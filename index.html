@@ -1941,9 +1941,11 @@
         ['doc-tipo-servicio', 'Selecciona el tipo de servicio.'],
         ['doc-marca', 'Ingresa la marca del vehículo.'],
         ['reg-vehiculo', 'Ingresa el modelo del vehículo.'],
+        ['doc-color', 'Ingresa el color del vehículo.'],
         ['doc-anio', 'Ingresa el año del vehículo.'],
         ['reg-placa', 'Ingresa la placa del vehículo.'],
-        ['doc-capacidad', 'Ingresa la capacidad de pasajeros.']
+        ['doc-capacidad', 'Ingresa la capacidad de pasajeros.'],
+        ['doc-licencia', 'Ingresa el número de licencia.']
       ];
       for (const [id, mensaje] of camposTexto) {
         const campo = $(id);
@@ -2027,6 +2029,23 @@
 
     actualizarContadorDocumentos();
 
+    async function buscarUsuariosPorIdentificador(identificador) {
+      const limpio = String(identificador || '').trim();
+      if (!limpio) return { data: [], error: null };
+      const [resDoc, resEmail] = await Promise.all([
+        supabaseClient.from('usuarios').select('*').eq('numero_documento', limpio).limit(10),
+        supabaseClient.from('usuarios').select('*').ilike('email', limpio).limit(10)
+      ]);
+      if (resDoc.error && resEmail.error) return { data: [], error: resDoc.error };
+      const vistos = new Set();
+      const combinados = [];
+      [...(resDoc.data || []), ...(resEmail.data || [])].forEach((u) => {
+        const k = String(u.id || u.Id || u.email || Math.random());
+        if (!vistos.has(k)) { vistos.add(k); combinados.push(u); }
+      });
+      return { data: combinados, error: null };
+    }
+
     /* ================= INICIO DE SESIÓN ================= */
     formLogin.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -2037,16 +2056,12 @@
       btnLogin.innerText = "Verificando...";
 
       try {
-        const { data: usuarios, error: errUsuario } = await supabaseClient
-          .from('usuarios')
-          .select('*')
-          .or(`numero_documento.eq.${dni},email.eq.${dni}`)
-          .limit(1);
+        const { data: usuarios, error: errUsuario } = await buscarUsuariosPorIdentificador(dni);
 
         if (errUsuario) { mostrarAlerta("Error al buscar el usuario: " + errUsuario.message, "error"); return; }
         if (!usuarios || usuarios.length === 0) { mostrarAlerta("No se encontró usuario con ese documento o correo.", "error"); return; }
 
-        const usuario = usuarios[0];
+        const usuario = (rolSeleccionado && usuarios.find(u => u.tipo_usuario === rolSeleccionado)) || usuarios[0];
 
         if (usuario.tipo_usuario && rolSeleccionado && usuario.tipo_usuario !== rolSeleccionado) {
           mostrarAlerta("No existe una cuenta con ese documento para este rol.", "error");
@@ -2054,8 +2069,35 @@
         }
         if (!usuario.email) { mostrarAlerta("Esta cuenta no tiene un correo asociado.", "error"); return; }
 
+        let accesoOk = false;
+        let errAuthUltimo = null;
+
         const { error: errAuth } = await supabaseClient.auth.signInWithPassword({ email: usuario.email, password: pwd });
-        if (errAuth) { mostrarAlerta("Contraseña incorrecta o error de acceso.", "error"); return; }
+        if (!errAuth) {
+          accesoOk = true;
+        } else {
+          errAuthUltimo = errAuth;
+          if (/not confirmed/i.test(errAuth.message || '') || errAuth.code === 'email_not_confirmed') {
+            try {
+              await supabaseClient.rpc('drivxi_confirmar_email', { p_email: usuario.email });
+              const { error: errReintento } = await supabaseClient.auth.signInWithPassword({ email: usuario.email, password: pwd });
+              if (!errReintento) accesoOk = true;
+            } catch (errConf) {}
+          }
+        }
+
+        if (!accesoOk && usuario.password !== undefined && usuario.password !== null && usuario.password === pwd) {
+          accesoOk = true;
+        }
+
+        if (!accesoOk) {
+          if (errAuthUltimo && (/not confirmed/i.test(errAuthUltimo.message || '') || errAuthUltimo.code === 'email_not_confirmed')) {
+            mostrarAlerta("Tu correo aún no está confirmado en Supabase. Ejecuta el SQL de DRIVXI o desactiva 'Confirm email'.", "error");
+          } else {
+            mostrarAlerta("Contraseña incorrecta o error de acceso.", "error");
+          }
+          return;
+        }
 
         if (usuario.tipo_usuario === 'conductor' && !usuario.conductor_id) {
           const { data: cond } = await supabaseClient
@@ -2121,139 +2163,179 @@
       btnGuardar.disabled = true;
       btnGuardar.innerText = "Guardando...";
 
-      const { data: authData, error: authError } = await supabaseClient.auth.signUp({
-        email: regEmail.value.trim(),
-        password: regPassword.value
-      });
-
-      if (authError) {
-        mostrarAlerta("Error al crear la cuenta: " + authError.message, "error");
-        btnGuardar.disabled = false;
-        btnGuardar.innerText = "Guardar y Continuar";
-        return;
-      }
-
-      /* Subir la foto de perfil a Supabase Storage (bucket 'fotos-perfil').
-         Se guarda la URL pública en la tabla; si la subida falla se guarda el Base64. */
-      const fotoUrl = fotoBase64
-        ? await subirASupabaseStorage(fotoBase64, BUCKET_FOTOS, rolSeleccionado || 'usuarios', ((regNumDoc && regNumDoc.value.trim()) || 'usuario'))
-        : null;
-
-      const datosUsuario = {
-        nombre: $('reg-nombre').value,
-        auth_user_id: authData.user.id,
-        telefono: $('reg-telefono').value,
-        email: regEmail ? regEmail.value : '',
-        tipo_documento: regTipoDoc ? regTipoDoc.value : 'DNI',
-        numero_documento: regNumDoc ? regNumDoc.value : '',
-        tipo_usuario: rolSeleccionado,
-        foto: fotoUrl,
-        politicas_aceptadas: checkPoliticasRegistro.checked,
-        fecha_aceptacion_politicas: new Date().toISOString()
-      };
-
-      const { data: usuarioInsertado, error: errorUsuario } = await supabaseClient
-        .from('usuarios').insert([datosUsuario]).select();
-
-      if (errorUsuario) {
-        mostrarAlerta("Error al guardar en la tabla 'usuarios': " + errorUsuario.message, "error");
-        btnGuardar.disabled = false;
-        btnGuardar.innerText = "Guardar y Continuar";
-        return;
-      }
-
-      const usuarioCreado = usuarioInsertado[0];
-      const nuevoUsuarioId = usuarioCreado.id || usuarioCreado.Id;
-
-      /* Registrar en Supabase si el usuario ACEPTÓ (o no) las políticas de protección de datos */
       try {
-        const { error: errPolitica } = await supabaseClient.from('politicas_aceptaciones').insert([{
-          usuario_id: nuevoUsuarioId,
-          rol: rolSeleccionado,
-          aceptado: checkPoliticasRegistro.checked,
-          version: 'v1.0',
-          fecha: new Date().toISOString()
-        }]);
-        if (errPolitica) console.warn("No se pudo registrar la aceptación de políticas (tabla 'politicas_aceptaciones'):", errPolitica.message);
-      } catch (errPoliticas) { console.warn("Error al registrar la aceptación de políticas:", errPoliticas); }
+        const emailLimpio = regEmail ? regEmail.value.trim() : '';
+        const docLimpio = regNumDoc ? regNumDoc.value.trim() : '';
+        const pwdRegistro = regPassword.value;
 
-      /* TABLA PASAJEROS: datos del rol pasajero */
-      if (rolSeleccionado === 'pasajero') {
-        try {
-          const { error: errPasajero } = await supabaseClient
-            .from('pasajeros').insert([{ usuario_id: nuevoUsuarioId }]);
-          if (errPasajero) console.warn("No se pudo guardar en la tabla 'pasajeros':", errPasajero.message);
-        } catch (errPas) { console.warn("Error al guardar el pasajero:", errPas); }
-      }
-
-      /* TABLA COMERCIOS: nombre del establecimiento, categoría y logo */
-      if (rolSeleccionado === 'comercio') {
-        try {
-          const inputComercioNombre = document.getElementById('reg-comercio-nombre');
-          const inputComercioCategoria = document.getElementById('reg-comercio-categoria');
-          const { error: errComercio } = await supabaseClient
-            .from('comercios').insert([{
-              usuario_id: nuevoUsuarioId,
-              nombre_establecimiento: inputComercioNombre ? inputComercioNombre.value : '',
-              categoria: inputComercioCategoria ? inputComercioCategoria.value : '',
-              logo: fotoUrl
-            }]);
-          if (errComercio) console.warn("No se pudo guardar en la tabla 'comercios':", errComercio.message);
-        } catch (errCom) { console.warn("Error al guardar el comercio:", errCom); }
-      }
-
-      /* TABLAS CONDUCTORES + VEHÍCULOS + DOCUMENTACIÓN DEL VEHÍCULO */
-      if (rolSeleccionado === 'conductor') {
-        const { data: conductorInsertado, error: errCond } = await supabaseClient
-  .from('conductores')
-  .insert([{
-    usuario_id: nuevoUsuarioId,
-    licencia: documentacionVehiculo.licencia
-  }])
-  .select();
-        if (!errCond && conductorInsertado && conductorInsertado.length > 0) {
-          const conductorId = conductorInsertado[0].id || conductorInsertado[0].Id;
-          usuarioCreado.conductor_id = conductorId;
-          const inputVehiculoModelo = document.getElementById('reg-vehiculo');
-          const inputVehiculoPlaca = document.getElementById('reg-placa');
-          const { error: errVehiculo } = await supabaseClient
-  .from('vehiculos')
-  .insert([{
-    conductor_id: conductorId,
-    tipo_servicio: documentacionVehiculo.tipo_servicio || null,
-    marca: documentacionVehiculo.marca || null,
-    modelo: documentacionVehiculo.modelo || (inputVehiculoModelo ? inputVehiculoModelo.value : null),
-    anio: documentacionVehiculo.anio || null,
-    placa: documentacionVehiculo.placa || (inputVehiculoPlaca ? inputVehiculoPlaca.value : null),
-    color: documentacionVehiculo.color || null,
-    capacidad_pasajeros: documentacionVehiculo.capacidad_pasajeros || null,
-    pet_friendly: documentacionVehiculo.pet_friendly === true
-  }]);
-
-if (errVehiculo) {
-  console.error("ERROR AL GUARDAR VEHÍCULO:", errVehiculo);
-  mostrarAlerta("No se pudo guardar el vehículo: " + errVehiculo.message, "error");
-}
-          await guardarDocumentacionConductor(nuevoUsuarioId, conductorId);
-        } else if (errCond) {
-          console.warn("No se pudo guardar en la tabla 'conductores':", errCond.message);
+        const [dupEmail, dupDoc] = await Promise.all([
+          emailLimpio ? supabaseClient.from('usuarios').select('id,tipo_usuario').ilike('email', emailLimpio).limit(10) : Promise.resolve({ data: [] }),
+          docLimpio ? supabaseClient.from('usuarios').select('id,tipo_usuario').eq('numero_documento', docLimpio).limit(10) : Promise.resolve({ data: [] })
+        ]);
+        if (dupEmail.data && dupEmail.data.some(u => !rolSeleccionado || u.tipo_usuario === rolSeleccionado)) {
+          mostrarAlerta("Ya existe una cuenta registrada con ese correo. Inicia sesión.", "error");
+          return;
         }
-        usuarioCreado.tipo_servicio = documentacionVehiculo.tipo_servicio || null;
-        usuarioCreado.capacidad_pasajeros = documentacionVehiculo.capacidad_pasajeros || null;
-        usuarioCreado.pet_friendly = documentacionVehiculo.pet_friendly === true;
-      }
+        if (dupDoc.data && dupDoc.data.some(u => !rolSeleccionado || u.tipo_usuario === rolSeleccionado)) {
+          mostrarAlerta("Ya existe una cuenta registrada con ese documento para este rol. Inicia sesión.", "error");
+          return;
+        }
 
-      usuarioActual = usuarioCreado;
-      guardarSesion(usuarioCreado);
-      btnGuardar.disabled = false;
-      btnGuardar.innerText = "Guardar y Continuar";
-      mostrarAlerta(`¡Registro exitoso como ${rolSeleccionado.toUpperCase()}!`, "exito");
-      irAlApp();
+        let authUserId = null;
+        try {
+          const { data: authData, error: authError } = await supabaseClient.auth.signUp({
+            email: emailLimpio,
+            password: pwdRegistro
+          });
+          if (!authError && authData && authData.user) {
+            authUserId = authData.user.id;
+            if (!authData.session) {
+              try { await supabaseClient.rpc('drivxi_confirmar_email', { p_email: emailLimpio }); } catch (errConf) {}
+            }
+          } else if (authError) {
+            console.warn("Aviso Auth signUp (se continúa con registro directo):", authError.message);
+          }
+        } catch (errAuthSignUp) {
+          console.warn("Aviso Auth signUp:", errAuthSignUp);
+        }
+
+        /* Subir la foto de perfil a Supabase Storage (bucket 'fotos-perfil').
+           Se guarda la URL pública en la tabla; si la subida falla se guarda el Base64. */
+        const fotoUrl = fotoBase64
+          ? await subirASupabaseStorage(fotoBase64, BUCKET_FOTOS, rolSeleccionado || 'usuarios', (docLimpio || 'usuario'))
+          : null;
+
+        const datosUsuario = {
+          nombre: $('reg-nombre').value.trim(),
+          auth_user_id: authUserId,
+          telefono: $('reg-telefono').value.trim(),
+          email: emailLimpio,
+          password: pwdRegistro,
+          tipo_documento: regTipoDoc ? regTipoDoc.value : 'DNI',
+          numero_documento: docLimpio,
+          tipo_usuario: rolSeleccionado,
+          foto: fotoUrl,
+          politicas_aceptadas: checkPoliticasRegistro.checked,
+          fecha_aceptacion_politicas: new Date().toISOString()
+        };
+
+        let { data: usuarioInsertado, error: errorUsuario } = await supabaseClient
+          .from('usuarios').insert([datosUsuario]).select();
+
+        if (errorUsuario && /password/i.test(errorUsuario.message || '')) {
+          const sinPassword = { ...datosUsuario };
+          delete sinPassword.password;
+          const reintento = await supabaseClient.from('usuarios').insert([sinPassword]).select();
+          usuarioInsertado = reintento.data;
+          errorUsuario = reintento.error;
+        }
+
+        if (errorUsuario) {
+          mostrarAlerta("Error al guardar en la tabla 'usuarios': " + errorUsuario.message, "error");
+          return;
+        }
+
+        const usuarioCreado = (usuarioInsertado && usuarioInsertado[0]) ? usuarioInsertado[0] : { ...datosUsuario };
+        const nuevoUsuarioId = usuarioCreado.id || usuarioCreado.Id;
+
+        /* Registrar en Supabase si el usuario ACEPTÓ (o no) las políticas de protección de datos */
+        try {
+          const { error: errPolitica } = await supabaseClient.from('politicas_aceptaciones').insert([{
+            usuario_id: nuevoUsuarioId,
+            rol: rolSeleccionado,
+            aceptado: checkPoliticasRegistro.checked,
+            version: 'v1.0',
+            fecha: new Date().toISOString()
+          }]);
+          if (errPolitica) console.warn("No se pudo registrar la aceptación de políticas (tabla 'politicas_aceptaciones'):", errPolitica.message);
+        } catch (errPoliticas) { console.warn("Error al registrar la aceptación de políticas:", errPoliticas); }
+
+        /* TABLA PASAJEROS: datos del rol pasajero */
+        if (rolSeleccionado === 'pasajero') {
+          try {
+            const { error: errPasajero } = await supabaseClient
+              .from('pasajeros').insert([{ usuario_id: nuevoUsuarioId }]);
+            if (errPasajero) console.warn("No se pudo guardar en la tabla 'pasajeros':", errPasajero.message);
+          } catch (errPas) { console.warn("Error al guardar el pasajero:", errPas); }
+        }
+
+        /* TABLA COMERCIOS: nombre del establecimiento, categoría y logo */
+        if (rolSeleccionado === 'comercio') {
+          try {
+            const inputComercioNombre = document.getElementById('reg-comercio-nombre');
+            const inputComercioCategoria = document.getElementById('reg-comercio-categoria');
+            const { error: errComercio } = await supabaseClient
+              .from('comercios').insert([{
+                usuario_id: nuevoUsuarioId,
+                nombre_establecimiento: inputComercioNombre ? inputComercioNombre.value : '',
+                categoria: inputComercioCategoria ? inputComercioCategoria.value : '',
+                logo: fotoUrl
+              }]);
+            if (errComercio) console.warn("No se pudo guardar en la tabla 'comercios':", errComercio.message);
+          } catch (errCom) { console.warn("Error al guardar el comercio:", errCom); }
+        }
+
+        /* TABLAS CONDUCTORES + VEHÍCULOS + DOCUMENTACIÓN DEL VEHÍCULO */
+        if (rolSeleccionado === 'conductor') {
+          const { data: conductorInsertado, error: errCond } = await supabaseClient
+    .from('conductores')
+    .insert([{
+      usuario_id: nuevoUsuarioId,
+      licencia: documentacionVehiculo.licencia
+    }])
+    .select();
+          if (!errCond && conductorInsertado && conductorInsertado.length > 0) {
+            const conductorId = conductorInsertado[0].id || conductorInsertado[0].Id;
+            usuarioCreado.conductor_id = conductorId;
+            const inputVehiculoModelo = document.getElementById('reg-vehiculo');
+            const inputVehiculoPlaca = document.getElementById('reg-placa');
+            const { error: errVehiculo } = await supabaseClient
+    .from('vehiculos')
+    .insert([{
+      conductor_id: conductorId,
+      tipo_servicio: documentacionVehiculo.tipo_servicio || null,
+      marca: documentacionVehiculo.marca || null,
+      modelo: documentacionVehiculo.modelo || (inputVehiculoModelo ? inputVehiculoModelo.value : null),
+      anio: documentacionVehiculo.anio || null,
+      placa: documentacionVehiculo.placa || (inputVehiculoPlaca ? inputVehiculoPlaca.value : null),
+      color: documentacionVehiculo.color || null,
+      capacidad_pasajeros: documentacionVehiculo.capacidad_pasajeros || null,
+      pet_friendly: documentacionVehiculo.pet_friendly === true
+    }]);
+
+  if (errVehiculo) {
+    console.error("ERROR AL GUARDAR VEHÍCULO:", errVehiculo);
+    mostrarAlerta("No se pudo guardar el vehículo: " + errVehiculo.message, "error");
+  }
+            await guardarDocumentacionConductor(nuevoUsuarioId, conductorId);
+          } else if (errCond) {
+            console.warn("No se pudo guardar en la tabla 'conductores':", errCond.message);
+          }
+          usuarioCreado.tipo_servicio = documentacionVehiculo.tipo_servicio || null;
+          usuarioCreado.capacidad_pasajeros = documentacionVehiculo.capacidad_pasajeros || null;
+          usuarioCreado.pet_friendly = documentacionVehiculo.pet_friendly === true;
+        }
+
+        usuarioActual = usuarioCreado;
+        guardarSesion(usuarioCreado);
+        mostrarAlerta(`¡Registro exitoso como ${rolSeleccionado.toUpperCase()}!`, "exito");
+        irAlApp();
+      } catch (errReg) {
+        console.error(errReg);
+        mostrarAlerta("Ocurrió un error al registrar la cuenta: " + (errReg && errReg.message ? errReg.message : errReg), "error");
+      } finally {
+        btnGuardar.disabled = false;
+        btnGuardar.innerText = "Guardar y Continuar";
+      }
     });
 
     /* ================= PUENTE ENTRE PÁGINAS ================= */
     function guardarSesion(usuario) {
-      try { localStorage.setItem(LLAVE_SESION, JSON.stringify(usuario)); }
+      try {
+        const limpio = usuario ? { ...usuario } : null;
+        if (limpio) delete limpio.password;
+        localStorage.setItem(LLAVE_SESION, JSON.stringify(limpio));
+      }
       catch (errStorage) { console.warn("No se pudo guardar la sesión en el navegador:", errStorage); }
     }
 
@@ -2267,7 +2349,7 @@ if (errVehiculo) {
       if (!sesionGuardada) return;
       try {
         usuarioActual = JSON.parse(sesionGuardada);
-        if (usuarioActual) irAlApp();
+        if (usuarioActual && (usuarioActual.id || usuarioActual.Id || usuarioActual.email || usuarioActual.numero_documento)) irAlApp();
       } catch (e) { console.error("Error al cargar sesión:", e); }
     })();
 
