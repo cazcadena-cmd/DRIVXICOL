@@ -1629,7 +1629,21 @@ if (errVehiculo) {
     }
 
     function irAlApp() {
-      setTimeout(() => { window.location.href = APP_URL; }, 400);
+      setTimeout(async () => {
+        // Verifica que app.html exista junto a este archivo antes de saltar.
+        // Si falta en el repo (GitHub Pages mostraría 404), se avisa en pantalla en vez de navegar.
+        try {
+          const r = await fetch(APP_URL, { method: 'HEAD', cache: 'no-store' });
+          if (!r.ok) throw new Error('no encontrado');
+        } catch (e) {
+          if (e && e.message === 'no encontrado') {
+            mostrarAlerta('Falta subir app.html junto a index.html en tu repo para poder entrar.', 'error');
+            return;
+          }
+          // Sin red o archivo local: se intenta navegar igual.
+        }
+        window.location.href = APP_URL;
+      }, 400);
     }
 
     /* Si ya hay sesión activa, entra directo a la app */
