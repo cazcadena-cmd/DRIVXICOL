@@ -9,9 +9,9 @@
   <link rel="apple-touch-icon" href="icon-192.png">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="BIKAR">
+  <meta name="apple-mobile-web-app-title" content="DRIVXI">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <title>BIKAR · Viajes</title>
+  <title>DRIVXI · Viajes</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://maps.googleapis.com">
@@ -23,7 +23,7 @@
   </style>
   <style>
     /* ============================================================
-       BIKAR · Mapa, viajes y tiempo real (Google Maps + Supabase)
+       DRIVXI · Mapa, viajes y tiempo real (Google Maps + Supabase)
        Paleta: #9ED832 · #9ED832 · #9ED832 · #f8f9fa · #ffffff · #121212 · #1e1e1e
        ============================================================ */
     :root{
@@ -120,7 +120,7 @@
     .ui-panel::-webkit-scrollbar-thumb{background:rgba(158,216,50,.3);border-radius:3px}
     .ui-panel::before{content:"";position:sticky;display:block;top:0;left:14%;right:14%;height:2px;border-radius:2px;margin:-24px 14% 6px;background:linear-gradient(90deg,transparent,var(--primary-color),transparent);opacity:.9;pointer-events:none}
     .panel-title{color:var(--text-color);font-size:1.35rem;font-weight:700;margin-bottom:6px}
-    .panel-title::before{content:"BIKAR";display:block;font-size:.64rem;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:var(--primary-color);margin-bottom:6px}
+    .panel-title::before{content:"DRIVXI";display:block;font-size:.64rem;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:var(--primary-color);margin-bottom:6px}
     .panel-subtitle,.status-text{color:var(--muted-text);font-size:.86rem;margin-bottom:18px}
     .status-text{line-height:1.4;margin:4px 0 14px}
     .viaje-bloqueo-box{padding:16px;border-radius:18px;background:rgba(239,68,68,.1);border:1.5px dashed rgba(239,68,68,.4);margin-bottom:14px;text-align:center;transition:background .35s ease,border-color .35s ease}
@@ -328,13 +328,13 @@
     .menu-perfil-item.resaltado.estado-aceptado .mi-ico{background:linear-gradient(135deg,#9ED832,#9ED832)}
     .menu-perfil-item.resaltado.estado-encurso{border-color:rgba(16,185,129,.55);background:rgba(16,185,129,.10)}
     .menu-perfil-item.resaltado.estado-encurso .mi-ico{background:linear-gradient(135deg,#059669,#10b981)}
-    .modal-bikar{position:fixed;inset:0;z-index:5500;display:flex;align-items:center;justify-content:center;padding:calc(70px + env(safe-area-inset-top)) 14px calc(20px + env(safe-area-inset-bottom));background:rgba(8,22,34,.42);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);animation:fadeIn .2s ease both;overflow-y:auto}
-    .modal-bikar-dialog{position:relative;width:min(100%,460px);max-height:100%;display:flex;flex-direction:column;padding:20px 18px 18px;background:linear-gradient(180deg,var(--glass-bg-strong),var(--glass-bg));border:1px solid var(--glass-border);border-radius:24px;box-shadow:var(--shadow),inset 0 1px 0 var(--glass-highlight);-webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);color:var(--text-color);animation:modalIn .28s cubic-bezier(.2,.8,.2,1) both;overflow:hidden}
-    .modal-bikar-cerrar{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:10px;z-index:3;border:1px solid var(--field-border);background:var(--field-bg);color:var(--muted-text);cursor:pointer;font-size:1rem;line-height:1;display:flex;align-items:center;justify-content:center;transition:all .2s}
-    .modal-bikar-cerrar:hover{color:var(--primary-color);border-color:var(--primary-color);transform:rotate(90deg)}
-    .modal-bikar-scroll{overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding-right:4px;scrollbar-width:thin;scrollbar-color:rgba(158,216,50,.35) transparent}
-    .modal-bikar-scroll::-webkit-scrollbar{width:6px}
-    .modal-bikar-scroll::-webkit-scrollbar-thumb{background:rgba(158,216,50,.3);border-radius:3px}
+    .modal-drivxi{position:fixed;inset:0;z-index:5500;display:flex;align-items:center;justify-content:center;padding:calc(70px + env(safe-area-inset-top)) 14px calc(20px + env(safe-area-inset-bottom));background:rgba(8,22,34,.42);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);animation:fadeIn .2s ease both;overflow-y:auto}
+    .modal-drivxi-dialog{position:relative;width:min(100%,460px);max-height:100%;display:flex;flex-direction:column;padding:20px 18px 18px;background:linear-gradient(180deg,var(--glass-bg-strong),var(--glass-bg));border:1px solid var(--glass-border);border-radius:24px;box-shadow:var(--shadow),inset 0 1px 0 var(--glass-highlight);-webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);color:var(--text-color);animation:modalIn .28s cubic-bezier(.2,.8,.2,1) both;overflow:hidden}
+    .modal-drivxi-cerrar{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:10px;z-index:3;border:1px solid var(--field-border);background:var(--field-bg);color:var(--muted-text);cursor:pointer;font-size:1rem;line-height:1;display:flex;align-items:center;justify-content:center;transition:all .2s}
+    .modal-drivxi-cerrar:hover{color:var(--primary-color);border-color:var(--primary-color);transform:rotate(90deg)}
+    .modal-drivxi-scroll{overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding-right:4px;scrollbar-width:thin;scrollbar-color:rgba(158,216,50,.35) transparent}
+    .modal-drivxi-scroll::-webkit-scrollbar{width:6px}
+    .modal-drivxi-scroll::-webkit-scrollbar-thumb{background:rgba(158,216,50,.3);border-radius:3px}
     .modal-kicker{display:block;font-size:.6rem;font-weight:800;letter-spacing:.28em;text-transform:uppercase;color:var(--primary-color);margin-bottom:4px}
     .modal-titulo{font-size:1.15rem;font-weight:800;letter-spacing:-.01em;margin-bottom:2px}
     .modal-ayuda-dialog{width:min(100%,720px);height:min(86vh,800px);padding:16px 14px 14px}
@@ -399,7 +399,7 @@
     .pago-fila-tit{font-size:.8rem;font-weight:700;color:var(--text-color)}
     .pago-fila-sub{font-size:.67rem;color:var(--muted-text);margin-top:2px}
     .pago-fila-valor{font-size:.92rem;font-weight:800;color:var(--primary-color);white-space:nowrap}
-    .modal-bikar.confirmar-capa{z-index:8000;align-items:center}
+    .modal-drivxi.confirmar-capa{z-index:8000;align-items:center}
     .confirmar-dialog{width:min(100%,340px);text-align:center;padding:24px 20px 18px}
     .confirmar-icono{width:54px;height:54px;margin:0 auto 12px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(224,90,90,.22),rgba(163,38,38,.16));border:1px solid rgba(224,90,90,.4);color:#e05a5a}
     .confirmar-icono svg{width:24px;height:24px}
@@ -461,7 +461,7 @@
     .pagos-resumen.con-comisiones .pago-kpi{grid-column:span 2;min-width:0}
     .pagos-resumen.con-comisiones .pago-comision{grid-column:span 3}
     .pago-comision small{display:block;margin-top:4px;font-size:.6rem;color:var(--muted-text);line-height:1.35}
-    @media (prefers-reduced-motion:reduce){.modal-nueva,.modal-nueva .modal-bikar-dialog,.modal-nueva .direccion-fila,.menu-subservicios,.menu-subservicios .menu-perfil-item,.servicio-presentacion-imagen{animation:none!important}}
+    @media (prefers-reduced-motion:reduce){.modal-nueva,.modal-nueva .modal-drivxi-dialog,.modal-nueva .direccion-fila,.menu-subservicios,.menu-subservicios .menu-perfil-item,.servicio-presentacion-imagen{animation:none!important}}
   </style>
   <script>
     (function(){
@@ -493,18 +493,18 @@
     </button>
     <button type="button" class="menu-perfil-item oculto" id="menu-item-tipos-servicios" aria-expanded="false" aria-controls="menu-subservicios">
       <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
-      <span class="mi-txt">Tipos de servicios de BIKAR</span>
+      <span class="mi-txt">Tipos de servicios de DRIVXI</span>
       <svg class="menu-servicios-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
     </button>
-    <div id="menu-subservicios" class="menu-subservicios oculto" aria-label="Servicios de BIKAR">
-      <button type="button" class="menu-perfil-item" data-servicio-info="taxi_auto"><span class="mi-ico" data-icono-servicio="taxi_auto"></span><span>BIKAR TAXI</span></button>
-      <button type="button" class="menu-perfil-item" data-servicio-info="moto_delivery"><span class="mi-ico" data-icono-servicio="moto_delivery"></span><span>BIKAR ENVÍOS</span></button>
-      <button type="button" class="menu-perfil-item" data-servicio-info="moto_taxi"><span class="mi-ico" data-icono-servicio="moto_taxi"></span><span>BIKAR MOTO</span></button>
+    <div id="menu-subservicios" class="menu-subservicios oculto" aria-label="Servicios de DRIVXI">
+      <button type="button" class="menu-perfil-item" data-servicio-info="taxi_auto"><span class="mi-ico" data-icono-servicio="taxi_auto"></span><span>DRIVXI TAXI</span></button>
+      <button type="button" class="menu-perfil-item" data-servicio-info="moto_delivery"><span class="mi-ico" data-icono-servicio="moto_delivery"></span><span>DRIVXI ENVÍOS</span></button>
+      <button type="button" class="menu-perfil-item" data-servicio-info="moto_taxi"><span class="mi-ico" data-icono-servicio="moto_taxi"></span><span>DRIVXI MOTO</span></button>
       <button type="button" class="menu-perfil-item" data-servicio-info="taxi_carga"><span class="mi-ico" data-icono-servicio="taxi_carga"></span><span>TAXI CARGA</span></button>
     </div>
     <button type="button" class="menu-perfil-item" id="menu-item-ayuda">
       <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
-      <span class="mi-txt">Ayuda BIKAR</span>
+      <span class="mi-txt">Ayuda DRIVXI</span>
     </button>
     <button type="button" class="menu-perfil-item peligro" id="menu-item-salir">
       <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg></span>
@@ -530,7 +530,7 @@
     <span id="txt-alerta-viaje">Viaje en curso · Toca para ver</span>
   </a>
   <div id="mode-selector">
-    <button id="btn-cambiar-modo" class="btn-secondary chip-usuario" type="button">BIKAR</button>
+    <button id="btn-cambiar-modo" class="btn-secondary chip-usuario" type="button">DRIVXI</button>
   </div>
   <div id="map"></div>
   <div id="ui-pasajero" class="ui-panel oculto">
@@ -577,7 +577,7 @@
       </div>
       <div class="aviso-push-txt">
         <span class="aviso-push-tit" id="aviso-push-tit">Activa los avisos de viajes</span>
-        <span class="aviso-push-sub" id="aviso-push-sub">Recibe cada solicitud con el sonido BIKAR aunque tengas la app cerrada.</span>
+        <span class="aviso-push-sub" id="aviso-push-sub">Recibe cada solicitud con el sonido DRIVXI aunque tengas la app cerrada.</span>
       </div>
       <button type="button" class="btn-mini oculto" id="btn-activar-push">Activar</button>
     </div>
@@ -629,16 +629,16 @@
       <p class="servicios-leyenda">Solo se muestran los servicios que cuentan con conductores activos en este momento.</p>
     </div>
   </aside>
-  <div id="modal-perfil" class="modal-bikar oculto" role="dialog" aria-modal="true" aria-labelledby="perfil-titulo">
-    <div class="modal-bikar-dialog">
-      <button type="button" class="modal-bikar-cerrar" id="cerrar-modal-perfil" aria-label="Cerrar">×</button>
-      <span class="modal-kicker">BIKAR · Mi cuenta</span>
+  <div id="modal-perfil" class="modal-drivxi oculto" role="dialog" aria-modal="true" aria-labelledby="perfil-titulo">
+    <div class="modal-drivxi-dialog">
+      <button type="button" class="modal-drivxi-cerrar" id="cerrar-modal-perfil" aria-label="Cerrar">×</button>
+      <span class="modal-kicker">DRIVXI · Mi cuenta</span>
       <h2 class="modal-titulo" id="perfil-titulo">Perfil</h2>
-      <div class="modal-bikar-scroll" style="margin-top:6px">
+      <div class="modal-drivxi-scroll" style="margin-top:6px">
         <div class="perfil-hero">
           <img id="perfil-foto-grande" class="perfil-hero-foto" src="" alt="Foto de perfil">
           <div class="perfil-hero-txt">
-            <div class="perfil-hero-nombre" id="perfil-nombre-grande">Usuario BIKAR</div>
+            <div class="perfil-hero-nombre" id="perfil-nombre-grande">Usuario DRIVXI</div>
             <span class="perfil-rol" id="perfil-rol-badge">Pasajero</span>
           </div>
         </div>
@@ -661,22 +661,22 @@
       </div>
     </div>
   </div>
-  <div id="modal-vehiculo" class="modal-bikar oculto" role="dialog" aria-modal="true" aria-labelledby="vehiculo-titulo">
-    <div class="modal-bikar-dialog">
-      <button type="button" class="modal-bikar-cerrar" id="cerrar-modal-vehiculo" aria-label="Cerrar">×</button>
-      <span class="modal-kicker">BIKAR · Conductor</span>
+  <div id="modal-vehiculo" class="modal-drivxi oculto" role="dialog" aria-modal="true" aria-labelledby="vehiculo-titulo">
+    <div class="modal-drivxi-dialog">
+      <button type="button" class="modal-drivxi-cerrar" id="cerrar-modal-vehiculo" aria-label="Cerrar">×</button>
+      <span class="modal-kicker">DRIVXI · Conductor</span>
       <h2 class="modal-titulo" id="vehiculo-titulo">Mi vehículo</h2>
-      <div class="modal-bikar-scroll" style="margin-top:10px">
+      <div class="modal-drivxi-scroll" style="margin-top:10px">
         <div id="vehiculo-fotos"></div>
         <div class="perfil-seccion-titulo">Datos del vehículo</div>
         <div id="vehiculo-datos" class="perfil-datos"></div>
       </div>
     </div>
   </div>
-  <div id="modal-historial" class="modal-bikar oculto" role="dialog" aria-modal="true" aria-labelledby="historial-titulo">
-    <div class="modal-bikar-dialog" style="height:min(660px,100%)">
-      <button type="button" class="modal-bikar-cerrar" id="cerrar-modal-historial" aria-label="Cerrar">×</button>
-      <span class="modal-kicker">BIKAR · Actividad</span>
+  <div id="modal-historial" class="modal-drivxi oculto" role="dialog" aria-modal="true" aria-labelledby="historial-titulo">
+    <div class="modal-drivxi-dialog" style="height:min(660px,100%)">
+      <button type="button" class="modal-drivxi-cerrar" id="cerrar-modal-historial" aria-label="Cerrar">×</button>
+      <span class="modal-kicker">DRIVXI · Actividad</span>
       <h2 class="modal-titulo" id="historial-titulo">Mis viajes</h2>
       <div class="historial-tabs">
         <button type="button" class="historial-tab activo" id="tab-servicios">Servicios</button>
@@ -694,40 +694,40 @@
           Descargar
         </button>
       </div>
-      <div class="modal-bikar-scroll" id="historial-contenido" style="flex:1;min-height:0"></div>
+      <div class="modal-drivxi-scroll" id="historial-contenido" style="flex:1;min-height:0"></div>
     </div>
   </div>
-  <div id="modal-ayuda" class="modal-bikar oculto" role="dialog" aria-modal="true" aria-labelledby="ayuda-titulo">
-    <div class="modal-bikar-dialog modal-ayuda-dialog">
-      <button type="button" class="modal-bikar-cerrar" id="cerrar-modal-ayuda" aria-label="Cerrar">×</button>
-      <span class="modal-kicker">BIKAR · Soporte</span>
+  <div id="modal-ayuda" class="modal-drivxi oculto" role="dialog" aria-modal="true" aria-labelledby="ayuda-titulo">
+    <div class="modal-drivxi-dialog modal-ayuda-dialog">
+      <button type="button" class="modal-drivxi-cerrar" id="cerrar-modal-ayuda" aria-label="Cerrar">×</button>
+      <span class="modal-kicker">DRIVXI · Soporte</span>
       <h2 class="modal-titulo" id="ayuda-titulo">Centro de Ayuda</h2>
       <div class="ayuda-iframe-container">
         <div id="ayuda-loader" class="ayuda-loading">
           <div class="loading-pulse"><span></span><span></span><span></span></div>
           <span style="margin-left:8px">Cargando centro de ayuda…</span>
         </div>
-        <iframe id="iframe-ayuda" class="ayuda-iframe" src="" title="Centro de Ayuda BIKAR" loading="lazy"></iframe>
+        <iframe id="iframe-ayuda" class="ayuda-iframe" src="" title="Centro de Ayuda DRIVXI" loading="lazy"></iframe>
       </div>
     </div>
   </div>
-  <div id="modal-recurrentes" class="modal-bikar modal-nueva oculto" role="dialog" aria-modal="true" aria-labelledby="recurrentes-titulo" aria-describedby="recurrentes-ayuda">
-    <div class="modal-bikar-dialog modal-pequena">
-      <button type="button" class="modal-bikar-cerrar" id="cerrar-modal-recurrentes" aria-label="Cerrar viajes recurrentes">×</button>
-      <span class="modal-kicker">BIKAR · Tus destinos</span>
+  <div id="modal-recurrentes" class="modal-drivxi modal-nueva oculto" role="dialog" aria-modal="true" aria-labelledby="recurrentes-titulo" aria-describedby="recurrentes-ayuda">
+    <div class="modal-drivxi-dialog modal-pequena">
+      <button type="button" class="modal-drivxi-cerrar" id="cerrar-modal-recurrentes" aria-label="Cerrar viajes recurrentes">×</button>
+      <span class="modal-kicker">DRIVXI · Tus destinos</span>
       <h2 class="modal-titulo" id="recurrentes-titulo">Viajes recurrentes</h2>
       <p class="modal-instrucciones" id="recurrentes-ayuda">Elige uno de tus últimos tres viajes para volver a ese destino.</p>
-      <div class="modal-bikar-scroll">
+      <div class="modal-drivxi-scroll">
         <div id="lista-recurrentes" class="direcciones-lista" aria-live="polite"></div>
       </div>
     </div>
   </div>
-  <div id="modal-favoritos" class="modal-bikar modal-nueva oculto" role="dialog" aria-modal="true" aria-labelledby="favoritos-titulo" aria-describedby="favoritos-instrucciones">
-    <div class="modal-bikar-dialog">
-      <button type="button" class="modal-bikar-cerrar" id="cerrar-modal-favoritos" aria-label="Cerrar direcciones favoritas">×</button>
-      <span class="modal-kicker">BIKAR · Lugares favoritos</span>
+  <div id="modal-favoritos" class="modal-drivxi modal-nueva oculto" role="dialog" aria-modal="true" aria-labelledby="favoritos-titulo" aria-describedby="favoritos-instrucciones">
+    <div class="modal-drivxi-dialog">
+      <button type="button" class="modal-drivxi-cerrar" id="cerrar-modal-favoritos" aria-label="Cerrar direcciones favoritas">×</button>
+      <span class="modal-kicker">DRIVXI · Lugares favoritos</span>
       <h2 class="modal-titulo" id="favoritos-titulo">Mis direcciones</h2>
-      <div class="modal-bikar-scroll">
+      <div class="modal-drivxi-scroll">
         <p class="modal-instrucciones" id="favoritos-instrucciones">Guarda Mi casa, Mi trabajo u otro lugar. Elige un nombre, busca la dirección y selecciona una sugerencia. Después, toca una dirección guardada para usarla como destino.</p>
         <div id="lista-favoritos" class="direcciones-lista" aria-live="polite"></div>
         <form id="form-direccion-favorita" class="favoritos-form">
@@ -753,25 +753,25 @@
       </div>
     </div>
   </div>
-  <div id="modal-tipo-servicio" class="modal-bikar modal-nueva oculto" role="dialog" aria-modal="true" aria-labelledby="tipo-servicio-titulo">
-    <div class="modal-bikar-dialog modal-pequena">
-      <button type="button" class="modal-bikar-cerrar" id="cerrar-modal-tipo-servicio" aria-label="Cerrar información del servicio">×</button>
-      <span class="modal-kicker">BIKAR · Nuestros servicios</span>
+  <div id="modal-tipo-servicio" class="modal-drivxi modal-nueva oculto" role="dialog" aria-modal="true" aria-labelledby="tipo-servicio-titulo">
+    <div class="modal-drivxi-dialog modal-pequena">
+      <button type="button" class="modal-drivxi-cerrar" id="cerrar-modal-tipo-servicio" aria-label="Cerrar información del servicio">×</button>
+      <span class="modal-kicker">DRIVXI · Nuestros servicios</span>
       <h2 class="modal-titulo" id="tipo-servicio-titulo"></h2>
-      <div class="modal-bikar-scroll">
+      <div class="modal-drivxi-scroll">
         <img id="tipo-servicio-imagen" class="servicio-presentacion-imagen" alt="" decoding="async" referrerpolicy="no-referrer">
         <div id="tipo-servicio-fallback" class="servicio-presentacion-fallback oculto" role="img"></div>
         <p id="tipo-servicio-descripcion" class="modal-instrucciones"></p>
       </div>
     </div>
   </div>
-  <div id="modal-confirmar" class="modal-bikar confirmar-capa oculto" role="alertdialog" aria-modal="true" aria-labelledby="confirmar-titulo">
-    <div class="modal-bikar-dialog confirmar-dialog">
+  <div id="modal-confirmar" class="modal-drivxi confirmar-capa oculto" role="alertdialog" aria-modal="true" aria-labelledby="confirmar-titulo">
+    <div class="modal-drivxi-dialog confirmar-dialog">
       <div class="confirmar-icono">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
       </div>
       <h3 class="confirmar-titulo" id="confirmar-titulo">Cerrar sesión</h3>
-      <p class="confirmar-mensaje" id="confirmar-mensaje">¿Estás seguro de que deseas cerrar tu sesión en BIKAR?</p>
+      <p class="confirmar-mensaje" id="confirmar-mensaje">¿Estás seguro de que deseas cerrar tu sesión en DRIVXI?</p>
       <div class="confirmar-acciones">
         <button type="button" class="btn-conf-cancelar" id="confirmar-cancelar">Cancelar</button>
         <button type="button" class="btn-conf-aceptar" id="confirmar-aceptar">Sí, cerrar sesión</button>
@@ -809,7 +809,7 @@
     const VENTANA_ACTIVO_MS = 10 * 60 * 1000;
     const LATIDO_CONDUCTOR_MS = 20000;
 
-    /* ============================ TARIFAS REALES PERÚ (SOLES S/) ============================ */
+    /* ============ TARIFAS COLOMBIA (PESOS COP $) · Ref. DiDi 2025-2026 menos 2%, redondeadas a la centena ============ */
     const ICONOS = {
       taxi_auto: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/><path d="M9 7V4h6v3"/></svg>',
       moto_taxi: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/><path d="M6 11h4"/></svg>',
@@ -819,10 +819,10 @@
     };
 
     const CATALOGO = [
-      { clave:'moto_taxi',     etiqueta:'BIKAR MOTO',    desc:'Económico y ágil · 1 pasajero',           base:2.50,  porKm:0.90, minTarifa:3.50,  espera:'2 min' },
-      { clave:'moto_delivery', etiqueta:'BIKAR ENVÍOS',  desc:'Envíos de paquetes, comida y documentos',  base:3.20,  porKm:1.10, minTarifa:4.50,  espera:'3 min' },
-      { clave:'taxi_auto',     etiqueta:'BIKAR TAXI',    desc:'Auto sedán cómodo · hasta 4 pasajeros',    base:4.50,  porKm:1.40, minTarifa:6.50,  espera:'4 min' },
-      { clave:'taxi_carga',    etiqueta:'TAXI CARGA',    desc:'Mudanzas, carga pesada y encomiendas',     base:16.00, porKm:2.80, minTarifa:20.00, espera:'8 min' }
+      { clave:'moto_taxi',     etiqueta:'DRIVXI MOTO',    desc:'Económico y ágil · 1 pasajero',           base:2450,  porKm:980,  minTarifa:4400,  espera:'2 min' },
+      { clave:'moto_delivery', etiqueta:'DRIVXI ENVÍOS',  desc:'Envíos de paquetes, comida y documentos',  base:2940,  porKm:1176, minTarifa:5400,  espera:'3 min' },
+      { clave:'taxi_auto',     etiqueta:'DRIVXI TAXI',    desc:'Auto sedán cómodo · hasta 4 pasajeros',    base:3920,  porKm:1372, minTarifa:6400,  espera:'4 min' },
+      { clave:'taxi_carga',    etiqueta:'TAXI CARGA',    desc:'Mudanzas, carga pesada y encomiendas',     base:17640, porKm:3136, minTarifa:24500, espera:'8 min' }
     ];
 
     function normalizarClaveServicio(raw) {
@@ -844,14 +844,13 @@
       const dist = Number(distanciaKm || 0);
       const calculo = s.base + (dist * s.porKm);
       const final = Math.max(s.minTarifa, calculo);
-      const normal = Math.round(final * 10) / 10;
-      return s.capacidadPasajeros === 6 ? Math.round(normal * 130) / 100 : normal;
+      const normal = Math.round(final / 100) * 100;
+      return s.capacidadPasajeros === 6 ? Math.round(normal * 130 / 100) * 100 : normal;
     }
 
     function formatoMoneda(v) {
-      let n = Number(v || 0);
-      if (n > 500) n = n / 1000;
-      return 'S/ ' + n.toFixed(2);
+      const n = Math.round(Number(v || 0));
+      return '$ ' + n.toLocaleString('es-CO');
     }
 
     /* ============================ ESTADO ============================ */
@@ -1482,7 +1481,7 @@
     const esConductorSesion = () => !!usuarioActual && String(usuarioActual.tipo_usuario || '').toLowerCase() === 'conductor';
     const vapidListo = () => !!VAPID_PUBLIC_KEY && !/^PEGA/i.test(VAPID_PUBLIC_KEY) && VAPID_PUBLIC_KEY.length > 40;
 
-    const MELODIA_BIKAR = [
+    const MELODIA_DRIVXI = [
       [659.25, 0.00, 0.35], [880.00, 0.14, 0.35], [1108.73, 0.28, 0.35], [1318.51, 0.42, 0.75],
       [1108.73, 0.95, 0.35], [1318.51, 1.09, 0.35], [1760.00, 1.23, 1.10]
     ];
@@ -1528,7 +1527,7 @@
         if (ctx.state !== 'running' || Date.now() - pedido > 5000) return;
         const t0 = ctx.currentTime + 0.05;
         for (let r = 0; r < (repeticiones || 2); r++) {
-          MELODIA_BIKAR.forEach((n) => tonoCampana(ctx, n[0], t0 + r * 2.6 + n[1], n[2], 0.3));
+          MELODIA_DRIVXI.forEach((n) => tonoCampana(ctx, n[0], t0 + r * 2.6 + n[1], n[2], 0.3));
         }
       };
       if (ctx.state === 'running') reproducir();
@@ -1678,7 +1677,7 @@
 
         const icono = new URL('icon-192.png', location.href).href;
         const opciones = {
-          body: cuerpo || '', icon: icono, tag: op.tag || 'bikar-aviso',
+          body: cuerpo || '', icon: icono, tag: op.tag || 'drivxi-aviso',
           renotify: false,
           silent: false, requireInteraction: !!op.persistente,
           vibrate: op.vibrar || [250, 100, 250, 100, 400], timestamp: Date.now(),
@@ -1714,7 +1713,7 @@
           '🚖 Nueva solicitud · ' + (v.tipo_servicio || v.nombre_servicio || 'Servicio'),
           formatoMoneda(v.tarifa) + (dist ? ' · ' + dist.toFixed(1) + ' km' : '') +
             '\nA: ' + (v.origen_nombre || 'Origen') + '\nB: ' + (v.destino_nombre || 'Destino'),
-          { tag: 'bikar-viaje-' + k, viaje_id: v.id, tipo: 'nuevo_viaje', persistente: true, vibrar: [350, 120, 350, 120, 700, 200, 350, 120, 350] }
+          { tag: 'drivxi-viaje-' + k, viaje_id: v.id, tipo: 'nuevo_viaje', persistente: true, vibrar: [350, 120, 350, 120, 700, 200, 350, 120, 350] }
         );
       });
     }
@@ -1756,7 +1755,7 @@
     const TEXTOS_ESTADO_PASAJERO = {
       aceptado:   ['✅ ¡Conductor asignado!', 'Tu conductor aceptó el servicio y va hacia tu dirección de partida. Prepárate para abordar.', '¡Conductor asignado! Va hacia tu dirección', '✓'],
       encurso:    ['🚖 Viaje en curso', 'Vas rumbo a tu destino. ¡Buen viaje!', 'Viaje en curso · Vas rumbo a tu destino', '✓'],
-      finalizado: ['🏁 Viaje finalizado', 'Gracias por viajar con BIKAR. Toca para ver tu viaje y calificar.', 'Viaje finalizado', '✓'],
+      finalizado: ['🏁 Viaje finalizado', 'Gracias por viajar con DRIVXI. Toca para ver tu viaje y calificar.', 'Viaje finalizado', '✓'],
       cancelado:  ['❌ Viaje cancelado', 'Tu viaje fue cancelado. Puedes solicitar otro cuando quieras.', 'Tu viaje fue cancelado', '!']
     };
     const TEXTOS_ESTADO_CONDUCTOR = {
@@ -1781,7 +1780,7 @@
       try { if (navigator.vibrate) navigator.vibrate([200, 80, 200]); } catch (e) {}
       if (!desdePush) {
         notificarSistema(t[0], t[1], {
-          tag: 'bikar-estado-' + idViaje + '-' + grupo, viaje_id: idViaje, tipo: 'estado_viaje',
+          tag: 'drivxi-estado-' + idViaje + '-' + grupo, viaje_id: idViaje, tipo: 'estado_viaje',
           url: new URL('viaje.html?id=' + idViaje + '&rol=' + (esCond ? 'conductor' : 'pasajero'), location.href).href
         });
       }
@@ -1796,14 +1795,14 @@
       if (!caja) return;
       const textos = pas ? {
         activar:     { t: 'Activa los avisos de tu viaje', s: 'Te avisaremos cuando un conductor acepte tu viaje, llegue o lo cancele, aunque tengas la app cerrada o en segundo plano.', b: 'Activar', alerta: false },
-        bloqueado:   { t: 'Notificaciones bloqueadas', s: 'Permite las notificaciones de BIKAR en los ajustes del navegador o del sitio para recibir los avisos de tu viaje.', b: null, alerta: true },
-        instalar:    { t: 'Instala BIKAR en tu iPhone', s: 'Toca Compartir y elige «Añadir a pantalla de inicio»; luego abre BIKAR desde su icono y activa los avisos.', b: null, alerta: false },
+        bloqueado:   { t: 'Notificaciones bloqueadas', s: 'Permite las notificaciones de DRIVXI en los ajustes del navegador o del sitio para recibir los avisos de tu viaje.', b: null, alerta: true },
+        instalar:    { t: 'Instala DRIVXI en tu iPhone', s: 'Toca Compartir y elige «Añadir a pantalla de inicio»; luego abre DRIVXI desde su icono y activa los avisos.', b: null, alerta: false },
         nosoportado: { t: 'Avisos push no disponibles', s: 'Este navegador no admite notificaciones push. Usa Chrome, Edge o Safari actualizado para recibir los avisos de tu viaje.', b: null, alerta: true },
         error:       { t: 'No se pudieron activar los avisos', s: 'Revisa tu conexión e inténtalo de nuevo.', b: 'Reintentar', alerta: true }
       } : {
-        activar:     { t: 'Activa los avisos de viajes', s: 'Recibe cada solicitud con el sonido BIKAR aunque tengas la app cerrada o en segundo plano.', b: 'Activar', alerta: false },
-        bloqueado:   { t: 'Notificaciones bloqueadas', s: 'Permite las notificaciones de BIKAR en los ajustes del navegador o del sitio para recibir viajes con la app cerrada.', b: null, alerta: true },
-        instalar:    { t: 'Instala BIKAR en tu iPhone', s: 'Toca Compartir y elige «Añadir a pantalla de inicio»; luego abre BIKAR desde su icono y activa los avisos.', b: null, alerta: false },
+        activar:     { t: 'Activa los avisos de viajes', s: 'Recibe cada solicitud con el sonido DRIVXI aunque tengas la app cerrada o en segundo plano.', b: 'Activar', alerta: false },
+        bloqueado:   { t: 'Notificaciones bloqueadas', s: 'Permite las notificaciones de DRIVXI en los ajustes del navegador o del sitio para recibir viajes con la app cerrada.', b: null, alerta: true },
+        instalar:    { t: 'Instala DRIVXI en tu iPhone', s: 'Toca Compartir y elige «Añadir a pantalla de inicio»; luego abre DRIVXI desde su icono y activa los avisos.', b: null, alerta: false },
         nosoportado: { t: 'Avisos push no disponibles', s: 'Este navegador no admite notificaciones push. Usa Chrome, Edge o Safari actualizado para recibir viajes con la app cerrada.', b: null, alerta: true },
         error:       { t: 'No se pudieron activar los avisos', s: 'Revisa tu conexión e inténtalo de nuevo.', b: 'Reintentar', alerta: true }
       };
@@ -1854,7 +1853,7 @@
           ? 'Notificaciones activadas · Recibirás los viajes con la app cerrada'
           : 'Notificaciones activadas en este dispositivo', '✓');
         sonidoNuevoViaje(1);
-        notificarSistema('🔔 BIKAR · Avisos activados', 'Así te llegarán las solicitudes de viaje.', { forzar: true, tag: 'bikar-prueba' });
+        notificarSistema('🔔 DRIVXI · Avisos activados', 'Así te llegarán las solicitudes de viaje.', { forzar: true, tag: 'drivxi-prueba' });
       }
     });
 
@@ -1869,7 +1868,7 @@
           ? 'Notificaciones activadas · Te avisaremos de tu viaje aunque cierres la app'
           : 'Notificaciones activadas en este dispositivo', '✓');
         sonidoNuevoViaje(1);
-        notificarSistema('🔔 BIKAR · Avisos activados', 'Así te llegarán los avisos de tu viaje.', { forzar: true, tag: 'bikar-prueba' });
+        notificarSistema('🔔 DRIVXI · Avisos activados', 'Así te llegarán los avisos de tu viaje.', { forzar: true, tag: 'drivxi-prueba' });
       }
     });
 
@@ -2008,7 +2007,7 @@
     async function cancelarViajePasajero() {
       const v = viajeActivoPasajero;
       if (!v || !db) return;
-      const ok = await confirmarBikar('Cancelar viaje', '¿Seguro que deseas cancelar este viaje? Los conductores del servicio serán notificados.', 'Sí, cancelar viaje');
+      const ok = await confirmarDrivxi('Cancelar viaje', '¿Seguro que deseas cancelar este viaje? Los conductores del servicio serán notificados.', 'Sí, cancelar viaje');
       if (!ok) return;
       btnCancelarViaje.disabled = true;
       let { error } = await db.from('viajes')
@@ -2027,9 +2026,9 @@
 
     /* ============================ USUARIO / SESIÓN ============================ */
     function nombreUsuario(u) {
-      if (!u) return 'Usuario BIKAR';
+      if (!u) return 'Usuario DRIVXI';
       const n = [u.nombre || u.nombres, u.apellido || u.apellidos].filter(Boolean).join(' ').trim();
-      return n || u.nombre_comercio || u.nombre_establecimiento || u.usuario || u.correo || u.email || 'Usuario BIKAR';
+      return n || u.nombre_comercio || u.nombre_establecimiento || u.usuario || u.correo || u.email || 'Usuario DRIVXI';
     }
 
     function avatarPorDefecto(nombre) {
@@ -2200,7 +2199,7 @@
     /* ============================ MENÚ DE PERFIL ============================ */
     function actualizarChipUsuario() {
       btnCambiarModo.textContent = nombreUsuario(usuarioActual);
-      btnCambiarModo.title = 'Sesión activa: ' + (usuarioActual && usuarioActual.tipo_usuario ? usuarioActual.tipo_usuario.toUpperCase() : 'BIKAR');
+      btnCambiarModo.title = 'Sesión activa: ' + (usuarioActual && usuarioActual.tipo_usuario ? usuarioActual.tipo_usuario.toUpperCase() : 'DRIVXI');
     }
 
     function abrirMenuPerfil() {
@@ -2234,7 +2233,7 @@
     $('menu-item-ayuda').addEventListener('click', () => { cerrarMenuPerfil(); abrirModalAyuda(); });
     $('menu-item-salir').addEventListener('click', async () => {
       cerrarMenuPerfil();
-      if (await confirmarBikar('Cerrar sesión', '¿Estás seguro de que deseas cerrar tu sesión en BIKAR?', 'Sí, cerrar sesión')) cerrarSesion();
+      if (await confirmarDrivxi('Cerrar sesión', '¿Estás seguro de que deseas cerrar tu sesión en DRIVXI?', 'Sí, cerrar sesión')) cerrarSesion();
     });
 
     async function cerrarSesion() {
@@ -2257,7 +2256,7 @@
       modalConfirmar.classList.add('oculto');
       if (resolverConfirmacionActual) { const r = resolverConfirmacionActual; resolverConfirmacionActual = null; r(valor); }
     }
-    function confirmarBikar(titulo, mensaje, textoAceptar) {
+    function confirmarDrivxi(titulo, mensaje, textoAceptar) {
       $('confirmar-titulo').textContent = titulo;
       $('confirmar-mensaje').textContent = mensaje;
       $('confirmar-aceptar').textContent = textoAceptar || 'Aceptar';
@@ -2625,14 +2624,14 @@
       const cab = ['id','tipo_servicio','origen_nombre','destino_nombre','distancia_km','tarifa_soles','estado','fecha'];
       const filas = lista.map((v) => [
         v.id ?? '', v.tipo_servicio || v.nombre_servicio || '', v.origen_nombre || '', v.destino_nombre || '',
-        v.distancia_km ?? '', (v.tarifa ? Number(v.tarifa > 500 ? v.tarifa/1000 : v.tarifa).toFixed(2) : '0.00'), v.estado || '', textoFecha(fechaDeViaje(v))
+        v.distancia_km ?? '', (v.tarifa ? String(Math.round(Number(v.tarifa))) : '0'), v.estado || '', textoFecha(fechaDeViaje(v))
       ]);
       const q = (c) => '"' + String(c).replace(/"/g, '""') + '"';
       const csv = '\uFEFF' + [cab].concat(filas).map(f => f.map(q).join(';')).join('\r\n');
       const url = URL.createObjectURL(new Blob([csv], { type:'text/csv;charset=utf-8;' }));
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'bikar_' + vistaHistorial + '_' + filtroPeriodo.value + '_' + new Date().toISOString().slice(0,10) + '.csv';
+      a.download = 'drivxi_' + vistaHistorial + '_' + filtroPeriodo.value + '_' + new Date().toISOString().slice(0,10) + '.csv';
       document.body.appendChild(a); a.click(); a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 1200);
       mostrarToast('Archivo descargado');
@@ -3025,7 +3024,7 @@
         } catch (e) {}
         const cal = await calificacionDePasajero(id, fila);
         return {
-          nombre: fila ? nombreUsuario(fila) : 'Pasajero BIKAR',
+          nombre: fila ? nombreUsuario(fila) : 'Pasajero DRIVXI',
           foto: fila ? fotoDeUsuario(fila) : avatarPorDefecto('P'),
           verificado: !!(fila && (fila.verificado === true || String(fila.estado || '').toLowerCase() === 'verificado')),
           calificacion: cal ? cal.promedio : null,
@@ -3158,7 +3157,7 @@
       banner.innerHTML = SVG_RECHAZAR + ' Viaje cancelado';
       el.insertBefore(banner, el.firstChild);
       mostrarToast('Viaje cancelado por el pasajero', '!');
-      notificarSistema('❌ Viaje cancelado', 'El pasajero canceló la solicitud.', { tag: 'bikar-cancelado-' + el.dataset.id });
+      notificarSistema('❌ Viaje cancelado', 'El pasajero canceló la solicitud.', { tag: 'drivxi-cancelado-' + el.dataset.id });
       try { if (navigator.vibrate) navigator.vibrate([200, 80, 200]); } catch (e) {}
       pintarEstadoLista();
       setTimeout(() => {
@@ -3302,19 +3301,19 @@
     const SVG_PAPELERA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V3h8v3M5 6l1 15h12l1-15M10 10v7M14 10v7"/></svg>';
     const SERVICIOS_INFO = {
       taxi_auto: {
-        titulo:'BIKAR TAXI',
+        titulo:'DRIVXI TAXI',
         imagen:'https://images.pexels.com/photos/13918522/pexels-photo-13918522.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
         alt:'Taxi circulando por una calle de la ciudad',
         descripcion:'Viaja en auto desde tu punto de partida hasta tu destino. Elige la opción disponible que necesites; los vehículos registrados para 6 pasajeros tienen una tarifa 30% mayor que la normal.'
       },
       moto_delivery: {
-        titulo:'BIKAR ENVÍOS',
+        titulo:'DRIVXI ENVÍOS',
         imagen:'https://images.pexels.com/photos/4440774/pexels-photo-4440774.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
         alt:'Entrega de paquetes a un destinatario',
         descripcion:'Envía paquetes, comida o documentos de un punto a otro. Indica la dirección de recojo y la de entrega para solicitar un conductor del servicio.'
       },
       moto_taxi: {
-        titulo:'BIKAR MOTO',
+        titulo:'DRIVXI MOTO',
         imagen:'https://images.pexels.com/photos/5192884/pexels-photo-5192884.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
         alt:'Personas desplazándose en motocicleta',
         descripcion:'Una alternativa ágil y económica para el traslado de un pasajero en moto. Selecciona tu destino y consulta la disponibilidad y la tarifa antes de confirmar.'
@@ -3331,7 +3330,7 @@
       focoModalesNuevos.set(modal, document.activeElement);
       modal.classList.remove('oculto');
       requestAnimationFrame(() => {
-        if (abierto(modal)) modal.querySelector('.modal-bikar-cerrar').focus({ preventScroll:true });
+        if (abierto(modal)) modal.querySelector('.modal-drivxi-cerrar').focus({ preventScroll:true });
       });
     }
 
@@ -3353,7 +3352,7 @@
     }
 
     MODALES_NUEVOS.forEach((modal) => {
-      modal.querySelector('.modal-bikar-cerrar').addEventListener('click', () => cerrarModalNuevo(modal));
+      modal.querySelector('.modal-drivxi-cerrar').addEventListener('click', () => cerrarModalNuevo(modal));
       modal.addEventListener('click', (e) => { if (e.target === modal) cerrarModalNuevo(modal); });
     });
 
