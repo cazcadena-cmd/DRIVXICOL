@@ -5,7 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#121212">
   <title>DRIVXI APP</title>
+  <meta name="description" content="DRIVXI · Seguridad, Economía e Innovación. Solicita viajes, conduce o registra tu comercio.">
   <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="DRIVXI">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <!-- Vista previa al compartir el enlace por WhatsApp -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="DRIVXI">
+  <meta property="og:title" content="DRIVXI APP · Seguridad, Economía e Innovación">
+  <meta property="og:description" content="Solicita viajes, conduce o registra tu comercio. Instala la app y viaja con DRIVXI.">
+  <meta property="og:url" content="https://cazcadena-cmd.github.io/DRIVXICOL/">
+  <meta property="og:image" content="https://cazcadena-cmd.github.io/DRIVXICOL/icon-512.png">
+  <meta property="og:image:width" content="512">
+  <meta property="og:image:height" content="512">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DRIVXI APP">
+  <meta name="twitter:description" content="Solicita viajes, conduce o registra tu comercio.">
+  <meta name="twitter:image" content="https://cazcadena-cmd.github.io/DRIVXICOL/icon-512.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -814,7 +834,16 @@
       </ol>
     </div>
 
-    <button type="button" id="btn-instalar-pwa" class="btn-main">Instalar aplicación</button>
+    <!-- Instrucciones manuales para Android (cuando Chrome no ofrece instalación automática) -->
+    <div id="pwa-instrucciones-android" class="oculto" style="text-align:left; background:rgba(255,255,255,0.06); padding:12px 14px; border-radius:14px; margin-bottom:16px; font-size:0.82rem; color:#f8f9fa; border:1px solid rgba(158,216,50,0.3);">
+      <p style="font-weight:600; margin-bottom:6px; color:var(--primary-color);">Para instalar en tu Android:</p>
+      <ol style="padding-left:18px; line-height:1.5;">
+        <li>Presiona el menú <strong>⋮</strong> de Chrome (arriba a la derecha).</li>
+        <li>Elige <strong>"Instalar app"</strong> o <strong>"Agregar a pantalla principal"</strong> ➕.</li>
+      </ol>
+    </div>
+
+    <button type="button" id="btn-instalar-pwa" class="btn-main">Instalar</button>
     <button type="button" id="btn-cerrar-instalar-pwa" class="btn-secondary" style="margin-top:8px;">Ahora no</button>
   </div>
 
@@ -1662,6 +1691,7 @@ if (errVehiculo) {
     const btnInstalar = document.getElementById('btn-instalar-pwa');
     const btnCerrarInstalar = document.getElementById('btn-cerrar-instalar-pwa');
     const instruccionesIos = document.getElementById('pwa-instrucciones-ios');
+    const instruccionesAndroid = document.getElementById('pwa-instrucciones-android');
     const textoInstalar = document.getElementById('pwa-instalar-texto');
 
     const esPwa = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
@@ -1671,16 +1701,36 @@ if (errVehiculo) {
       window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
+        // Si el popup ya está visible con la guía manual, cambia al botón de instalación automática
+        if (instruccionesAndroid) instruccionesAndroid.classList.add('oculto');
+        btnInstalar.classList.remove('oculto');
+        if (textoInstalar) textoInstalar.innerText = "Instala la aplicación en tu dispositivo para acceder rápidamente";
         mostrarAlertaInstalacion();
       });
 
       if (esIos) {
         setTimeout(() => {
           instruccionesIos.classList.remove('oculto');
+          if (instruccionesAndroid) instruccionesAndroid.classList.add('oculto');
           btnInstalar.classList.add('oculto');
           if (textoInstalar) textoInstalar.innerText = "Agrega DRIVXI a tu pantalla de inicio para acceder rápidamente.";
           mostrarAlertaInstalacion();
         }, 1200);
+      } else {
+        // Android y otros: el popup aparece SIEMPRE al abrir la app mientras no esté instalada.
+        // Con el evento del navegador, INSTALAR instala automáticamente;
+        // sin evento, se muestra la guía manual (menú ⋮ → Instalar app).
+        setTimeout(() => {
+          if (!deferredPrompt) {
+            if (instruccionesAndroid) instruccionesAndroid.classList.remove('oculto');
+            btnInstalar.classList.add('oculto');
+            if (textoInstalar) textoInstalar.innerText = "Instala DRIVXI en tu Android para acceder rápidamente.";
+          } else {
+            if (instruccionesAndroid) instruccionesAndroid.classList.add('oculto');
+            btnInstalar.classList.remove('oculto');
+          }
+          mostrarAlertaInstalacion();
+        }, 2600);
       }
     }
 
