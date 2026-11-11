@@ -87,11 +87,11 @@
     .inicio-features span{display:inline-flex;align-items:center;gap:7px;font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#fff!important}
     .inicio-features span::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--primary-color);box-shadow:0 0 8px var(--primary-color)}
     .texto-subtitulo{position:absolute;top:calc(85px + env(safe-area-inset-top));left:16px;z-index:2;color:#fff!important;font-size:.85rem;font-weight:500;
-      text-shadow:0 1px 8px rgba(0,0,0,.7);white-space:nowrap;overflow:hidden;border-right:2px solid var(--primary-color);width:0;max-width:max-content;
+      text-shadow:0 1px 8px rgba(0,0,0,.7);white-space:nowrap;overflow:hidden;border-right:2px solid var(--primary-color);width:0;max-width:max-content;text-transform:capitalize;
       animation:mecanografiar 3s steps(30,end) forwards,parpadeoCursor .75s step-end infinite}
 
     /* ROLES */
-    .roles-container{position:absolute;left:16px;bottom:calc(50px + env(safe-area-inset-bottom));z-index:2;display:flex;flex-direction:column;gap:8px;width:calc(100% - 32px);max-width:200px}
+    .roles-container{position:absolute;left:16px;top:calc(125px + env(safe-area-inset-top));bottom:auto;z-index:2;display:flex;flex-direction:column;gap:8px;width:calc(100% - 32px);max-width:200px}
     .tarjeta-rol{position:relative;display:flex;align-items:center;gap:9px;width:100%;background:var(--field-bg);border:1px solid var(--field-border);
       border-radius:10px;padding:7px 10px;cursor:pointer;color:var(--text-color);text-align:left;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
       box-shadow:0 12px 32px rgba(0,0,0,.28),inset 0 1px 0 var(--glass-highlight);
@@ -398,7 +398,7 @@
     </video>
     <div class="fx-scan" aria-hidden="true"></div>
     <div class="inicio-features" aria-hidden="true"><span>Seguridad</span><span>Economia</span><span>Innovacion</span></div>
-    <p class="texto-subtitulo">BIENVENIDOS! SELECCIONA TU ROL</p>
+    <p class="texto-subtitulo">Bienvenidos! Selecciona tu rol</p>
 
     <div class="roles-container">
       <button class="tarjeta-rol" onclick="seleccionarRol('pasajero')" aria-label="Ingresar como Pasajero">
