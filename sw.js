@@ -1,6 +1,6 @@
 /* DRIVXI Service Worker · caché + notificaciones push */
 const CACHE_NAME = 'drivxi-cache-v1';
-const URLS_TO_CACHE = ['./drivxi.html', './index.html', './manifest.json'];
+const URLS_TO_CACHE = ['./index.html', './drivxi.html', './app.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
