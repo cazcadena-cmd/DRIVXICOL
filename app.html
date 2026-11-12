@@ -707,6 +707,15 @@
     .disp-pie{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;flex-wrap:wrap}
     .disp-estado{font-size:.62rem;font-weight:800;color:var(--muted-text)}
     .disp-estado.ok{color:#10b981}
+    .disp-grupo{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:6px 2px 2px;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-text)}
+    .disp-grupo.ok{color:#10b981}
+    .disp-grupo b{min-width:20px;padding:2px 7px;border-radius:999px;text-align:center;font-size:.6rem;letter-spacing:0;background:var(--field-bg);border:1px solid var(--field-border)}
+    .disp-vacio{padding:10px 12px;border-radius:12px;font-size:.7rem;line-height:1.4;color:var(--muted-text);background:var(--field-bg);border:1px dashed var(--field-border)}
+    .disp-pills{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+    .disp-pill{padding:2px 8px;border-radius:999px;font-size:.56rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--field-border);color:var(--muted-text);background:var(--glass-bg)}
+    .disp-pill.ok{color:#10b981;border-color:rgba(16,185,129,.45);background:rgba(16,185,129,.12)}
+    .disp-pill.rechazado{color:#ef4444;border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.1)}
+    .disp-pill.cancelado{color:#d68b1f;border-color:rgba(214,139,31,.45);background:rgba(214,139,31,.12)}
 
     /* Perfil del conductor: aceptar o no viajes con mascota */
     .btn-mini.mascotas-no{color:var(--muted-text);background:var(--field-bg);border-color:var(--field-border)}
@@ -750,9 +759,9 @@
     </button>
     <div id="menu-subservicios" class="menu-subservicios oculto" aria-label="Servicios de DRIVXI">
       <button type="button" class="menu-perfil-item" data-servicio-info="taxi_auto"><span class="mi-ico" data-icono-servicio="taxi_auto"></span><span>DRIVXI TAXI</span></button>
+      <button type="button" class="menu-perfil-item" data-servicio-info="auto_particular"><span class="mi-ico" data-icono-servicio="auto_particular"></span><span>DRIVXI AUTO</span></button>
       <button type="button" class="menu-perfil-item" data-servicio-info="moto_delivery"><span class="mi-ico" data-icono-servicio="moto_delivery"></span><span>DRIVXI ENVÍOS</span></button>
       <button type="button" class="menu-perfil-item" data-servicio-info="moto_taxi"><span class="mi-ico" data-icono-servicio="moto_taxi"></span><span>DRIVXI MOTO</span></button>
-      <button type="button" class="menu-perfil-item" data-servicio-info="taxi_carga"><span class="mi-ico" data-icono-servicio="taxi_carga"></span><span>TAXI CARGA</span></button>
     </div>
     <button type="button" class="menu-perfil-item" id="menu-item-ayuda">
       <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
@@ -1095,7 +1104,7 @@
       <button type="button" class="modal-drivxi-cerrar" id="cerrar-modal-disponibles" aria-label="Cerrar">×</button>
       <span class="modal-kicker">DRIVXI · Conductor</span>
       <h2 class="modal-titulo" id="disponibles-titulo">Viajes disponibles</h2>
-      <p class="modal-instrucciones">Viajes que rechazaste. Si siguen activos puedes retomarlos y volverán a tus solicitudes.</p>
+      <p class="modal-instrucciones">Viajes que rechazaste o cancelaste. Arriba están los que siguen activos para retomar; abajo, los que ya no están disponibles.</p>
       <div class="modal-drivxi-scroll" id="disponibles-lista" style="flex:1;min-height:0"></div>
     </div>
   </div>
@@ -1136,7 +1145,7 @@
       taxi_auto: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/><path d="M9 7V4h6v3"/></svg>',
       moto_taxi: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/><path d="M6 11h4"/></svg>',
       moto_delivery: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/><rect x="2" y="5" width="7" height="6" rx="1"/><path d="M2 8h7"/></svg>',
-      taxi_carga: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17h4V5H2v12h3"/><path d="M20 17h2v-3.3a1 1 0 0 0-.1-.5l-1.6-3.2a1 1 0 0 0-.9-.5H14"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>',
+      auto_particular: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m21 8-2 2-1.5-3.7A2 2 0 0 0 15.6 5H8.4a2 2 0 0 0-1.9 1.3L5 10 3 8"/><path d="M7 14h.01"/><path d="M17 14h.01"/><rect x="3" y="10" width="18" height="8" rx="2"/><path d="M5 18v2"/><path d="M19 18v2"/></svg>',
       mascota: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="9.5" r="1.8"/><circle cx="9.5" cy="5.5" r="1.8"/><circle cx="14.5" cy="5.5" r="1.8"/><circle cx="18.5" cy="9.5" r="1.8"/><path d="M8 15.5c.8-2 2.3-3.2 4-3.2s3.2 1.2 4 3.2c.9 2.1-.2 4.2-2.3 4.2-.7 0-1.1-.3-1.7-.3s-1 .3-1.7.3c-2.1 0-3.2-2.1-2.3-4.2z"/></svg>',
       default: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>'
     };
@@ -1145,7 +1154,7 @@
       { clave:'moto_taxi',     etiqueta:'DRIVXI MOTO',    desc:'Económico y ágil · 1 pasajero',           base:2450,  porKm:980,  minTarifa:4400,  espera:'2 min' },
       { clave:'moto_delivery', etiqueta:'DRIVXI ENVÍOS',  desc:'Envíos de paquetes, comida y documentos',  base:2940,  porKm:1176, minTarifa:5400,  espera:'3 min' },
       { clave:'taxi_auto',     etiqueta:'DRIVXI TAXI',    desc:'Auto sedán cómodo · hasta 4 pasajeros',    base:3920,  porKm:1372, minTarifa:6400,  espera:'4 min' },
-      { clave:'taxi_carga',    etiqueta:'TAXI CARGA',    desc:'Mudanzas, carga pesada y encomiendas',     base:17640, porKm:3136, minTarifa:24500, espera:'8 min' }
+      { clave:'auto_particular', etiqueta:'DRIVXI AUTO', desc:'Auto particular cómodo · hasta 4 pasajeros', base:3920, porKm:1372, minTarifa:6400, espera:'4 min' }
     ];
 
     function normalizarClaveServicio(raw) {
@@ -1155,7 +1164,8 @@
       c = c.replace(/[_\-.]+/g, ' ').replace(/\s+/g, ' ').trim();
       if (/moto\s*deliver|delivery|domicili|paqueter|mensajer|reparto|envio/.test(c)) return 'moto_delivery';
       if (/moto\s*taxi|\bmoto\b/.test(c)) return 'moto_taxi';
-      if (/carga|mudanza|camion|furgon|encomienda/.test(c)) return 'taxi_carga';
+      // DRIVXI AUTO (auto particular). Los registros antiguos de «Taxi Carga» también pasan a DRIVXI AUTO.
+      if (/drivxi\s*auto|particular|carga|mudanza|camion|furgon|encomienda/.test(c)) return 'auto_particular';
       if (/taxi\s*auto|\bauto\b|\btaxi\b|\bcarro\b|\bcoche\b|sedan/.test(c)) return 'taxi_auto';
       return null;
     }
@@ -2200,7 +2210,9 @@
       aceptado:   ['✅ ¡Conductor asignado!', 'Tu conductor aceptó el servicio y va hacia tu dirección de partida. Prepárate para abordar.', '¡Conductor asignado! Va hacia tu dirección', '✓'],
       encurso:    ['🚖 Viaje en curso', 'Vas rumbo a tu destino. ¡Buen viaje!', 'Viaje en curso · Vas rumbo a tu destino', '✓'],
       finalizado: ['🏁 Viaje finalizado', 'Gracias por viajar con DRIVXI. Toca para ver tu viaje y calificar.', 'Viaje finalizado', '✓'],
-      cancelado:  ['❌ Viaje cancelado', 'Tu viaje fue cancelado. Puedes solicitar otro cuando quieras.', 'Tu viaje fue cancelado', '!']
+      cancelado:  ['❌ Viaje cancelado', 'Tu viaje fue cancelado. Puedes solicitar otro cuando quieras.', 'Tu viaje fue cancelado', '!'],
+      // El conductor canceló un viaje ya aceptado: vuelve a estar disponible para otros conductores
+      solicitado: ['🔄 Buscando otro conductor', 'Tu conductor canceló el viaje. Ya lo estamos mostrando a otros conductores cercanos.', 'Tu conductor canceló · buscando otro conductor', '!']
     };
     const TEXTOS_ESTADO_CONDUCTOR = {
       cancelado:  ['❌ Viaje cancelado', 'El pasajero canceló el viaje.', 'El pasajero canceló el viaje', '!']
@@ -3074,23 +3086,218 @@
       historialContenido.appendChild(cont);
     }
 
-    function descargarHistorial() {
+    /* ============================ DESCARGA EN PDF (Mis viajes · Mis ingresos / Mis pagos) ============================
+       Genera un reporte PDF profesional: encabezado DRIVXI con logo, datos de la cuenta, resumen y tabla ordenada.
+       La librería (jsPDF + AutoTable) se carga solo al tocar «Descargar». */
+    const URL_JSPDF = 'https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js';
+    const URL_AUTOTABLE = 'https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js';
+    let promesaLibreriaPdf = null;
+
+    function cargarScriptExterno(src) {
+      return new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = src; s.async = true;
+        s.onload = () => resolve();
+        s.onerror = () => { s.remove(); reject(new Error('No se pudo cargar la librería de PDF')); };
+        document.head.appendChild(s);
+      });
+    }
+    function cargarLibreriaPdf() {
+      const listo = () => window.jspdf && window.jspdf.jsPDF && window.jspdf.jsPDF.API && window.jspdf.jsPDF.API.autoTable;
+      if (listo()) return Promise.resolve();
+      if (!promesaLibreriaPdf) {
+        promesaLibreriaPdf = (window.jspdf && window.jspdf.jsPDF ? Promise.resolve() : cargarScriptExterno(URL_JSPDF))
+          .then(() => cargarScriptExterno(URL_AUTOTABLE))
+          .then(() => { if (!listo()) throw new Error('Librería de PDF incompleta'); })
+          .catch((e) => { promesaLibreriaPdf = null; throw e; });
+      }
+      return promesaLibreriaPdf;
+    }
+
+    // Texto apto para la fuente del PDF (quita emojis y caracteres que no se pueden imprimir)
+    function pdfTxt(s) {
+      return String(s == null ? '' : s)
+        .replace(/[\u00A0\u202F\u2007]/g, ' ')
+        .replace(/[\u2013\u2014]/g, '-').replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"')
+        .replace(/\u2192/g, '>').replace(/\u2022/g, '-').replace(/\u2026/g, '...')
+        .replace(/[^\x00-\xFF]/g, '').replace(/\s+/g, ' ').trim();
+    }
+    const pdfMoneda = (v) => pdfTxt('$ ' + Math.round(Number(v) || 0).toLocaleString('es-CO'));
+
+    // Logo de la app (icon-192.png) sobre fondo oscuro para el encabezado; si no carga, el PDF sale sin logo
+    function logoParaPdf() {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          try {
+            const c = document.createElement('canvas');
+            c.width = 160; c.height = 160;
+            const ctx = c.getContext('2d');
+            ctx.fillStyle = '#121212'; ctx.fillRect(0, 0, 160, 160);
+            ctx.drawImage(img, 0, 0, 160, 160);
+            resolve(c.toDataURL('image/jpeg', 0.9));
+          } catch (e) { resolve(null); }
+        };
+        img.onerror = () => resolve(null);
+        img.src = 'icon-192.png';
+      });
+    }
+
+    function estadoLegible(estado) {
+      const e = String(estado || 'solicitado').toLowerCase().trim().replace(/[\s\-]+/g, '_');
+      if (/cancel|rechaz|anul/.test(e)) return 'Cancelado';
+      if (/finaliz|complet|termin|conclu/.test(e)) return 'Finalizado';
+      if (e === 'en_camino') return 'En camino';
+      if (['en_progreso', 'en_curso', 'en_viaje', 'iniciado'].includes(e)) return 'En curso';
+      if (['aceptado', 'asignado'].includes(e)) return 'Aceptado';
+      return 'Solicitado';
+    }
+
+    async function descargarHistorial() {
       const lista = viajesFiltrados();
       if (!lista.length) { mostrarToast('No hay datos para descargar', '!'); return; }
-      const cab = ['id','tipo_servicio','origen_nombre','destino_nombre','distancia_km','tarifa_soles','estado','fecha'];
-      const filas = lista.map((v) => [
-        v.id ?? '', v.tipo_servicio || v.nombre_servicio || '', v.origen_nombre || '', v.destino_nombre || '',
-        v.distancia_km ?? '', (v.tarifa ? String(Math.round(Number(v.tarifa))) : '0'), v.estado || '', textoFecha(fechaDeViaje(v))
-      ]);
-      const q = (c) => '"' + String(c).replace(/"/g, '""') + '"';
-      const csv = '\uFEFF' + [cab].concat(filas).map(f => f.map(q).join(';')).join('\r\n');
-      const url = URL.createObjectURL(new Blob([csv], { type:'text/csv;charset=utf-8;' }));
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'drivxi_' + vistaHistorial + '_' + filtroPeriodo.value + '_' + new Date().toISOString().slice(0,10) + '.csv';
-      document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 1200);
-      mostrarToast('Archivo descargado');
+      const boton = $('btn-descargar-historial');
+      if (boton.disabled) return;
+      boton.disabled = true;
+      mostrarToast('Generando tu reporte PDF…');
+      try {
+        await cargarLibreriaPdf();
+        const logo = await logoParaPdf();
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+        const W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight(), M = 14;
+        const VERDE = [158, 216, 50], OSCURO = [18, 18, 18], TEXTO = [30, 41, 59], GRIS = [100, 116, 139], LINEA = [226, 232, 240];
+        const ROJO = [220, 38, 38], VERDE_OK = [5, 150, 105], AMBAR = [180, 110, 10];
+
+        const con = esConductorContexto();
+        const esPagos = vistaHistorial === 'pagos';
+        const cancelado = (v) => /cancel|rechaz|anul/.test(String(v.estado || '').toLowerCase());
+        const finalizado = (v) => /finaliz|complet|termin|conclu/.test(String(v.estado || '').toLowerCase());
+        const valor = (v) => cancelado(v) ? 0 : Number(v.tarifa || 0);
+        const nombreServicio = (v) => ((viajeDeSeisPasajeros(v) || viajeConMascota(v)) ? v.nombre_servicio : v.tipo_servicio) || v.nombre_servicio || 'Servicio';
+        const total = lista.reduce((a, v) => a + valor(v), 0);
+        const nValidos = lista.filter((v) => !cancelado(v)).length;
+        const nCancelados = lista.length - nValidos;
+        const nFinalizados = lista.filter(finalizado).length;
+        const km = lista.filter((v) => !cancelado(v)).reduce((a, v) => a + Number(v.distancia_km || 0), 0);
+        const periodo = { hoy: 'Hoy', semana: 'Últimos 7 días', mes: 'Este mes', todo: 'Todo el historial' }[filtroPeriodo.value] || '';
+        const ahora = new Date();
+        const titulo = esPagos ? (con ? 'Reporte de ingresos' : 'Reporte de pagos') : (con ? 'Servicios realizados' : 'Historial de viajes');
+
+        /* ---------- Encabezado ---------- */
+        doc.setFillColor(...OSCURO); doc.rect(0, 0, W, 34, 'F');
+        doc.setFillColor(...VERDE); doc.rect(0, 34, W, 1.4, 'F');
+        let xMarca = M;
+        if (logo) { try { doc.addImage(logo, 'JPEG', M, 9, 16, 16); xMarca = M + 20; } catch (e) {} }
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(22); doc.setTextColor(...VERDE);
+        doc.text('DRIVXI', xMarca, 18.5);
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(210, 210, 210);
+        doc.text(pdfTxt('Seguridad · Economía · Innovación'), xMarca, 24.5);
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(255, 255, 255);
+        doc.text(pdfTxt(titulo), W - M, 15, { align: 'right' });
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(200, 200, 200);
+        doc.text(pdfTxt('Periodo: ' + periodo), W - M, 21, { align: 'right' });
+        doc.text(pdfTxt('Generado: ' + textoFecha(ahora)), W - M, 26, { align: 'right' });
+
+        /* ---------- Datos de la cuenta ---------- */
+        let y = 45;
+        const rol = con ? 'Conductor' + (claveServicioConductor ? ' · ' + etiquetaServicio(claveServicioConductor) : '') : 'Pasajero';
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(...GRIS);
+        doc.text('TITULAR', M, y); doc.text('TIPO DE CUENTA', W / 2, y);
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.setTextColor(...TEXTO);
+        doc.text(pdfTxt(nombreUsuario(usuarioActual)), M, y + 5.5, { maxWidth: W / 2 - M - 4 });
+        doc.text(pdfTxt(rol), W / 2, y + 5.5, { maxWidth: W / 2 - M });
+
+        /* ---------- Resumen ---------- */
+        y = 58;
+        const kpis = esPagos
+          ? [[con ? 'Total ganado' : 'Total pagado', pdfMoneda(total)], ['Servicios', String(nValidos)],
+             ['Promedio', pdfMoneda(nValidos ? total / nValidos : 0)], ['Cancelados ($ 0)', String(nCancelados)]]
+          : [['Servicios', String(lista.length)], ['Finalizados', String(nFinalizados)],
+             ['Cancelados', String(nCancelados)], [con ? 'Total generado' : 'Total pagado', pdfMoneda(total)]];
+        const gap = 4, ancho = (W - 2 * M - gap * 3) / 4;
+        kpis.forEach((k, i) => {
+          const x = M + i * (ancho + gap);
+          doc.setFillColor(247, 250, 242); doc.setDrawColor(...VERDE); doc.setLineWidth(0.35);
+          doc.roundedRect(x, y, ancho, 19, 2.5, 2.5, 'FD');
+          doc.setFont('helvetica', 'bold'); doc.setFontSize(7); doc.setTextColor(...GRIS);
+          doc.text(pdfTxt(k[0]).toUpperCase(), x + 4, y + 6.5);
+          doc.setFontSize(12.5); doc.setTextColor(...TEXTO);
+          doc.text(k[1], x + 4, y + 14.5, { maxWidth: ancho - 6 });
+        });
+        y += 25;
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(...GRIS);
+        let nota = 'Los viajes cancelados aparecen con valor $ 0 y no se suman al total.';
+        if (!esPagos && km) nota = 'Distancia recorrida: ' + km.toFixed(1).replace('.', ',') + ' km. ' + nota;
+        if (esPagos && con) nota += ' Comisiones DRIVXI: $ 0 (gratuito por ahora).';
+        doc.text(pdfTxt(nota), M, y, { maxWidth: W - 2 * M });
+        y += 6;
+
+        /* ---------- Tabla ---------- */
+        const cabecera = esPagos
+          ? ['#', 'Fecha', 'Servicio', 'Método de pago', 'Estado', con ? 'Ganado' : 'Pagado']
+          : ['#', 'Fecha', 'Servicio', 'Recorrido', 'Km', 'Estado', 'Tarifa'];
+        const filas = lista.map((v) => {
+          const fecha = pdfTxt(textoFecha(fechaDeViaje(v)));
+          const pago = metodoPagoDeViaje(v);
+          if (esPagos) {
+            return [String(v.id ?? ''), fecha, pdfTxt(nombreServicio(v)),
+              pago === 'billetera' ? 'Billetera digital' : (pago === 'efectivo' ? 'Efectivo' : '-'),
+              estadoLegible(v.estado), (con ? '+ ' : '- ') + pdfMoneda(valor(v))];
+          }
+          return [String(v.id ?? ''), fecha, pdfTxt(nombreServicio(v)),
+            pdfTxt('A: ' + (v.origen_nombre || 'Origen')) + '\n' + pdfTxt('B: ' + (v.destino_nombre || 'Destino')),
+            v.distancia_km ? String(v.distancia_km).replace('.', ',') : '-',
+            estadoLegible(v.estado), pdfMoneda(valor(v))];
+        });
+        const colEstado = esPagos ? 4 : 5, colValor = esPagos ? 5 : 6;
+        const pie = new Array(cabecera.length).fill('');
+        pie[colValor - 1] = 'TOTAL';
+        pie[colValor] = (esPagos ? (con ? '+ ' : '- ') : '') + pdfMoneda(total);
+
+        doc.autoTable({
+          startY: y,
+          head: [cabecera.map(pdfTxt)],
+          body: filas,
+          foot: [pie],
+          showFoot: 'lastPage',
+          theme: 'grid',
+          margin: { left: M, right: M, top: 16, bottom: 18 },
+          styles: { font: 'helvetica', fontSize: 7.8, cellPadding: 2.2, textColor: TEXTO, lineColor: LINEA, lineWidth: 0.15, valign: 'middle', overflow: 'linebreak' },
+          headStyles: { fillColor: OSCURO, textColor: VERDE, fontStyle: 'bold', fontSize: 8 },
+          footStyles: { fillColor: VERDE, textColor: OSCURO, fontStyle: 'bold', fontSize: 9 },
+          alternateRowStyles: { fillColor: [248, 250, 244] },
+          columnStyles: esPagos
+            ? { 0: { cellWidth: 12, halign: 'center' }, 1: { cellWidth: 36 }, 3: { cellWidth: 32 }, 4: { cellWidth: 24, halign: 'center', fontStyle: 'bold' }, 5: { cellWidth: 30, halign: 'right', fontStyle: 'bold' } }
+            : { 0: { cellWidth: 11, halign: 'center' }, 1: { cellWidth: 28 }, 2: { cellWidth: 28 }, 4: { cellWidth: 11, halign: 'center' }, 5: { cellWidth: 22, halign: 'center', fontStyle: 'bold' }, 6: { cellWidth: 24, halign: 'right', fontStyle: 'bold' } },
+          didParseCell: (d) => {
+            if (d.section === 'foot' && d.column.index >= colValor - 1) d.cell.styles.halign = 'right';
+            if (d.section !== 'body') return;
+            const est = String(d.row.raw[colEstado] || '');
+            if (d.column.index === colEstado) d.cell.styles.textColor = est === 'Cancelado' ? ROJO : (est === 'Finalizado' ? VERDE_OK : AMBAR);
+            if (est === 'Cancelado' && d.column.index !== colEstado) d.cell.styles.textColor = GRIS;
+          }
+        });
+
+        /* ---------- Pie de página en todas las hojas ---------- */
+        const paginas = doc.internal.getNumberOfPages();
+        for (let i = 1; i <= paginas; i++) {
+          doc.setPage(i);
+          doc.setDrawColor(...LINEA); doc.setLineWidth(0.3); doc.line(M, H - 12, W - M, H - 12);
+          doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor(...GRIS);
+          doc.text(pdfTxt('DRIVXI · Reporte generado desde la app · Soporte: resgistrosdrivxi@gmail.com'), M, H - 7);
+          doc.text(pdfTxt('Página ' + i + ' de ' + paginas), W - M, H - 7, { align: 'right' });
+        }
+
+        const tipo = esPagos ? (con ? 'ingresos' : 'pagos') : (con ? 'servicios' : 'viajes');
+        doc.save('drivxi_' + tipo + '_' + filtroPeriodo.value + '_' + ahora.toISOString().slice(0, 10) + '.pdf');
+        mostrarToast('Reporte PDF descargado');
+      } catch (e) {
+        console.warn('PDF:', e);
+        mostrarToast('No se pudo generar el PDF. Revisa tu conexión e inténtalo de nuevo', '!');
+      } finally {
+        boton.disabled = false;
+      }
     }
 
     function abrirModalHistorial() {
@@ -3758,6 +3965,9 @@
       const ids = new Set(viajes.map(v => String(v.id)));
       const nuevos = primera ? [] : viajes.filter(v => !viajesIdsVistos.has(String(v.id)));
       const idsNuevos = new Set(nuevos.map(v => String(v.id)));
+      // Viajes que salieron de la lista (p. ej. los aceptó otro conductor): si vuelven a estar disponibles
+      // porque ese conductor los canceló, se avisan otra vez con sonido y notificación
+      if (!primera) viajesIdsVistos.forEach((id) => { if (!ids.has(id)) { viajesAvisados.delete(id); viajesNotificados.delete(id); } });
       viajesIdsVistos = ids;
 
       Array.from(contSolicitudes.children).forEach((el) => {
@@ -4061,35 +4271,46 @@
     $('btn-perfil-mascotas').addEventListener('click', cambiarAceptaMascotas);
 
     /* ============================ VIAJES DISPONIBLES (CONDUCTOR) ============================
-       Lista los viajes que el conductor rechazó (guardados en este dispositivo).
-       Si siguen activos (solicitados y sin conductor) puede retomarlos: vuelven a sus solicitudes. */
+       Lista los viajes que el conductor rechazó o canceló después de aceptarlos (guardados en este dispositivo),
+       separados en «Disponibles para retomar» (siguen activos) y «Rechazados · ya no disponibles». */
     const modalDisponibles = $('modal-disponibles');
+    const K_CANCELADOS_COND = 'drivxi_viajes_cancelados_conductor';   // viajes que este conductor canceló en viaje.html
 
-    function quitarRechazo(idViaje) {
-      const todo = lsJSON(K_RECHAZADOS);
+    function listaLocalConductor(clave) {
+      const todo = lsJSON(clave);
+      const lista = todo && typeof todo === 'object' ? todo[String(idConductorActual())] : null;
+      return Array.isArray(lista) ? lista.map(String) : [];
+    }
+    function quitarDeListaLocal(clave, idViaje) {
+      const todo = lsJSON(clave);
       if (!todo || typeof todo !== 'object' || Array.isArray(todo)) return;
       const k = String(idConductorActual());
       if (!Array.isArray(todo[k])) return;
       todo[k] = todo[k].map(String).filter((x) => x !== String(idViaje));
-      lsSet(K_RECHAZADOS, JSON.stringify(todo));
+      lsSet(clave, JSON.stringify(todo));
+    }
+    function quitarRechazo(idViaje) {
+      quitarDeListaLocal(K_RECHAZADOS, idViaje);
+      quitarDeListaLocal(K_CANCELADOS_COND, idViaje);
     }
 
     function disponibilidadViaje(v) {
-      if (!v) return { activo: false, texto: 'Ya no existe' };
+      if (!v) return { activo: false, texto: 'El viaje ya no existe' };
       const e = String(v.estado || '').toLowerCase();
-      if (/cancel|rechaz|anul/.test(e)) return { activo: false, texto: 'Cancelado' };
-      if (/finaliz|complet|termin|conclu/.test(e)) return { activo: false, texto: 'Finalizado' };
-      if (e === 'solicitado' && v.conductor_id == null) return { activo: true, texto: '● Sigue disponible' };
-      return { activo: false, texto: 'Tomado por otro conductor' };
+      if (/cancel|rechaz|anul/.test(e)) return { activo: false, texto: String(v.cancelado_por || '').toLowerCase() === 'pasajero' ? 'Cancelado por el pasajero' : 'Viaje cancelado' };
+      if (/finaliz|complet|termin|conclu/.test(e)) return { activo: false, texto: 'Viaje finalizado' };
+      if (e === 'solicitado' && v.conductor_id == null) return { activo: true, texto: 'Sigue activo · puedes retomarlo' };
+      return { activo: false, texto: 'Lo tomó otro conductor' };
     }
 
     async function abrirViajesDisponibles() {
       const lista = $('disponibles-lista');
-      lista.innerHTML = '<div class="cargando"><div class="loading-pulse"><span></span><span></span><span></span></div>Cargando viajes rechazados…</div>';
+      lista.innerHTML = '<div class="cargando"><div class="loading-pulse"><span></span><span></span><span></span></div>Cargando tus viajes…</div>';
       modalDisponibles.classList.remove('oculto');
-      const ids = rechazadosDelConductor().slice().reverse().slice(0, 100);   // los más recientes primero
+      const cancelados = new Set(listaLocalConductor(K_CANCELADOS_COND));
+      const ids = [...new Set(rechazadosDelConductor().concat(Array.from(cancelados)))].reverse().slice(0, 100);   // los más recientes primero
       if (!ids.length) {
-        lista.innerHTML = '<div class="perfil-vacio">Aún no has rechazado viajes. Cuando rechaces uno aparecerá aquí y, si sigue activo, podrás retomarlo.</div>';
+        lista.innerHTML = '<div class="perfil-vacio">Aún no has rechazado ni cancelado viajes. Cuando lo hagas aparecerán aquí y, si siguen activos, podrás retomarlos.</div>';
         return;
       }
       let filas = [];
@@ -4102,35 +4323,56 @@
         return;
       }
       const porId = new Map(filas.map((v) => [String(v.id), v]));
-      const cont = document.createElement('div');
-      cont.className = 'disp-lista';
-      ids.forEach((id, i) => {
+      const activos = [], inactivos = [];
+      ids.forEach((id) => {
         const v = porId.get(String(id));
-        const disp = disponibilidadViaje(v);
+        const item = { id: id, v: v, disp: disponibilidadViaje(v), cancelePor: cancelados.has(String(id)) };
+        (item.disp.activo ? activos : inactivos).push(item);
+      });
+
+      const crearTarjeta = (item, i) => {
+        const v = item.v, disp = item.disp;
         const card = document.createElement('div');
         card.className = 'disp-card' + (disp.activo ? '' : ' no-disponible');
         card.style.animationDelay = (i * 0.04) + 's';
+        const pills = '<span class="disp-pills">' +
+          (disp.activo ? '<span class="disp-pill ok">Disponible</span>' : '') +
+          (item.cancelePor ? '<span class="disp-pill cancelado">Lo cancelaste</span>' : '<span class="disp-pill rechazado">Lo rechazaste</span>') +
+          '</span>';
         if (!v) {
-          card.innerHTML = '<div class="disp-top"><span class="disp-servicio">Viaje #' + esc(id) + '</span></div>' +
+          card.innerHTML = '<div class="disp-top"><span class="disp-servicio">Viaje #' + esc(item.id) + '</span>' + pills + '</div>' +
             '<div class="disp-pie"><span class="disp-estado">' + disp.texto + '</span></div>';
-        } else {
-          const clave = normalizarClaveServicio(v.tipo_servicio || v.nombre_servicio) || 'default';
-          const etiqueta = ((viajeDeSeisPasajeros(v) || viajeConMascota(v)) ? v.nombre_servicio : v.tipo_servicio) || 'Servicio';
-          const pago = metodoPagoDeViaje(v);
-          card.innerHTML =
-            '<div class="disp-top"><span class="disp-servicio">' + iconoServicio(viajeConMascota(v) ? 'mascota' : clave) + esc(etiqueta) + '</span>' +
-              '<span class="disp-precio">' + formatoMoneda(v.tarifa || 0) + '</span></div>' +
-            '<div class="disp-ruta"><span>A ·</span> ' + esc(v.origen_nombre || 'Origen') + '</div>' +
-            '<div class="disp-ruta"><span>B ·</span> ' + esc(v.destino_nombre || 'Destino') + '</div>' +
-            '<div class="disp-pie"><span class="disp-estado' + (disp.activo ? ' ok' : '') + '">' + disp.texto +
-              (pago ? ' · ' + ETIQUETA_PAGO[pago] : '') + '</span>' +
-              (disp.activo ? '<button type="button" class="btn-mini">Retomar viaje</button>' : '') +
-            '</div>';
-          const boton = card.querySelector('.btn-mini');
-          if (boton) boton.addEventListener('click', () => retomarViaje(v));
+          return card;
         }
-        cont.appendChild(card);
-      });
+        const clave = normalizarClaveServicio(v.tipo_servicio || v.nombre_servicio) || 'default';
+        const etiqueta = ((viajeDeSeisPasajeros(v) || viajeConMascota(v)) ? v.nombre_servicio : v.tipo_servicio) || 'Servicio';
+        const pago = metodoPagoDeViaje(v);
+        card.innerHTML =
+          '<div class="disp-top"><span class="disp-servicio">' + iconoServicio(viajeConMascota(v) ? 'mascota' : clave) + esc(etiqueta) + '</span>' +
+            '<span class="disp-precio">' + formatoMoneda(v.tarifa || 0) + '</span></div>' +
+          '<div class="disp-ruta"><span>A ·</span> ' + esc(v.origen_nombre || 'Origen') + '</div>' +
+          '<div class="disp-ruta"><span>B ·</span> ' + esc(v.destino_nombre || 'Destino') + '</div>' +
+          '<div class="disp-pie">' + pills +
+            (disp.activo ? '<button type="button" class="btn-mini">Retomar viaje</button>' : '') +
+          '</div>' +
+          '<div class="disp-pie" style="margin-top:6px"><span class="disp-estado' + (disp.activo ? ' ok' : '') + '">' + (disp.activo ? '● ' : '') + disp.texto +
+            (pago ? ' · ' + ETIQUETA_PAGO[pago] : '') + '</span></div>';
+        const boton = card.querySelector('.btn-mini');
+        if (boton) boton.addEventListener('click', () => retomarViaje(v));
+        return card;
+      };
+
+      const cont = document.createElement('div');
+      cont.className = 'disp-lista';
+      // 1) Disponibles para retomar (siguen activos)
+      cont.insertAdjacentHTML('beforeend', '<div class="disp-grupo ok"><span>Disponibles para retomar</span><b>' + activos.length + '</b></div>');
+      if (activos.length) activos.forEach((it, i) => cont.appendChild(crearTarjeta(it, i)));
+      else cont.insertAdjacentHTML('beforeend', '<div class="disp-vacio">Ninguno de tus viajes rechazados o cancelados sigue activo en este momento.</div>');
+      // 2) Rechazados · ya no disponibles
+      if (inactivos.length) {
+        cont.insertAdjacentHTML('beforeend', '<div class="disp-grupo"><span>Rechazados · ya no disponibles</span><b>' + inactivos.length + '</b></div>');
+        inactivos.forEach((it, i) => cont.appendChild(crearTarjeta(it, activos.length + i)));
+      }
       lista.innerHTML = '';
       lista.appendChild(cont);
     }
@@ -4186,11 +4428,11 @@
         alt:'Personas desplazándose en motocicleta',
         descripcion:'Una alternativa ágil y económica para el traslado de un pasajero en moto. Selecciona tu destino y consulta la disponibilidad y la tarifa antes de confirmar.'
       },
-      taxi_carga: {
-        titulo:'TAXI CARGA',
-        imagen:'https://images.pexels.com/photos/9754798/pexels-photo-9754798.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
-        alt:'Camión transportando carga por carretera',
-        descripcion:'Traslada muebles, encomiendas o carga de mayor volumen. Marca los puntos de recojo y entrega y coordina con el conductor los detalles del traslado.'
+      auto_particular: {
+        titulo:'DRIVXI AUTO',
+        imagen:'https://images.pexels.com/photos/4606345/pexels-photo-4606345.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
+        alt:'Conductor de auto particular llevando a un pasajero',
+        descripcion:'Viaja en un auto particular, cómodo y con conductor verificado, desde tu punto de partida hasta tu destino. Ideal para hasta 4 pasajeros: consulta la disponibilidad y la tarifa antes de confirmar.'
       }
     };
 
