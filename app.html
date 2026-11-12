@@ -652,6 +652,29 @@
     body.buscando-destino #sugerencias-destino .sugerencia-detalle{font-size:.68rem}
     body.buscando-destino #sugerencias-destino .powered-google{flex-shrink:0;border-top:0;padding:2px 10px}
     @keyframes dxSugIn{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+
+    /* ============================================================
+       DRIVXI · MÉTODOS DE PAGO (el pasajero elige · el conductor configura)
+       ============================================================ */
+    .metodo-pago-box{margin-bottom:10px;padding:10px;border-radius:14px;background:var(--field-bg);border:1px solid var(--field-border);animation:cardPop .3s ease both}
+    .metodo-pago-titulo{display:block;margin-bottom:7px;font-size:.58rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--primary-color)}
+    .metodo-pago-opciones{display:flex;gap:8px}
+    .metodo-pago-btn{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:50px;padding:8px 6px;
+      border-radius:12px;border:1.5px solid var(--field-border);background:var(--glass-bg-strong);color:var(--text-color);cursor:pointer;
+      font-size:.78rem;font-weight:800;transition:border-color .2s,background .2s,box-shadow .2s,transform .2s}
+    .metodo-pago-btn small{max-width:100%;font-size:.58rem;font-weight:600;color:var(--muted-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .metodo-pago-btn:hover:not(:disabled){border-color:var(--primary-color)}
+    .metodo-pago-btn.sel{border-color:var(--primary-color);background:rgba(158,216,50,.14);box-shadow:0 0 0 3px rgba(158,216,50,.16)}
+    .metodo-pago-btn.sel small{color:var(--text-color)}
+    .metodo-pago-btn:disabled{opacity:.45;cursor:not-allowed}
+    .metodo-pago-info{margin-top:7px;font-size:.64rem;line-height:1.4;color:var(--muted-text)}
+    .viaje-pago-chip{padding:3px 8px;border-radius:999px;font-size:.58rem;font-weight:800;letter-spacing:.04em;color:var(--text-color);
+      background:var(--glass-bg);border:1px solid var(--field-border);white-space:nowrap}
+    .pago-qr-drop{position:relative;display:flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 12px;margin-bottom:10px;border-radius:12px;
+      border:1px dashed rgba(158,216,50,.55);background:var(--field-bg);color:var(--text-color);font-size:.78rem;font-weight:700;cursor:pointer}
+    .pago-qr-drop input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+    .pago-qr-preview{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .pago-qr-preview img{width:84px;height:84px;object-fit:contain;padding:4px;border-radius:12px;background:#fff;border:1px solid var(--field-border)}
   </style>
   <script>
     (function(){
@@ -815,6 +838,15 @@
     </div>
     <div id="servicios-lista" class="servicios-lista"></div>
     <div class="servicios-footer">
+      <!-- MÉTODO DE PAGO DEL PASAJERO (aparece al elegir un servicio) -->
+      <div id="metodo-pago-pasajero" class="metodo-pago-box oculto">
+        <span class="metodo-pago-titulo">Método de pago</span>
+        <div class="metodo-pago-opciones">
+          <button type="button" class="metodo-pago-btn" data-metodo="efectivo">💵 Efectivo<small id="mp-efectivo-sub"></small></button>
+          <button type="button" class="metodo-pago-btn" data-metodo="billetera">📱 Billetera digital<small id="mp-billetera-sub"></small></button>
+        </div>
+        <p class="metodo-pago-info" id="metodo-pago-info"></p>
+      </div>
       <button id="btn-confirmar-servicio" class="btn-main" disabled>Selecciona un servicio</button>
       <p class="servicios-leyenda">Solo se muestran los servicios que cuentan con conductores activos en este momento.</p>
     </div>
@@ -842,6 +874,10 @@
           <button type="button" class="btn-mini oculto" id="btn-perfil-vehiculo">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
             Mi vehículo
+          </button>
+          <button type="button" class="btn-mini oculto" id="btn-perfil-pagos">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3"/><path d="M21 9h-5a3 3 0 0 0 0 6h5V9z"/></svg>
+            Métodos de pago
           </button>
           <button type="button" class="btn-mini" id="btn-perfil-tema">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -968,6 +1004,46 @@
       </div>
     </div>
   </div>
+  <!-- MÉTODOS DE PAGO DEL CONDUCTOR (obligatorio para las cuentas que aún no los tienen) -->
+  <div id="modal-metodos-pago" class="modal-drivxi oculto" role="dialog" aria-modal="true" aria-labelledby="metodos-pago-titulo">
+    <div class="modal-drivxi-dialog modal-pequena">
+      <button type="button" class="modal-drivxi-cerrar oculto" id="cerrar-modal-metodos-pago" aria-label="Cerrar">×</button>
+      <span class="modal-kicker">DRIVXI · Conductor</span>
+      <h2 class="modal-titulo" id="metodos-pago-titulo">Tus métodos de pago</h2>
+      <div class="modal-drivxi-scroll">
+        <p class="modal-instrucciones" id="metodos-pago-ayuda">Elige cómo pueden pagarte los pasajeros.</p>
+        <div class="metodo-pago-opciones">
+          <button type="button" class="metodo-pago-btn" id="mpc-efectivo">💵 Efectivo</button>
+          <button type="button" class="metodo-pago-btn" id="mpc-billetera">📱 Billetera digital</button>
+        </div>
+        <div id="mpc-billetera-campos" class="oculto" style="margin-top:12px">
+          <label class="favoritos-label" for="mpc-nombre">Nombre de la billetera</label>
+          <input id="mpc-nombre" class="favoritos-control" list="mpc-lista-billeteras" maxlength="40" placeholder="Ej: Nequi" autocomplete="off">
+          <datalist id="mpc-lista-billeteras">
+            <option value="Nequi"></option>
+            <option value="Daviplata"></option>
+            <option value="Bancolombia a la mano"></option>
+            <option value="Movii"></option>
+            <option value="Dale!"></option>
+            <option value="Nu Colombia"></option>
+            <option value="Lulo Bank"></option>
+            <option value="RappiPay"></option>
+          </datalist>
+          <label class="favoritos-label" for="mpc-numero">Número de cuenta o celular</label>
+          <input id="mpc-numero" class="favoritos-control" inputmode="numeric" maxlength="30" placeholder="Ej: 3001234567" autocomplete="off">
+          <span class="favoritos-label">Código QR de la billetera (opcional)</span>
+          <label class="pago-qr-drop"><span id="mpc-qr-texto">Subir imagen del QR</span><input type="file" id="mpc-qr" accept="image/*"></label>
+          <div id="mpc-qr-preview" class="pago-qr-preview oculto">
+            <img id="mpc-qr-img" alt="QR de tu billetera">
+            <button type="button" class="btn-mini" id="mpc-qr-quitar">Quitar QR</button>
+          </div>
+        </div>
+        <p id="mpc-error" class="favoritos-error oculto" role="alert"></p>
+        <button type="button" class="btn-main" id="mpc-guardar" style="margin-top:12px">Guardar métodos de pago</button>
+      </div>
+    </div>
+  </div>
+
   <div id="toast"><span class="toast-icon">✓</span><span id="toast-text"></span></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
@@ -1061,6 +1137,10 @@
     let sesionYaVerificada = false, vistaHistorial = 'servicios', historialViajes = [], historialCargando = false;
     let capacidadConductor = null, recurrentesMostrados = false, secuenciaRecurrentes = 0;
     let aceptaMascotasConductor = false; // true si el vehículo del conductor está registrado como «Acepta mascotas»
+    let pagosPorOpcion = {};              // por opción de servicio: conductores activos que aceptan efectivo / billetera
+    let metodoPagoSeleccionado = null;    // método elegido por el pasajero: 'efectivo' | 'billetera'
+    let pagoConductor = { efectivo: true, billetera: false, nombre: '', numero: '', qr: '', configurado: false, columnas: false };
+    let filaPagoConductor = null;         // fila de 'conductores' del conductor en sesión
     let favoritoBorrador = null, tokenFavorito = null, destinoGuardadoPendiente = null;
     let servicioConductorListo = false, secuenciaDireccionGuardada = 0;
 
@@ -1176,6 +1256,38 @@
     const aceptaMascotasDe = (...fuentes) => fuentes.some((f) => f && typeof f === 'object' &&
       (f.pet_friendly === true || f.pet_friendly === 'true' || f.acepta_mascotas === true || f.acepta_mascotas === 'true'));
     const viajeConMascota = (v) => !!v && (v.con_mascota === true || /mascota/i.test(String(v.nombre_servicio || '')));
+
+    /* ---- MÉTODOS DE PAGO: el pasajero elige Efectivo o Billetera digital; solo lo reciben conductores que lo aceptan ---- */
+    const ETIQUETA_PAGO = { efectivo: '💵 Efectivo', billetera: '📱 Billetera digital' };
+    function metodosPagoDe(c) {
+      const columnas = !!c && typeof c === 'object' && ('acepta_efectivo' in c || 'acepta_billetera' in c);
+      if (!columnas) return { efectivo: true, billetera: false, nombre: '', numero: '', qr: '', configurado: false, columnas: false };
+      return {
+        efectivo: c.acepta_efectivo !== false,
+        billetera: c.acepta_billetera === true,
+        nombre: String(c.billetera_nombre || '').trim(),
+        numero: String(c.billetera_numero || '').trim(),
+        qr: String(c.billetera_qr || '').trim(),
+        configurado: !!c.metodos_pago_fecha,
+        columnas: true
+      };
+    }
+    const metodoPagoDeViaje = (v) => {
+      const m = String((v && v.metodo_pago) || '').toLowerCase();
+      return m.indexOf('billetera') >= 0 ? 'billetera' : (m.indexOf('efectivo') >= 0 ? 'efectivo' : '');
+    };
+    const conductorAceptaPago = (v) => {
+      const m = metodoPagoDeViaje(v);
+      return !m || (m === 'billetera' ? pagoConductor.billetera : pagoConductor.efectivo);
+    };
+    function sumarPagoOpcion(opcion, pago) {
+      const p = pagosPorOpcion[opcion] || (pagosPorOpcion[opcion] = { efectivo: 0, billetera: 0, billeteras: [] });
+      if (pago.efectivo) p.efectivo++;
+      if (pago.billetera) {
+        p.billetera++;
+        if (pago.nombre && !p.billeteras.some((n) => mismoTexto(n, pago.nombre))) p.billeteras.push(pago.nombre);
+      }
+    }
 
     let toastTimer;
     function mostrarToast(mensaje, icono = '✓') {
@@ -1969,6 +2081,7 @@
         notificarSistema(
           '🚖 Nueva solicitud · ' + ((viajeConMascota(v) ? v.nombre_servicio : '') || v.tipo_servicio || v.nombre_servicio || 'Servicio'),
           formatoMoneda(v.tarifa) + (dist ? ' · ' + dist.toFixed(1) + ' km' : '') +
+            (metodoPagoDeViaje(v) ? ' · ' + ETIQUETA_PAGO[metodoPagoDeViaje(v)] : '') +
             '\nA: ' + (v.origen_nombre || 'Origen') + '\nB: ' + (v.destino_nombre || 'Destino'),
           { tag: 'drivxi-viaje-' + k, viaje_id: v.id, tipo: 'nuevo_viaje', persistente: true, vibrar: [350, 120, 350, 120, 700, 200, 350, 120, 350] }
         );
@@ -2429,6 +2542,7 @@
         inicializarEstadoConductor();
         sincronizarEstadoConductorDB();
         await resolverServicioDelConductor();
+        await cargarPagoConductor();   // métodos de pago del conductor (si no los tiene, se le piden)
         servicioConductorListo = true;
         iniciarPushConductor(false);
         if (conductorActivo) {
@@ -2621,6 +2735,7 @@
       const esCond = rol === 'conductor';
       $('btn-perfil-vehiculo').classList.toggle('oculto', !esCond);
       $('btn-perfil-tema').classList.toggle('oculto', esCond);
+      $('btn-perfil-pagos').classList.toggle('oculto', !esCond);
 
       const cont = $('perfil-datos'), extra = $('perfil-extra');
       cont.innerHTML = ''; extra.innerHTML = '';
@@ -2978,6 +3093,8 @@
       servicioSeleccionado = null;
       btnConfirmarServicio.disabled = true;
       btnConfirmarServicio.textContent = 'Selecciona un servicio';
+      metodoPagoSeleccionado = null;
+      $('metodo-pago-pasajero').classList.add('oculto');
     }
     $('btn-cerrar-servicios').addEventListener('click', cerrarPanelServicios);
     backdrop.addEventListener('click', cerrarPanelServicios);
@@ -3018,6 +3135,7 @@
 
     async function obtenerConductoresActivos() {
       const conteo = {};
+      pagosPorOpcion = {};
       if (!db) return conteo;
 
       const res = await Promise.all([
@@ -3027,7 +3145,7 @@
           'id,tipo_usuario,conductor_activo',
           'id,tipo_usuario'
         ], ['tipo_usuario', 'conductor']),
-        leerTablaConCapacidad('conductores', ['id,usuario_id']),
+        leerTablaConCapacidad('conductores', ['id,usuario_id,acepta_efectivo,acepta_billetera,billetera_nombre', 'id,usuario_id']),
         leerTablaConCapacidad('vehiculos', ['conductor_id,tipo_servicio,pet_friendly', 'conductor_id,tipo_servicio']),
         leerTablaConCapacidad('documentos_conductor', ['usuario_id,conductor_id,tipo_servicio,pet_friendly', 'usuario_id,conductor_id,tipo_servicio'])
       ]);
@@ -3075,11 +3193,14 @@
           const capacidad = capacidadPasajerosDe(filaVehCond.get(String(cid)), filaDocUsuario.get(String(u.id)),
             filaDocCond.get(String(cid)), filaCondUsuario.get(String(u.id)), u);
           const opcion = claveOpcionServicio(clave, capacidad);
+          const pago = metodosPagoDe(filaCondUsuario.get(String(u.id)));
           conteo[opcion] = (conteo[opcion] || 0) + 1;
+          sumarPagoOpcion(opcion, pago);
           // DRIVXI TAXI con mascota: conductores de taxi (no de 6 pasajeros) que aceptan mascotas
           if (clave === 'taxi_auto' && capacidad !== 6 && aceptaMascotasDe(filaVehCond.get(String(cid)), filaDocUsuario.get(String(u.id)),
             filaDocCond.get(String(cid)), filaCondUsuario.get(String(u.id)), u)) {
             conteo[OPCION_MASCOTA] = (conteo[OPCION_MASCOTA] || 0) + 1;
+            sumarPagoOpcion(OPCION_MASCOTA, pago);
           }
         }
       });
@@ -3113,6 +3234,8 @@
       servicioSeleccionado = null;
       btnConfirmarServicio.disabled = true;
       btnConfirmarServicio.textContent = 'Selecciona un servicio';
+      metodoPagoSeleccionado = null;
+      $('metodo-pago-pasajero').classList.add('oculto');
 
       if (!disponibles.length) {
         serviciosLista.innerHTML = '<div class="cargando">No hay conductores activos en este momento. Intenta de nuevo en unos minutos.</div>';
@@ -3141,21 +3264,68 @@
           serviciosLista.querySelectorAll('.servicio-card').forEach(c => c.classList.remove('seleccionado'));
           card.classList.add('seleccionado');
           servicioSeleccionado = Object.assign({}, s, { tarifa });
-          btnConfirmarServicio.disabled = false;
-          btnConfirmarServicio.textContent = 'Confirmar ' + s.etiqueta + ' · ' + formatoMoneda(tarifa);
+          mostrarMetodosPago(s.opcion);
+          actualizarBotonConfirmar();
         });
         serviciosLista.appendChild(card);
       });
     }
 
+    /* ---- Método de pago del pasajero: solo se puede elegir el que aceptan los conductores activos del servicio ---- */
+    function actualizarBotonConfirmar() {
+      const s = servicioSeleccionado;
+      if (!s) { btnConfirmarServicio.disabled = true; btnConfirmarServicio.textContent = 'Selecciona un servicio'; return; }
+      if (!metodoPagoSeleccionado) { btnConfirmarServicio.disabled = true; btnConfirmarServicio.textContent = 'Elige un método de pago'; return; }
+      btnConfirmarServicio.disabled = false;
+      btnConfirmarServicio.textContent = 'Confirmar ' + s.etiqueta + ' · ' + formatoMoneda(s.tarifa);
+    }
+
+    function mostrarMetodosPago(opcion) {
+      const caja = $('metodo-pago-pasajero');
+      const p = pagosPorOpcion[opcion] || { efectivo: 1, billetera: 0, billeteras: [] };
+      const disponible = { efectivo: p.efectivo > 0, billetera: p.billetera > 0 };
+      if (metodoPagoSeleccionado && !disponible[metodoPagoSeleccionado]) metodoPagoSeleccionado = null;
+      if (!metodoPagoSeleccionado) {
+        const unicos = ['efectivo', 'billetera'].filter((m) => disponible[m]);
+        if (unicos.length === 1) metodoPagoSeleccionado = unicos[0];   // si solo hay una opción se elige sola
+      }
+      caja.querySelectorAll('.metodo-pago-btn').forEach((b) => {
+        const m = b.dataset.metodo;
+        b.disabled = !disponible[m];
+        b.classList.toggle('sel', metodoPagoSeleccionado === m);
+      });
+      $('mp-efectivo-sub').textContent = disponible.efectivo ? p.efectivo + ' conductor' + (p.efectivo > 1 ? 'es' : '') : 'No disponible';
+      $('mp-billetera-sub').textContent = disponible.billetera
+        ? (p.billeteras.length ? p.billeteras.slice(0, 3).join(' · ') : p.billetera + ' conductor' + (p.billetera > 1 ? 'es' : ''))
+        : 'No disponible';
+      const info = $('metodo-pago-info');
+      if (metodoPagoSeleccionado === 'efectivo') {
+        info.textContent = 'Pagas en efectivo directamente a tu conductor al terminar el viaje.';
+      } else if (metodoPagoSeleccionado === 'billetera') {
+        info.textContent = 'Cuando un conductor acepte verás su ' + (p.billeteras.length ? p.billeteras.join(', ') : 'billetera digital') +
+          ', el número de cuenta y su código QR para pagarle.';
+      } else {
+        info.textContent = 'Elige cómo vas a pagar: solo te asignaremos conductores que acepten ese método.';
+      }
+      caja.classList.remove('oculto');
+    }
+
+    $('metodo-pago-pasajero').addEventListener('click', (e) => {
+      const b = e.target.closest('.metodo-pago-btn');
+      if (!b || b.disabled || !servicioSeleccionado) return;
+      metodoPagoSeleccionado = b.dataset.metodo;
+      mostrarMetodosPago(servicioSeleccionado.opcion);
+      actualizarBotonConfirmar();
+    });
+
     btnConfirmarServicio.addEventListener('click', async () => {
-      if (!servicioSeleccionado) return;
+      if (!servicioSeleccionado || !metodoPagoSeleccionado) return;
       btnConfirmarServicio.disabled = true;
       btnConfirmarServicio.textContent = 'Solicitando…';
       if (promesaPushPasajero) {
         try { await Promise.race([promesaPushPasajero, new Promise((r) => setTimeout(r, 6000))]); } catch (e) {}
       }
-      await solicitarViaje(servicioSeleccionado);
+      await solicitarViaje(Object.assign({}, servicioSeleccionado, { metodoPago: metodoPagoSeleccionado }));
     });
 
     /* ============================ SOLICITAR VIAJE ============================ */
@@ -3174,11 +3344,13 @@
         estado: 'solicitado'
       };
       if (servicio.conMascota) registro.con_mascota = true;
+      if (servicio.metodoPago) registro.metodo_pago = servicio.metodoPago;   // 'efectivo' | 'billetera'
 
       let { data, error } = await db.from('viajes').insert([registro]).select();
-      // Si aún no se ejecutó el SQL de mascotas, el viaje se guarda igual (el nombre del servicio indica «Con mascota»)
-      if (error && registro.con_mascota && /con_mascota/i.test(String(error.message || ''))) {
+      // Si aún no se ejecutó el SQL de mascotas o de métodos de pago, el viaje se guarda igual sin esas columnas
+      if (error && /con_mascota|metodo_pago/i.test(String(error.message || ''))) {
         delete registro.con_mascota;
+        delete registro.metodo_pago;
         ({ data, error } = await db.from('viajes').insert([registro]).select());
       }
 
@@ -3359,6 +3531,7 @@
           '<div class="viaje-header-izq">' +
             '<span class="viaje-tipo-badge">' + iconoServicio(viajeConMascota(viaje) ? 'mascota' : clave) + ' ' + esc(((viajeDeSeisPasajeros(viaje) || viajeConMascota(viaje)) ? viaje.nombre_servicio : viaje.tipo_servicio) || 'Servicio') + '</span>' +
             (esNuevo ? '<span class="viaje-nuevo-chip">NUEVO</span>' : '') +
+            (metodoPagoDeViaje(viaje) ? '<span class="viaje-pago-chip">' + ETIQUETA_PAGO[metodoPagoDeViaje(viaje)] + '</span>' : '') +
           '</div>' +
           '<div class="viaje-precio-badge">' + formatoMoneda(viaje.tarifa || 0) + '<small>TARIFA</small></div>' +
         '</div>' +
@@ -3491,6 +3664,8 @@
       viajes = viajes.filter(v => viajeDeSeisPasajeros(v) === (capacidadConductor === 6));
       // Viajes «con mascota»: solo los ven los conductores que aceptan mascotas
       viajes = viajes.filter(v => !viajeConMascota(v) || aceptaMascotasConductor);
+      // Método de pago: solo los viajes cuyo pago (efectivo / billetera) acepta este conductor
+      viajes = viajes.filter(v => conductorAceptaPago(v));
 
       const rechazados = new Set(rechazadosDelConductor());
       viajes = viajes.filter(v => !rechazados.has(String(v.id)));
@@ -3553,6 +3728,10 @@
         mostrarToast('Este viaje es con mascota y tu vehículo no está registrado para mascotas', '!');
         return;
       }
+      if (!conductorAceptaPago(viaje)) {
+        mostrarToast('El pasajero pagará con ' + (metodoPagoDeViaje(viaje) === 'billetera' ? 'billetera digital' : 'efectivo') + ' y no lo tienes en tus métodos de pago', '!');
+        return;
+      }
       const conductorId = usuarioActual ? (usuarioActual.conductor_id || usuarioActual.id || usuarioActual.Id) : CONDUCTOR_ID_PRUEBA;
       const { error } = await db.from('viajes')
         .update({ estado:'aceptado', conductor_id: conductorId }).eq('id', viaje.id);
@@ -3561,6 +3740,146 @@
       mostrarToast('¡Viaje aceptado con éxito!');
       window.location.href = 'viaje.html?id=' + viaje.id + '&rol=conductor';
     }
+
+    /* ============================ MÉTODOS DE PAGO DEL CONDUCTOR ============================
+       - Al entrar se leen de la tabla 'conductores'. Si la cuenta aún no los tiene (cuentas ya creadas),
+         se abre una ventana OBLIGATORIA para que los actualice.
+       - También se pueden editar en cualquier momento desde Perfil → «Métodos de pago». */
+    const modalMetodosPago = $('modal-metodos-pago');
+    let mpcBorrador = null;
+
+    async function cargarPagoConductor() {
+      const u = usuarioActual || {};
+      let fila = null;
+      try {
+        const cid = await resolverConductorId(u);
+        if (cid != null) fila = masReciente(await consultarFilas('conductores', '*', 'id', cid));
+        if (!fila && u.id != null) fila = masReciente(await consultarFilas('conductores', '*', 'usuario_id', u.id));
+      } catch (e) { console.warn('Métodos de pago:', e); }
+      filaPagoConductor = fila;
+      pagoConductor = metodosPagoDe(fila);
+      if (fila && !pagoConductor.columnas) console.warn('Métodos de pago: ejecuta el SQL de métodos de pago en Supabase.');
+      if (fila && pagoConductor.columnas && !pagoConductor.configurado) abrirModalMetodosPago(true);
+    }
+
+    function pintarModalMetodosPago() {
+      const b = mpcBorrador;
+      $('mpc-efectivo').classList.toggle('sel', b.efectivo);
+      $('mpc-billetera').classList.toggle('sel', b.billetera);
+      $('mpc-billetera-campos').classList.toggle('oculto', !b.billetera);
+      const hayQr = !!b.qr;
+      $('mpc-qr-preview').classList.toggle('oculto', !hayQr);
+      if (hayQr) $('mpc-qr-img').src = b.qr; else $('mpc-qr-img').removeAttribute('src');
+      $('mpc-qr-texto').textContent = hayQr ? 'Cambiar imagen del QR' : 'Subir imagen del QR';
+    }
+
+    function abrirModalMetodosPago(obligatorio) {
+      mpcBorrador = {
+        efectivo: pagoConductor.efectivo, billetera: pagoConductor.billetera,
+        nombre: pagoConductor.nombre || '', numero: pagoConductor.numero || '', qr: pagoConductor.qr || '', qrNuevo: false
+      };
+      $('mpc-nombre').value = mpcBorrador.nombre;
+      $('mpc-numero').value = mpcBorrador.numero;
+      $('mpc-error').classList.add('oculto');
+      modalMetodosPago.dataset.obligatorio = obligatorio ? '1' : '';
+      $('cerrar-modal-metodos-pago').classList.toggle('oculto', !!obligatorio);
+      $('metodos-pago-titulo').textContent = obligatorio ? 'Actualiza tus métodos de pago' : 'Tus métodos de pago';
+      $('metodos-pago-ayuda').textContent = obligatorio
+        ? 'Ahora los pasajeros eligen cómo pagar. Indica qué métodos aceptas para seguir recibiendo viajes.'
+        : 'Elige cómo pueden pagarte los pasajeros. Los datos de tu billetera se muestran al pasajero cuando aceptas su viaje.';
+      pintarModalMetodosPago();
+      modalMetodosPago.classList.remove('oculto');
+    }
+
+    function cerrarModalMetodosPago() { modalMetodosPago.classList.add('oculto'); }
+
+    // Sube el QR a Storage (bucket público «fotos-perfil», carpeta «billeteras»). Si falla se guarda la imagen tal cual.
+    async function subirImagenPago(dataUrl, nombreBase) {
+      try {
+        if (!db || !/^data:image\//.test(dataUrl)) return dataUrl;
+        const partes = dataUrl.split(',');
+        const mime = (partes[0].match(/:(.*?);/) || [])[1] || 'image/jpeg';
+        const bin = atob(partes[1]);
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        const ruta = 'billeteras/' + nombreBase + '_' + Date.now() + '.jpg';
+        const { error } = await db.storage.from('fotos-perfil').upload(ruta, new Blob([bytes], { type: mime }), { contentType: mime, upsert: true });
+        if (error) return dataUrl;
+        const r = db.storage.from('fotos-perfil').getPublicUrl(ruta);
+        return (r && r.data && r.data.publicUrl) || dataUrl;
+      } catch (e) { return dataUrl; }
+    }
+
+    async function guardarMetodosPagoConductor() {
+      const b = mpcBorrador, err = $('mpc-error');
+      const fallo = (t) => { err.textContent = t; err.classList.remove('oculto'); };
+      b.nombre = $('mpc-nombre').value.trim();
+      b.numero = $('mpc-numero').value.trim();
+      if (!b.efectivo && !b.billetera) return fallo('Elige al menos un método de pago.');
+      if (b.billetera && !b.nombre) return fallo('Escribe el nombre de tu billetera digital.');
+      if (b.billetera && !/^[0-9+\-\s]{6,30}$/.test(b.numero)) return fallo('Escribe un número de cuenta válido.');
+      err.classList.add('oculto');
+      const boton = $('mpc-guardar');
+      boton.disabled = true; boton.textContent = 'Guardando…';
+      let qr = b.billetera ? (b.qr || null) : null;
+      if (qr && b.qrNuevo) qr = await subirImagenPago(qr, 'conductor_' + (usuarioActual && usuarioActual.id != null ? usuarioActual.id : 'x'));
+      const cambios = {
+        acepta_efectivo: b.efectivo,
+        acepta_billetera: b.billetera,
+        billetera_nombre: b.billetera ? b.nombre : null,
+        billetera_numero: b.billetera ? b.numero : null,
+        billetera_qr: qr,
+        metodos_pago_fecha: new Date().toISOString()
+      };
+      let error = null;
+      if (filaPagoConductor && filaPagoConductor.id != null) ({ error } = await db.from('conductores').update(cambios).eq('id', filaPagoConductor.id));
+      else ({ error } = await db.from('conductores').update(cambios).eq('usuario_id', usuarioActual.id));
+      boton.disabled = false; boton.textContent = 'Guardar métodos de pago';
+      if (error) return fallo('No se pudo guardar: ' + error.message + ' (¿ejecutaste el SQL de métodos de pago?)');
+      filaPagoConductor = Object.assign({}, filaPagoConductor || {}, cambios);
+      pagoConductor = metodosPagoDe(filaPagoConductor);
+      cerrarModalMetodosPago();
+      mostrarToast('Métodos de pago actualizados');
+      if (modoActual === 'conductor' && conductorActivo) { viajesIdsVistos = null; cargarViajesSolicitados(); }
+    }
+
+    $('mpc-efectivo').addEventListener('click', () => { mpcBorrador.efectivo = !mpcBorrador.efectivo; pintarModalMetodosPago(); });
+    $('mpc-billetera').addEventListener('click', () => {
+      mpcBorrador.billetera = !mpcBorrador.billetera;
+      pintarModalMetodosPago();
+      if (mpcBorrador.billetera && !$('mpc-nombre').value) setTimeout(() => $('mpc-nombre').focus(), 60);
+    });
+    $('mpc-qr-quitar').addEventListener('click', () => { mpcBorrador.qr = ''; mpcBorrador.qrNuevo = false; pintarModalMetodosPago(); });
+    $('mpc-qr').addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      e.target.value = '';
+      if (!file) return;
+      if (!file.type.startsWith('image/')) { mostrarToast('Sube una imagen del QR', '!'); return; }
+      if (file.size > 5 * 1024 * 1024) { mostrarToast('La imagen supera los 5 MB', '!'); return; }
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        const img = new Image();
+        img.onload = () => {
+          const MAX = 900;
+          let w = img.width, h = img.height;
+          if (w > MAX || h > MAX) { const k = MAX / Math.max(w, h); w = Math.round(w * k); h = Math.round(h * k); }
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, h);
+          ctx.drawImage(img, 0, 0, w, h);
+          mpcBorrador.qr = canvas.toDataURL('image/jpeg', 0.92);
+          mpcBorrador.qrNuevo = true;
+          pintarModalMetodosPago();
+        };
+        img.onerror = () => mostrarToast('No se pudo leer la imagen', '!');
+        img.src = evt.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+    $('mpc-guardar').addEventListener('click', guardarMetodosPagoConductor);
+    $('cerrar-modal-metodos-pago').addEventListener('click', () => { if (!modalMetodosPago.dataset.obligatorio) cerrarModalMetodosPago(); });
+    $('btn-perfil-pagos').addEventListener('click', () => { modalPerfil.classList.add('oculto'); abrirModalMetodosPago(false); });
 
     /* ============================ TIEMPO REAL ============================ */
     function suscribirRealtime() {
