@@ -675,6 +675,17 @@
     .pago-qr-drop input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
     .pago-qr-preview{display:flex;align-items:center;gap:10px;margin-bottom:10px}
     .pago-qr-preview img{width:84px;height:84px;object-fit:contain;padding:4px;border-radius:12px;background:#fff;border:1px solid var(--field-border)}
+    .mpc-billeteras{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+    .mpc-billeteras:empty{display:none}
+    .mpc-billetera{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;background:var(--field-bg);border:1px solid rgba(158,216,50,.4)}
+    .mpc-billetera img{width:36px;height:36px;object-fit:contain;padding:2px;border-radius:8px;background:#fff;flex-shrink:0}
+    .mpc-billetera .mpc-b-ico{display:grid;place-items:center;width:36px;height:36px;border-radius:8px;background:rgba(158,216,50,.14);flex-shrink:0;font-size:1rem}
+    .mpc-billetera .mpc-b-txt{flex:1;min-width:0;display:flex;flex-direction:column}
+    .mpc-billetera strong{font-size:.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .mpc-billetera small{font-size:.66rem;color:var(--muted-text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .mpc-billetera .mpc-b-quitar{flex-shrink:0;width:30px;height:30px;border-radius:9px;border:1px solid var(--field-border);background:transparent;color:var(--muted-text);cursor:pointer}
+    .mpc-billetera .mpc-b-quitar:hover{color:#ef4444;border-color:rgba(239,68,68,.5)}
+    .mpc-form-billetera{padding:10px;border-radius:12px;border:1px dashed rgba(158,216,50,.45)}
   </style>
   <script>
     (function(){
@@ -1017,25 +1028,27 @@
           <button type="button" class="metodo-pago-btn" id="mpc-billetera">📱 Billetera digital</button>
         </div>
         <div id="mpc-billetera-campos" class="oculto" style="margin-top:12px">
-          <label class="favoritos-label" for="mpc-nombre">Nombre de la billetera</label>
-          <input id="mpc-nombre" class="favoritos-control" list="mpc-lista-billeteras" maxlength="40" placeholder="Ej: Nequi" autocomplete="off">
-          <datalist id="mpc-lista-billeteras">
-            <option value="Nequi"></option>
-            <option value="Daviplata"></option>
-            <option value="Bancolombia a la mano"></option>
-            <option value="Movii"></option>
-            <option value="Dale!"></option>
-            <option value="Nu Colombia"></option>
-            <option value="Lulo Bank"></option>
-            <option value="RappiPay"></option>
-          </datalist>
-          <label class="favoritos-label" for="mpc-numero">Número de cuenta o celular</label>
-          <input id="mpc-numero" class="favoritos-control" inputmode="numeric" maxlength="30" placeholder="Ej: 3001234567" autocomplete="off">
-          <span class="favoritos-label">Código QR de la billetera (opcional)</span>
-          <label class="pago-qr-drop"><span id="mpc-qr-texto">Subir imagen del QR</span><input type="file" id="mpc-qr" accept="image/*"></label>
-          <div id="mpc-qr-preview" class="pago-qr-preview oculto">
-            <img id="mpc-qr-img" alt="QR de tu billetera">
-            <button type="button" class="btn-mini" id="mpc-qr-quitar">Quitar QR</button>
+          <div id="mpc-billeteras-guardadas" class="mpc-billeteras"></div>
+          <div class="mpc-form-billetera">
+            <span class="favoritos-label" id="mpc-form-titulo">Agregar billetera digital</span>
+            <input id="mpc-nombre" class="favoritos-control" list="mpc-lista-billeteras" maxlength="40" placeholder="Nombre (Ej: Nequi)" autocomplete="off">
+            <datalist id="mpc-lista-billeteras">
+              <option value="Nequi"></option>
+              <option value="Daviplata"></option>
+              <option value="Bancolombia a la mano"></option>
+              <option value="Movii"></option>
+              <option value="Dale!"></option>
+              <option value="Nu Colombia"></option>
+              <option value="Lulo Bank"></option>
+              <option value="RappiPay"></option>
+            </datalist>
+            <input id="mpc-numero" class="favoritos-control" inputmode="numeric" maxlength="30" placeholder="Número de cuenta o celular" autocomplete="off">
+            <label class="pago-qr-drop"><span id="mpc-qr-texto">Subir imagen del QR (opcional)</span><input type="file" id="mpc-qr" accept="image/*"></label>
+            <div id="mpc-qr-preview" class="pago-qr-preview oculto">
+              <img id="mpc-qr-img" alt="QR de la billetera">
+              <button type="button" class="btn-mini" id="mpc-qr-quitar">Quitar QR</button>
+            </div>
+            <button type="button" class="btn-mini" id="mpc-agregar-billetera">+ Agregar billetera</button>
           </div>
         </div>
         <p id="mpc-error" class="favoritos-error oculto" role="alert"></p>
@@ -1259,15 +1272,32 @@
 
     /* ---- MÉTODOS DE PAGO: el pasajero elige Efectivo o Billetera digital; solo lo reciben conductores que lo aceptan ---- */
     const ETIQUETA_PAGO = { efectivo: '💵 Efectivo', billetera: '📱 Billetera digital' };
+    // Lista de billeteras del conductor (columna 'billeteras'; si no existe, la billetera única de las columnas anteriores)
+    function billeterasDe(c) {
+      let lista = [];
+      let b = c && c.billeteras;
+      if (typeof b === 'string') { try { b = JSON.parse(b); } catch (e) { b = null; } }
+      if (Array.isArray(b)) {
+        lista = b.filter((x) => x && (x.nombre || x.numero || x.qr)).map((x) => ({
+          nombre: String(x.nombre || '').trim(), numero: String(x.numero || '').trim(), qr: String(x.qr || '').trim()
+        }));
+      }
+      if (!lista.length && c && (c.billetera_nombre || c.billetera_numero || c.billetera_qr)) {
+        lista = [{ nombre: String(c.billetera_nombre || '').trim(), numero: String(c.billetera_numero || '').trim(), qr: String(c.billetera_qr || '').trim() }];
+      }
+      return lista;
+    }
     function metodosPagoDe(c) {
       const columnas = !!c && typeof c === 'object' && ('acepta_efectivo' in c || 'acepta_billetera' in c);
-      if (!columnas) return { efectivo: true, billetera: false, nombre: '', numero: '', qr: '', configurado: false, columnas: false };
+      if (!columnas) return { efectivo: true, billetera: false, billeteras: [], nombre: '', numero: '', qr: '', configurado: false, columnas: false };
+      const billeteras = billeterasDe(c);
       return {
         efectivo: c.acepta_efectivo !== false,
         billetera: c.acepta_billetera === true,
-        nombre: String(c.billetera_nombre || '').trim(),
-        numero: String(c.billetera_numero || '').trim(),
-        qr: String(c.billetera_qr || '').trim(),
+        billeteras: billeteras,
+        nombre: billeteras[0] ? billeteras[0].nombre : '',
+        numero: billeteras[0] ? billeteras[0].numero : '',
+        qr: billeteras[0] ? billeteras[0].qr : '',
         configurado: !!c.metodos_pago_fecha,
         columnas: true
       };
@@ -1285,7 +1315,8 @@
       if (pago.efectivo) p.efectivo++;
       if (pago.billetera) {
         p.billetera++;
-        if (pago.nombre && !p.billeteras.some((n) => mismoTexto(n, pago.nombre))) p.billeteras.push(pago.nombre);
+        const nombres = (pago.billeteras && pago.billeteras.length) ? pago.billeteras.map((w) => w.nombre) : [pago.nombre];
+        nombres.forEach((n) => { if (n && !p.billeteras.some((x) => mismoTexto(x, n))) p.billeteras.push(n); });
       }
     }
 
@@ -3145,7 +3176,7 @@
           'id,tipo_usuario,conductor_activo',
           'id,tipo_usuario'
         ], ['tipo_usuario', 'conductor']),
-        leerTablaConCapacidad('conductores', ['id,usuario_id,acepta_efectivo,acepta_billetera,billetera_nombre', 'id,usuario_id']),
+        leerTablaConCapacidad('conductores', ['id,usuario_id,acepta_efectivo,acepta_billetera,billetera_nombre,billeteras', 'id,usuario_id,acepta_efectivo,acepta_billetera,billetera_nombre', 'id,usuario_id']),
         leerTablaConCapacidad('vehiculos', ['conductor_id,tipo_servicio,pet_friendly', 'conductor_id,tipo_servicio']),
         leerTablaConCapacidad('documentos_conductor', ['usuario_id,conductor_id,tipo_servicio,pet_friendly', 'usuario_id,conductor_id,tipo_servicio'])
       ]);
@@ -3744,6 +3775,7 @@
     /* ============================ MÉTODOS DE PAGO DEL CONDUCTOR ============================
        - Al entrar se leen de la tabla 'conductores'. Si la cuenta aún no los tiene (cuentas ya creadas),
          se abre una ventana OBLIGATORIA para que los actualice.
+       - Puede aceptar efectivo y VARIAS billeteras digitales (nombre, número y QR opcional).
        - También se pueden editar en cualquier momento desde Perfil → «Métodos de pago». */
     const modalMetodosPago = $('modal-metodos-pago');
     let mpcBorrador = null;
@@ -3762,36 +3794,74 @@
       if (fila && pagoConductor.columnas && !pagoConductor.configurado) abrirModalMetodosPago(true);
     }
 
+    function pintarFormQrMpc() {
+      const f = mpcBorrador.form;
+      const hayQr = !!f.qr;
+      $('mpc-qr-preview').classList.toggle('oculto', !hayQr);
+      if (hayQr) $('mpc-qr-img').src = f.qr; else $('mpc-qr-img').removeAttribute('src');
+      $('mpc-qr-texto').textContent = hayQr ? 'Cambiar imagen del QR' : 'Subir imagen del QR (opcional)';
+    }
+
     function pintarModalMetodosPago() {
       const b = mpcBorrador;
       $('mpc-efectivo').classList.toggle('sel', b.efectivo);
       $('mpc-billetera').classList.toggle('sel', b.billetera);
       $('mpc-billetera-campos').classList.toggle('oculto', !b.billetera);
-      const hayQr = !!b.qr;
-      $('mpc-qr-preview').classList.toggle('oculto', !hayQr);
-      if (hayQr) $('mpc-qr-img').src = b.qr; else $('mpc-qr-img').removeAttribute('src');
-      $('mpc-qr-texto').textContent = hayQr ? 'Cambiar imagen del QR' : 'Subir imagen del QR';
+      const lista = $('mpc-billeteras-guardadas');
+      lista.innerHTML = '';
+      b.billeteras.forEach((w, i) => {
+        const fila = document.createElement('div');
+        fila.className = 'mpc-billetera';
+        fila.innerHTML = (w.qr ? '<img alt="QR">' : '<span class="mpc-b-ico">📱</span>') +
+          '<span class="mpc-b-txt"><strong></strong><small></small></span>' +
+          '<button type="button" class="mpc-b-quitar" aria-label="Quitar billetera">✕</button>';
+        if (w.qr) fila.querySelector('img').src = w.qr;
+        fila.querySelector('strong').textContent = w.nombre;
+        fila.querySelector('small').textContent = w.numero + (w.qr ? ' · con QR' : '');
+        fila.querySelector('.mpc-b-quitar').addEventListener('click', () => { b.billeteras.splice(i, 1); pintarModalMetodosPago(); });
+        lista.appendChild(fila);
+      });
+      $('mpc-form-titulo').textContent = b.billeteras.length ? 'Agregar otra billetera digital' : 'Agregar billetera digital';
+      pintarFormQrMpc();
     }
 
     function abrirModalMetodosPago(obligatorio) {
       mpcBorrador = {
-        efectivo: pagoConductor.efectivo, billetera: pagoConductor.billetera,
-        nombre: pagoConductor.nombre || '', numero: pagoConductor.numero || '', qr: pagoConductor.qr || '', qrNuevo: false
+        efectivo: pagoConductor.efectivo,
+        billetera: pagoConductor.billetera,
+        billeteras: (pagoConductor.billeteras || []).map((w) => ({ nombre: w.nombre, numero: w.numero, qr: w.qr, qrNuevo: false })),
+        form: { qr: '', qrNuevo: false }
       };
-      $('mpc-nombre').value = mpcBorrador.nombre;
-      $('mpc-numero').value = mpcBorrador.numero;
+      $('mpc-nombre').value = '';
+      $('mpc-numero').value = '';
       $('mpc-error').classList.add('oculto');
       modalMetodosPago.dataset.obligatorio = obligatorio ? '1' : '';
       $('cerrar-modal-metodos-pago').classList.toggle('oculto', !!obligatorio);
       $('metodos-pago-titulo').textContent = obligatorio ? 'Actualiza tus métodos de pago' : 'Tus métodos de pago';
       $('metodos-pago-ayuda').textContent = obligatorio
-        ? 'Ahora los pasajeros eligen cómo pagar. Indica qué métodos aceptas para seguir recibiendo viajes.'
-        : 'Elige cómo pueden pagarte los pasajeros. Los datos de tu billetera se muestran al pasajero cuando aceptas su viaje.';
+        ? 'Ahora los pasajeros eligen cómo pagar. Indica qué métodos aceptas para seguir recibiendo viajes. Puedes agregar varias billeteras digitales.'
+        : 'Elige cómo pueden pagarte los pasajeros. Puedes agregar varias billeteras; el pasajero las verá cuando aceptes su viaje.';
       pintarModalMetodosPago();
       modalMetodosPago.classList.remove('oculto');
     }
 
     function cerrarModalMetodosPago() { modalMetodosPago.classList.add('oculto'); }
+
+    // Valida el formulario y agrega la billetera a la lista. Devuelve un mensaje de error o '' si todo salió bien.
+    function agregarBilleteraDelFormulario() {
+      const b = mpcBorrador;
+      const nombre = $('mpc-nombre').value.trim();
+      const numero = $('mpc-numero').value.trim();
+      if (!nombre) return 'Escribe el nombre de la billetera digital.';
+      if (!/^[0-9+\-\s]{6,30}$/.test(numero)) return 'Escribe un número de cuenta válido.';
+      if (b.billeteras.some((w) => mismoTexto(w.nombre, nombre) && w.numero.replace(/\D/g, '') === numero.replace(/\D/g, ''))) return 'Esa billetera ya está agregada.';
+      if (b.billeteras.length >= 5) return 'Puedes agregar hasta 5 billeteras digitales.';
+      b.billeteras.push({ nombre: nombre, numero: numero, qr: b.form.qr, qrNuevo: b.form.qrNuevo });
+      b.form = { qr: '', qrNuevo: false };
+      $('mpc-nombre').value = '';
+      $('mpc-numero').value = '';
+      return '';
+    }
 
     // Sube el QR a Storage (bucket público «fotos-perfil», carpeta «billeteras»). Si falla se guarda la imagen tal cual.
     async function subirImagenPago(dataUrl, nombreBase) {
@@ -3813,33 +3883,54 @@
     async function guardarMetodosPagoConductor() {
       const b = mpcBorrador, err = $('mpc-error');
       const fallo = (t) => { err.textContent = t; err.classList.remove('oculto'); };
-      b.nombre = $('mpc-nombre').value.trim();
-      b.numero = $('mpc-numero').value.trim();
-      if (!b.efectivo && !b.billetera) return fallo('Elige al menos un método de pago.');
-      if (b.billetera && !b.nombre) return fallo('Escribe el nombre de tu billetera digital.');
-      if (b.billetera && !/^[0-9+\-\s]{6,30}$/.test(b.numero)) return fallo('Escribe un número de cuenta válido.');
+      // Si dejó escrita una billetera sin tocar «Agregar billetera», se agrega sola
+      if (b.billetera && ($('mpc-nombre').value.trim() || $('mpc-numero').value.trim())) {
+        const e = agregarBilleteraDelFormulario();
+        if (e) return fallo(e);
+      }
+      if (b.billetera && !b.billeteras.length) return fallo('Agrega al menos una billetera digital o desactiva esa opción.');
+      const usaBilletera = b.billetera && b.billeteras.length > 0;
+      if (!b.efectivo && !usaBilletera) return fallo('Elige al menos un método de pago.');
       err.classList.add('oculto');
       const boton = $('mpc-guardar');
       boton.disabled = true; boton.textContent = 'Guardando…';
-      let qr = b.billetera ? (b.qr || null) : null;
-      if (qr && b.qrNuevo) qr = await subirImagenPago(qr, 'conductor_' + (usuarioActual && usuarioActual.id != null ? usuarioActual.id : 'x'));
+      const idBase = 'conductor_' + (usuarioActual && usuarioActual.id != null ? usuarioActual.id : 'x');
+      const billeteras = [];
+      if (usaBilletera) {
+        for (let i = 0; i < b.billeteras.length; i++) {
+          const w = b.billeteras[i];
+          let qr = w.qr || null;
+          if (qr && w.qrNuevo) qr = await subirImagenPago(qr, idBase + '_' + (i + 1));
+          billeteras.push({ nombre: w.nombre, numero: w.numero, qr: qr });
+        }
+      }
+      const primera = billeteras[0] || null;
       const cambios = {
         acepta_efectivo: b.efectivo,
-        acepta_billetera: b.billetera,
-        billetera_nombre: b.billetera ? b.nombre : null,
-        billetera_numero: b.billetera ? b.numero : null,
-        billetera_qr: qr,
+        acepta_billetera: usaBilletera,
+        billetera_nombre: primera ? primera.nombre : null,
+        billetera_numero: primera ? primera.numero : null,
+        billetera_qr: primera ? primera.qr : null,
+        billeteras: billeteras,
         metodos_pago_fecha: new Date().toISOString()
       };
-      let error = null;
-      if (filaPagoConductor && filaPagoConductor.id != null) ({ error } = await db.from('conductores').update(cambios).eq('id', filaPagoConductor.id));
-      else ({ error } = await db.from('conductores').update(cambios).eq('usuario_id', usuarioActual.id));
+      const actualizar = (datos) => (filaPagoConductor && filaPagoConductor.id != null)
+        ? db.from('conductores').update(datos).eq('id', filaPagoConductor.id)
+        : db.from('conductores').update(datos).eq('usuario_id', usuarioActual.id);
+      let { error } = await actualizar(cambios);
+      let aviso = '';
+      if (error && /billeteras/i.test(String(error.message || ''))) {
+        // Aún no existe la columna de varias billeteras (SQL): se guarda al menos la primera
+        delete cambios.billeteras;
+        ({ error } = await actualizar(cambios));
+        if (!error) aviso = ' · ejecuta el SQL para guardar varias billeteras';
+      }
       boton.disabled = false; boton.textContent = 'Guardar métodos de pago';
       if (error) return fallo('No se pudo guardar: ' + error.message + ' (¿ejecutaste el SQL de métodos de pago?)');
       filaPagoConductor = Object.assign({}, filaPagoConductor || {}, cambios);
       pagoConductor = metodosPagoDe(filaPagoConductor);
       cerrarModalMetodosPago();
-      mostrarToast('Métodos de pago actualizados');
+      mostrarToast('Métodos de pago actualizados' + aviso);
       if (modoActual === 'conductor' && conductorActivo) { viajesIdsVistos = null; cargarViajesSolicitados(); }
     }
 
@@ -3847,9 +3938,17 @@
     $('mpc-billetera').addEventListener('click', () => {
       mpcBorrador.billetera = !mpcBorrador.billetera;
       pintarModalMetodosPago();
-      if (mpcBorrador.billetera && !$('mpc-nombre').value) setTimeout(() => $('mpc-nombre').focus(), 60);
+      if (mpcBorrador.billetera && !mpcBorrador.billeteras.length) setTimeout(() => $('mpc-nombre').focus(), 60);
     });
-    $('mpc-qr-quitar').addEventListener('click', () => { mpcBorrador.qr = ''; mpcBorrador.qrNuevo = false; pintarModalMetodosPago(); });
+    $('mpc-agregar-billetera').addEventListener('click', () => {
+      const err = $('mpc-error');
+      const e = agregarBilleteraDelFormulario();
+      if (e) { err.textContent = e; err.classList.remove('oculto'); return; }
+      err.classList.add('oculto');
+      pintarModalMetodosPago();
+      mostrarToast('Billetera agregada');
+    });
+    $('mpc-qr-quitar').addEventListener('click', () => { mpcBorrador.form = { qr: '', qrNuevo: false }; pintarFormQrMpc(); });
     $('mpc-qr').addEventListener('change', (e) => {
       const file = e.target.files && e.target.files[0];
       e.target.value = '';
@@ -3868,9 +3967,8 @@
           const ctx = canvas.getContext('2d');
           ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, h);
           ctx.drawImage(img, 0, 0, w, h);
-          mpcBorrador.qr = canvas.toDataURL('image/jpeg', 0.92);
-          mpcBorrador.qrNuevo = true;
-          pintarModalMetodosPago();
+          mpcBorrador.form = { qr: canvas.toDataURL('image/jpeg', 0.92), qrNuevo: true };
+          pintarFormQrMpc();
         };
         img.onerror = () => mostrarToast('No se pudo leer la imagen', '!');
         img.src = evt.target.result;
