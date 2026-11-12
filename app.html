@@ -686,6 +686,30 @@
     .mpc-billetera .mpc-b-quitar{flex-shrink:0;width:30px;height:30px;border-radius:9px;border:1px solid var(--field-border);background:transparent;color:var(--muted-text);cursor:pointer}
     .mpc-billetera .mpc-b-quitar:hover{color:#ef4444;border-color:rgba(239,68,68,.5)}
     .mpc-form-billetera{padding:10px;border-radius:12px;border:1px dashed rgba(158,216,50,.45)}
+
+    /* Rechazar pequeño junto al precio (tarjetas de solicitud del conductor) */
+    .viaje-header-der{display:flex;align-items:center;gap:8px;flex-shrink:0}
+    .btn-rechazar.btn-rechazar-mini{width:auto;height:26px;margin:0;padding:0 8px;gap:4px;border-radius:999px;font-size:.6rem;font-weight:800;letter-spacing:.02em;flex-shrink:0}
+    .btn-rechazar.btn-rechazar-mini svg{width:11px;height:11px}
+
+    /* Viajes disponibles (viajes rechazados que el conductor puede retomar) */
+    .disp-lista{display:flex;flex-direction:column;gap:9px;padding:2px 4px 6px 2px}
+    .disp-card{position:relative;padding:11px 12px 11px 15px;border-radius:14px;background:var(--field-bg);border:1px solid var(--field-border);overflow:hidden;animation:cardPop .35s cubic-bezier(.2,.8,.2,1) both}
+    .disp-card::before{content:"";position:absolute;left:0;top:11px;bottom:11px;width:3px;border-radius:3px;background:linear-gradient(180deg,var(--primary-color),var(--deep-blue))}
+    .disp-card.no-disponible{opacity:.6}
+    .disp-card.no-disponible::before{background:var(--field-border)}
+    .disp-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+    .disp-servicio{display:inline-flex;align-items:center;gap:5px;min-width:0;font-size:.62rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--primary-color)}
+    .disp-servicio svg{width:12px;height:12px;flex-shrink:0}
+    .disp-precio{font-size:.92rem;font-weight:800;color:var(--text-color);white-space:nowrap}
+    .disp-ruta{font-size:.72rem;line-height:1.4;color:var(--text-color);font-weight:600}
+    .disp-ruta span{color:var(--muted-text);font-weight:500}
+    .disp-pie{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;flex-wrap:wrap}
+    .disp-estado{font-size:.62rem;font-weight:800;color:var(--muted-text)}
+    .disp-estado.ok{color:#10b981}
+
+    /* Perfil del conductor: aceptar o no viajes con mascota */
+    .btn-mini.mascotas-no{color:var(--muted-text);background:var(--field-bg);border-color:var(--field-border)}
   </style>
   <script>
     (function(){
@@ -714,6 +738,10 @@
     <button type="button" class="menu-perfil-item" id="menu-item-historial">
       <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
       <span class="mi-txt">Mis viajes</span>
+    </button>
+    <button type="button" class="menu-perfil-item oculto" id="menu-item-disponibles">
+      <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15.5-6.3L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.3L3 16"/><path d="M3 21v-5h5"/></svg></span>
+      <span class="mi-txt">Viajes disponibles</span>
     </button>
     <button type="button" class="menu-perfil-item oculto" id="menu-item-tipos-servicios" aria-expanded="false" aria-controls="menu-subservicios">
       <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
@@ -890,6 +918,10 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3"/><path d="M21 9h-5a3 3 0 0 0 0 6h5V9z"/></svg>
             Métodos de pago
           </button>
+          <button type="button" class="btn-mini oculto" id="btn-perfil-mascotas" title="Activar o desactivar los viajes con mascota">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="9.5" r="1.8"/><circle cx="9.5" cy="5.5" r="1.8"/><circle cx="14.5" cy="5.5" r="1.8"/><circle cx="18.5" cy="9.5" r="1.8"/><path d="M8 15.5c.8-2 2.3-3.2 4-3.2s3.2 1.2 4 3.2c.9 2.1-.2 4.2-2.3 4.2-.7 0-1.1-.3-1.7-.3s-1 .3-1.7.3c-2.1 0-3.2-2.1-2.3-4.2z"/></svg>
+            <span id="txt-perfil-mascotas">Acepta mascotas: Sí</span>
+          </button>
           <button type="button" class="btn-mini" id="btn-perfil-tema">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
             Cambiar tema
@@ -1054,6 +1086,17 @@
         <p id="mpc-error" class="favoritos-error oculto" role="alert"></p>
         <button type="button" class="btn-main" id="mpc-guardar" style="margin-top:12px">Guardar métodos de pago</button>
       </div>
+    </div>
+  </div>
+
+  <!-- VIAJES DISPONIBLES (CONDUCTOR): viajes rechazados que se pueden retomar si siguen activos -->
+  <div id="modal-disponibles" class="modal-drivxi oculto" role="dialog" aria-modal="true" aria-labelledby="disponibles-titulo">
+    <div class="modal-drivxi-dialog" style="height:min(620px,100%)">
+      <button type="button" class="modal-drivxi-cerrar" id="cerrar-modal-disponibles" aria-label="Cerrar">×</button>
+      <span class="modal-kicker">DRIVXI · Conductor</span>
+      <h2 class="modal-titulo" id="disponibles-titulo">Viajes disponibles</h2>
+      <p class="modal-instrucciones">Viajes que rechazaste. Si siguen activos puedes retomarlos y volverán a tus solicitudes.</p>
+      <div class="modal-drivxi-scroll" id="disponibles-lista" style="flex:1;min-height:0"></div>
     </div>
   </div>
 
@@ -2565,6 +2608,7 @@
       const esPasajero = String(usuario.tipo_usuario || '').toLowerCase() !== 'conductor';
       btnFavoritos.classList.toggle('oculto', !esPasajero);
       menuTiposServicios.classList.toggle('oculto', !esPasajero);
+      $('menu-item-disponibles').classList.toggle('oculto', esPasajero);   // «Viajes disponibles» solo para conductores
 
       if (usuario.tipo_usuario === 'conductor') {
         modoActual = 'conductor';
@@ -2767,6 +2811,11 @@
       $('btn-perfil-vehiculo').classList.toggle('oculto', !esCond);
       $('btn-perfil-tema').classList.toggle('oculto', esCond);
       $('btn-perfil-pagos').classList.toggle('oculto', !esCond);
+      // Aceptar o no viajes con mascota (solo conductores de DRIVXI TAXI)
+      const botonMascotas = $('btn-perfil-mascotas');
+      botonMascotas.classList.toggle('oculto', !(esCond && claveServicioConductor === 'taxi_auto'));
+      botonMascotas.classList.toggle('mascotas-no', !aceptaMascotasConductor);
+      $('txt-perfil-mascotas').textContent = 'Acepta mascotas: ' + (aceptaMascotasConductor ? 'Sí' : 'No');
 
       const cont = $('perfil-datos'), extra = $('perfil-extra');
       cont.innerHTML = ''; extra.innerHTML = '';
@@ -2952,8 +3001,11 @@
       historialContenido.innerHTML = '';
 
       if (vistaHistorial === 'pagos') {
-        const total = lista.reduce((a, v) => a + Number(v.tarifa || 0), 0);
-        const n = lista.length;
+        // Los viajes cancelados (por el pasajero o el conductor) aparecen en $ 0 y no se suman
+        const viajeCanceladoPago = (v) => /cancel|rechaz|anul/.test(String(v.estado || '').toLowerCase());
+        const valorViaje = (v) => viajeCanceladoPago(v) ? 0 : Number(v.tarifa || 0);
+        const total = lista.reduce((a, v) => a + valorViaje(v), 0);
+        const n = lista.filter((v) => !viajeCanceladoPago(v)).length;
         const promedio = n ? (total / n) : 0;
         const etiqueta = { hoy:'hoy', semana:'últimos 7 días', mes:'este mes', todo:'todo el historial' }[filtroPeriodo.value] || '';
         const wrap = document.createElement('div');
@@ -2966,7 +3018,7 @@
               '<div class="pago-kpi pago-comision" style="animation-delay:.26s"><span class="pago-kpi-label">Comisiones pendientes por pagar</span><span class="pago-kpi-valor">' + formatoMoneda(0) + '</span><small>Gratuito por ahora</small></div>' : '') +
           '</div><p class="historial-fecha" style="margin:-4px 0 10px 2px">Mostrando ' + etiqueta + '</p>';
 
-        if (!n) {
+        if (!lista.length) {
           wrap.insertAdjacentHTML('beforeend', '<div class="perfil-vacio">Sin movimientos en el periodo seleccionado.</div>');
         } else {
           const filas = document.createElement('div');
@@ -2979,7 +3031,7 @@
               '<div class="pago-fila-info"><div class="pago-fila-tit">' + esc(v.tipo_servicio || v.nombre_servicio || 'Servicio') +
               ' · #' + esc(v.id) + '</div><div class="pago-fila-sub">' + textoFecha(fechaDeViaje(v)) + ' · ' +
               esc(String(v.estado || 'solicitado')) + '</div></div>' +
-              '<div class="pago-fila-valor">' + (con ? '+' : '-') + ' ' + formatoMoneda(v.tarifa || 0) + '</div>';
+              '<div class="pago-fila-valor">' + (con ? '+' : '-') + ' ' + formatoMoneda(valorViaje(v)) + '</div>';
             filas.appendChild(fila);
           });
           wrap.appendChild(filas);
@@ -3564,7 +3616,10 @@
             (esNuevo ? '<span class="viaje-nuevo-chip">NUEVO</span>' : '') +
             (metodoPagoDeViaje(viaje) ? '<span class="viaje-pago-chip">' + ETIQUETA_PAGO[metodoPagoDeViaje(viaje)] + '</span>' : '') +
           '</div>' +
-          '<div class="viaje-precio-badge">' + formatoMoneda(viaje.tarifa || 0) + '<small>TARIFA</small></div>' +
+          '<div class="viaje-header-der">' +
+            '<div class="viaje-precio-badge">' + formatoMoneda(viaje.tarifa || 0) + '<small>TARIFA</small></div>' +
+            '<button type="button" class="btn-rechazar btn-rechazar-mini" title="Rechazar viaje" aria-label="Rechazar viaje">' + SVG_RECHAZAR + 'Rechazar</button>' +
+          '</div>' +
         '</div>' +
         '<div class="viaje-hace"><span class="live-dot"></span><span data-ts="' + ts + '">' + tiempoRelativo(ts) + '</span></div>' +
         '<div class="viaje-ruta">' +
@@ -3585,7 +3640,6 @@
         '<div class="viaje-pasajero"><div class="vp-skeleton"></div><div class="vp-cargando">Cargando datos del pasajero…</div></div>' +
         '<div class="viaje-footer">' +
           '<div class="viaje-cta"><button type="button" class="btn-main btn-aceptar-viaje">Aceptar Viaje</button></div>' +
-          '<button type="button" class="btn-rechazar">' + SVG_RECHAZAR + ' Rechazar viaje</button>' +
         '</div>';
 
       card.querySelector('.btn-aceptar-viaje').addEventListener('click', () => aceptarViaje(viaje));
@@ -3978,6 +4032,121 @@
     $('mpc-guardar').addEventListener('click', guardarMetodosPagoConductor);
     $('cerrar-modal-metodos-pago').addEventListener('click', () => { if (!modalMetodosPago.dataset.obligatorio) cerrarModalMetodosPago(); });
     $('btn-perfil-pagos').addEventListener('click', () => { modalPerfil.classList.add('oculto'); abrirModalMetodosPago(false); });
+
+    /* ============================ MASCOTAS DESDE EL PERFIL (CONDUCTOR) ============================
+       El conductor de DRIVXI TAXI puede activar o desactivar los viajes «Con mascota».
+       Se actualiza en vehiculos y documentos_conductor (donde lo guarda el registro). */
+    async function cambiarAceptaMascotas() {
+      const nuevo = !aceptaMascotasConductor;
+      const boton = $('btn-perfil-mascotas');
+      boton.disabled = true;
+      const u = usuarioActual || {};
+      const errores = [];
+      try {
+        const cid = await resolverConductorId(u);
+        const cambios = [];
+        if (cid != null) cambios.push(db.from('vehiculos').update({ pet_friendly: nuevo }).eq('conductor_id', cid));
+        if (u.id != null) cambios.push(db.from('documentos_conductor').update({ pet_friendly: nuevo }).eq('usuario_id', u.id));
+        if (cid != null) cambios.push(db.from('documentos_conductor').update({ pet_friendly: nuevo }).eq('conductor_id', cid));
+        (await Promise.all(cambios)).forEach((r) => { if (r && r.error) errores.push(r.error.message); });
+      } catch (e) { errores.push(e && e.message); }
+      boton.disabled = false;
+      if (errores.length) { mostrarToast('No se pudo actualizar: ' + errores[0], '!'); return; }
+      aceptaMascotasConductor = nuevo;
+      if (usuarioActual) { usuarioActual.pet_friendly = nuevo; guardarSesion(); }
+      mostrarToast(nuevo ? 'Ahora recibes viajes con mascota' : 'Ya no recibirás viajes con mascota', nuevo ? '✓' : '!');
+      abrirModalPerfil();   // refresca el perfil con el nuevo estado
+      if (modoActual === 'conductor' && conductorActivo) { viajesIdsVistos = null; cargarViajesSolicitados(); }
+    }
+    $('btn-perfil-mascotas').addEventListener('click', cambiarAceptaMascotas);
+
+    /* ============================ VIAJES DISPONIBLES (CONDUCTOR) ============================
+       Lista los viajes que el conductor rechazó (guardados en este dispositivo).
+       Si siguen activos (solicitados y sin conductor) puede retomarlos: vuelven a sus solicitudes. */
+    const modalDisponibles = $('modal-disponibles');
+
+    function quitarRechazo(idViaje) {
+      const todo = lsJSON(K_RECHAZADOS);
+      if (!todo || typeof todo !== 'object' || Array.isArray(todo)) return;
+      const k = String(idConductorActual());
+      if (!Array.isArray(todo[k])) return;
+      todo[k] = todo[k].map(String).filter((x) => x !== String(idViaje));
+      lsSet(K_RECHAZADOS, JSON.stringify(todo));
+    }
+
+    function disponibilidadViaje(v) {
+      if (!v) return { activo: false, texto: 'Ya no existe' };
+      const e = String(v.estado || '').toLowerCase();
+      if (/cancel|rechaz|anul/.test(e)) return { activo: false, texto: 'Cancelado' };
+      if (/finaliz|complet|termin|conclu/.test(e)) return { activo: false, texto: 'Finalizado' };
+      if (e === 'solicitado' && v.conductor_id == null) return { activo: true, texto: '● Sigue disponible' };
+      return { activo: false, texto: 'Tomado por otro conductor' };
+    }
+
+    async function abrirViajesDisponibles() {
+      const lista = $('disponibles-lista');
+      lista.innerHTML = '<div class="cargando"><div class="loading-pulse"><span></span><span></span><span></span></div>Cargando viajes rechazados…</div>';
+      modalDisponibles.classList.remove('oculto');
+      const ids = rechazadosDelConductor().slice().reverse().slice(0, 100);   // los más recientes primero
+      if (!ids.length) {
+        lista.innerHTML = '<div class="perfil-vacio">Aún no has rechazado viajes. Cuando rechaces uno aparecerá aquí y, si sigue activo, podrás retomarlo.</div>';
+        return;
+      }
+      let filas = [];
+      try {
+        const { data, error } = await db.from('viajes').select('*').in('id', ids);
+        if (error) throw error;
+        filas = data || [];
+      } catch (e) {
+        lista.innerHTML = '<div class="perfil-vacio">No se pudieron cargar los viajes.<br><small>' + esc(e && e.message) + '</small></div>';
+        return;
+      }
+      const porId = new Map(filas.map((v) => [String(v.id), v]));
+      const cont = document.createElement('div');
+      cont.className = 'disp-lista';
+      ids.forEach((id, i) => {
+        const v = porId.get(String(id));
+        const disp = disponibilidadViaje(v);
+        const card = document.createElement('div');
+        card.className = 'disp-card' + (disp.activo ? '' : ' no-disponible');
+        card.style.animationDelay = (i * 0.04) + 's';
+        if (!v) {
+          card.innerHTML = '<div class="disp-top"><span class="disp-servicio">Viaje #' + esc(id) + '</span></div>' +
+            '<div class="disp-pie"><span class="disp-estado">' + disp.texto + '</span></div>';
+        } else {
+          const clave = normalizarClaveServicio(v.tipo_servicio || v.nombre_servicio) || 'default';
+          const etiqueta = ((viajeDeSeisPasajeros(v) || viajeConMascota(v)) ? v.nombre_servicio : v.tipo_servicio) || 'Servicio';
+          const pago = metodoPagoDeViaje(v);
+          card.innerHTML =
+            '<div class="disp-top"><span class="disp-servicio">' + iconoServicio(viajeConMascota(v) ? 'mascota' : clave) + esc(etiqueta) + '</span>' +
+              '<span class="disp-precio">' + formatoMoneda(v.tarifa || 0) + '</span></div>' +
+            '<div class="disp-ruta"><span>A ·</span> ' + esc(v.origen_nombre || 'Origen') + '</div>' +
+            '<div class="disp-ruta"><span>B ·</span> ' + esc(v.destino_nombre || 'Destino') + '</div>' +
+            '<div class="disp-pie"><span class="disp-estado' + (disp.activo ? ' ok' : '') + '">' + disp.texto +
+              (pago ? ' · ' + ETIQUETA_PAGO[pago] : '') + '</span>' +
+              (disp.activo ? '<button type="button" class="btn-mini">Retomar viaje</button>' : '') +
+            '</div>';
+          const boton = card.querySelector('.btn-mini');
+          if (boton) boton.addEventListener('click', () => retomarViaje(v));
+        }
+        cont.appendChild(card);
+      });
+      lista.innerHTML = '';
+      lista.appendChild(cont);
+    }
+
+    function retomarViaje(v) {
+      quitarRechazo(v.id);
+      modalDisponibles.classList.add('oculto');
+      if (!conductorActivo) { mostrarToast('Viaje retomado · actívate para verlo en tus solicitudes', '!'); return; }
+      mostrarToast('Viaje retomado · ya está en tus solicitudes');
+      viajesIdsVistos = null;
+      cargarViajesSolicitados();
+    }
+
+    $('menu-item-disponibles').addEventListener('click', () => { cerrarMenuPerfil(); abrirViajesDisponibles(); });
+    $('cerrar-modal-disponibles').addEventListener('click', () => modalDisponibles.classList.add('oculto'));
+    modalDisponibles.addEventListener('click', (e) => { if (e.target === modalDisponibles) modalDisponibles.classList.add('oculto'); });
 
     /* ============================ TIEMPO REAL ============================ */
     function suscribirRealtime() {
