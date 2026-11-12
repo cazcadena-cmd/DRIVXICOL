@@ -213,7 +213,7 @@
     #preview-foto{display:block;width:100%;height:100%;object-fit:cover}
 
     /* OPCIONES DE ROL */
-    .opciones-rol-drivxi{position:absolute!important;left:16px!important;bottom:290px!important;z-index:2601!important;
+    .opciones-rol-drivxi{position:absolute!important;left:16px!important;bottom:230px!important;z-index:2601!important;
       display:flex!important;flex-direction:column!important;gap:10px!important;width:230px!important;background:transparent!important;
       border:none!important;box-shadow:none!important;padding:0!important;margin:0!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
       visibility:hidden!important;pointer-events:none!important}
@@ -1025,6 +1025,10 @@
     /* ================= SELECCIÓN DE ROL ================= */
     window.seleccionarRol = function (rol) {
       rolSeleccionado = rol;
+      /* Opciones específicas según el rol: "Iniciar sesión Pasajero", "Crear cuenta Pasajero", etc. */
+      const nombreRol = { pasajero: 'Pasajero', conductor: 'Conductor', comercio: 'Comercio' }[rol] || '';
+      $('btn-iniciar-sesion').textContent = ('Iniciar sesión ' + nombreRol).trim();
+      $('btn-crear-cuenta').textContent = ('Crear cuenta ' + nombreRol).trim();
       pantallaInicio.classList.remove('oculto');
       modalRegistro.classList.add('oculto');
       modalLogin.classList.add('oculto');
