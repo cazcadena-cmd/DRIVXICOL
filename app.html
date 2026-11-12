@@ -462,73 +462,6 @@
     .pagos-resumen.con-comisiones .pago-comision{grid-column:span 3}
     .pago-comision small{display:block;margin-top:4px;font-size:.6rem;color:var(--muted-text);line-height:1.35}
     @media (prefers-reduced-motion:reduce){.modal-nueva,.modal-nueva .modal-drivxi-dialog,.modal-nueva .direccion-fila,.menu-subservicios,.menu-subservicios .menu-perfil-item,.servicio-presentacion-imagen{animation:none!important}}
-
-    /* ===== TARJETAS DE VIAJE COMPACTAS (VISTA CONDUCTOR): misma información, menos espacio ===== */
-    #contenedor-solicitudes{gap:8px}
-    #contenedor-solicitudes .tarjeta-viaje{padding:10px 10px 10px 13px;border-radius:14px}
-    #contenedor-solicitudes .tarjeta-viaje::before{top:10px;bottom:10px;width:3px}
-    #contenedor-solicitudes .viaje-header{gap:6px;margin-bottom:5px}
-    #contenedor-solicitudes .viaje-tipo-badge{gap:4px;padding:3px 7px;font-size:.58rem}
-    #contenedor-solicitudes .viaje-tipo-badge svg{width:11px;height:11px}
-    #contenedor-solicitudes .viaje-nuevo-chip{padding:2px 6px;font-size:.5rem}
-    #contenedor-solicitudes .viaje-precio-badge{font-size:1.02rem}
-    #contenedor-solicitudes .viaje-precio-badge small{font-size:.5rem}
-    #contenedor-solicitudes .viaje-hace{gap:4px;margin:0 0 5px;font-size:.58rem}
-    #contenedor-solicitudes .viaje-hace .live-dot{width:6px;height:6px}
-    #contenedor-solicitudes .viaje-ruta{gap:3px;margin-bottom:7px}
-    #contenedor-solicitudes .viaje-punto{gap:7px;font-size:.72rem;line-height:1.25}
-    #contenedor-solicitudes .viaje-punto-dot{width:17px;height:17px;font-size:.55rem;margin-top:0}
-    #contenedor-solicitudes .viaje-punto-text{padding-top:1px}
-    #contenedor-solicitudes .viaje-punto-sub{font-size:.58rem;margin-top:1px}
-    #contenedor-solicitudes .viaje-linea-conector{height:5px;margin-left:8px}
-    #contenedor-solicitudes .viaje-metricas{gap:6px;padding:5px 8px;margin-bottom:7px;border-radius:10px}
-    #contenedor-solicitudes .viaje-metrica-item{gap:5px;font-size:.66rem}
-    #contenedor-solicitudes .viaje-metrica-item svg{width:12px;height:12px}
-    #contenedor-solicitudes .viaje-metrica-sub{font-size:.52rem}
-    #contenedor-solicitudes .viaje-pasajero{gap:8px;margin-bottom:7px;padding:6px 8px;border-radius:12px}
-    #contenedor-solicitudes .vp-foto-wrap,#contenedor-solicitudes .vp-foto,#contenedor-solicitudes .vp-skeleton{width:34px;height:34px}
-    #contenedor-solicitudes .vp-verificado{width:13px;height:13px;right:-3px;bottom:-3px;font-size:.5rem}
-    #contenedor-solicitudes .vp-etiqueta{font-size:.48rem;letter-spacing:.14em;margin-bottom:1px}
-    #contenedor-solicitudes .vp-nombre{font-size:.76rem}
-    #contenedor-solicitudes .vp-estrellas{margin-top:1px}
-    #contenedor-solicitudes .vp-estrellas i{font-size:.64rem}
-    #contenedor-solicitudes .vp-estrellas .vp-nota{margin-left:4px;font-size:.6rem}
-    #contenedor-solicitudes .vp-estrellas .vp-conteo{font-size:.52rem}
-    #contenedor-solicitudes .vp-score{min-width:40px;padding:4px 6px;border-radius:10px}
-    #contenedor-solicitudes .vp-score b{font-size:.8rem}
-    #contenedor-solicitudes .vp-score span{font-size:.42rem}
-    #contenedor-solicitudes .vp-cargando{gap:6px;font-size:.62rem}
-    #contenedor-solicitudes .viaje-footer{margin-top:2px}
-    #contenedor-solicitudes .viaje-cta .btn-main{padding:8px 30px 8px 12px;font-size:.78rem;border-radius:10px}
-    #contenedor-solicitudes .viaje-cta .btn-main::after{right:12px;font-size:.95rem}
-    #contenedor-solicitudes .btn-rechazar{gap:5px;margin-top:5px;padding:6px 12px;border-radius:10px;font-size:.72rem}
-    #contenedor-solicitudes .btn-rechazar svg{width:12px;height:12px}
-    #contenedor-solicitudes .viaje-cancelado-banner{margin-bottom:6px;padding:6px 8px;border-radius:10px;font-size:.66rem}
-
-    /* ===== SOLICITAR VIAJE COMPACTO (PASAJERO): textos, campos y botón más pequeños ===== */
-    #ui-pasajero{padding:14px 14px 13px;border-radius:20px}
-    #ui-pasajero::before{margin:-15px 14% 5px}
-    #ui-pasajero .panel-title{font-size:1.02rem;margin-bottom:8px}
-    #ui-pasajero .panel-title::before{font-size:.54rem;letter-spacing:.28em;margin-bottom:3px}
-    #ui-pasajero .input-group{margin-bottom:8px}
-    #ui-pasajero .input-group>input{height:42px;padding:0 12px 0 38px;border-radius:11px;font-size:.84rem;background-position:12px center;background-size:16px 16px}
-    #ui-pasajero .sugerencia-item{padding:8px 11px}
-    #ui-pasajero .sugerencia-principal{font-size:.78rem}
-    #ui-pasajero .sugerencia-detalle{font-size:.64rem}
-    #ui-pasajero .status-text{font-size:.72rem;line-height:1.35;margin:2px 0 9px}
-    #ui-pasajero .btn-main{padding:10px 38px 10px 14px;font-size:.86rem;border-radius:11px}
-    #ui-pasajero .btn-main::after{right:14px;font-size:1rem}
-    #ui-pasajero .aviso-push{gap:8px;margin:0 0 9px;padding:8px 9px;border-radius:12px}
-    #ui-pasajero .aviso-push-icono{width:30px;height:30px;border-radius:9px}
-    #ui-pasajero .aviso-push-icono svg{width:15px;height:15px}
-    #ui-pasajero .aviso-push-tit{font-size:.72rem}
-    #ui-pasajero .aviso-push-sub{font-size:.6rem}
-    #ui-pasajero .aviso-push .btn-mini{padding:7px 10px;border-radius:10px;font-size:.66rem}
-    #ui-pasajero .viaje-bloqueo-box{padding:10px;border-radius:14px;margin-bottom:8px}
-    #ui-pasajero .viaje-bloqueo-tit{font-size:.78rem}
-    #ui-pasajero .viaje-bloqueo-txt{font-size:.66rem;margin-bottom:7px}
-    #ui-pasajero .btn-ir-seguimiento,#ui-pasajero .btn-cancelar-viaje{padding:7px 14px;font-size:.7rem}
-    #ui-pasajero .comercio-info{margin:0 0 8px;padding:7px 10px;border-radius:10px;font-size:.68rem}
   </style>
   <script>
     (function(){
@@ -882,6 +815,7 @@
       moto_taxi: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/><path d="M6 11h4"/></svg>',
       moto_delivery: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/><rect x="2" y="5" width="7" height="6" rx="1"/><path d="M2 8h7"/></svg>',
       taxi_carga: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17h4V5H2v12h3"/><path d="M20 17h2v-3.3a1 1 0 0 0-.1-.5l-1.6-3.2a1 1 0 0 0-.9-.5H14"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>',
+      mascota: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="9.5" r="1.8"/><circle cx="9.5" cy="5.5" r="1.8"/><circle cx="14.5" cy="5.5" r="1.8"/><circle cx="18.5" cy="9.5" r="1.8"/><path d="M8 15.5c.8-2 2.3-3.2 4-3.2s3.2 1.2 4 3.2c.9 2.1-.2 4.2-2.3 4.2-.7 0-1.1-.3-1.7-.3s-1 .3-1.7.3c-2.1 0-3.2-2.1-2.3-4.2z"/></svg>',
       default: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>'
     };
 
@@ -933,12 +867,12 @@
     let seqViajes = 0;
     let sesionYaVerificada = false, vistaHistorial = 'servicios', historialViajes = [], historialCargando = false;
     let capacidadConductor = null, recurrentesMostrados = false, secuenciaRecurrentes = 0;
+    let aceptaMascotasConductor = false; // true si el vehículo del conductor está registrado como «Acepta mascotas»
     let favoritoBorrador = null, tokenFavorito = null, destinoGuardadoPendiente = null;
     let servicioConductorListo = false, secuenciaDireccionGuardada = 0;
 
     let swRegistro = null, swListenerOk = false;
     let pushSuscrito = false;
-    let ultimoErrorPush = '';                    // motivo exacto si no se pudieron activar los avisos
     let audioCtx = null;
     const viajesNotificados = new Set();
     const estadosViajeVistos = new Map();
@@ -1043,6 +977,12 @@
     }
     const claveOpcionServicio = (clave, capacidad) => clave + (capacidad === 6 ? '_6_pasajeros' : '');
     const viajeDeSeisPasajeros = (v) => capacidadPasajerosDe(v) === 6;
+
+    /* ---- MASCOTAS: «DRIVXI TAXI · Con mascota» (conductores que marcaron «¿Acepta Mascotas? Sí» al registrarse) ---- */
+    const OPCION_MASCOTA = 'taxi_auto_mascota';
+    const aceptaMascotasDe = (...fuentes) => fuentes.some((f) => f && typeof f === 'object' &&
+      (f.pet_friendly === true || f.pet_friendly === 'true' || f.acepta_mascotas === true || f.acepta_mascotas === 'true'));
+    const viajeConMascota = (v) => !!v && (v.con_mascota === true || /mascota/i.test(String(v.nombre_servicio || '')));
 
     let toastTimer;
     function mostrarToast(mensaje, icono = '✓') {
@@ -1667,22 +1607,19 @@
     }
 
     async function suscribirPush(pedirPermiso) {
-      ultimoErrorPush = '';
-      if (!db || !usuarioActual || usuarioActual.id == null || !PUSH_SOPORTADO) { ultimoErrorPush = 'Inicia sesión de nuevo e inténtalo otra vez.'; return false; }
+      if (!db || !usuarioActual || usuarioActual.id == null || !PUSH_SOPORTADO) return false;
       const rolPush = esConductorSesion() ? 'conductor' : 'pasajero';
-      if (!vapidListo()) { ultimoErrorPush = 'Falta la llave VAPID pública en app.html.'; console.warn('Push: falta VAPID_PUBLIC_KEY.'); return false; }
+      if (!vapidListo()) { console.warn('Push: falta VAPID_PUBLIC_KEY.'); return false; }
       try {
         let permiso = Notification.permission;
         if (permiso === 'default' && pedirPermiso) {
           try { permiso = await Notification.requestPermission(); } catch (e) { permiso = Notification.permission; }
         }
-        if (permiso !== 'granted') { ultimoErrorPush = 'Permite las notificaciones de DRIVXI cuando el navegador lo pregunte.'; return false; }
+        if (permiso !== 'granted') return false;
 
-        const regInicial = await registrarServiceWorker();
-        if (!regInicial) { ultimoErrorPush = 'No se encontró sw.js junto a app.html. Súbelo a la misma carpeta del repositorio.'; return false; }
-        // Nunca se queda esperando: si el servicio de avisos no se activa en 10 s se informa el motivo
-        const reg = await Promise.race([navigator.serviceWorker.ready, new Promise((r) => setTimeout(() => r(null), 10000))]);
-        if (!reg) { ultimoErrorPush = 'El servicio de avisos (sw.js) no terminó de instalarse. Sube el sw.js más reciente al repositorio y recarga la página.'; return false; }
+        const reg = await registrarServiceWorker();
+        if (!reg) return false;
+        await navigator.serviceWorker.ready;
 
         let sub = await reg.pushManager.getSubscription();
         if (sub && sub.options && sub.options.applicationServerKey &&
@@ -1706,14 +1643,12 @@
           p_user_agent: (navigator.userAgent || '').slice(0, 250)
         });
         if (error) {
-          ultimoErrorPush = 'Supabase no guardó el celular (función bikar_registrar_push). Ejecuta supabase.sql en el SQL Editor. Detalle: ' + error.message;
           console.warn('Push: no se pudo registrar la suscripción:', error.message);
           return false;
         }
         pushSuscrito = true;
         return true;
       } catch (e) {
-        ultimoErrorPush = 'El navegador no pudo crear la suscripción: ' + ((e && e.message) || e) + '. Revisa tu conexión y que la llave VAPID pública sea la correcta.';
         console.warn('Push: error al suscribir:', e && e.message);
         return false;
       }
@@ -1783,7 +1718,7 @@
         if (viajesNotificados.size > 300) Array.from(viajesNotificados).slice(0, 100).forEach((x) => viajesNotificados.delete(x));
         const dist = Number(v.distancia_km || 0);
         notificarSistema(
-          '🚖 Nueva solicitud · ' + (v.tipo_servicio || v.nombre_servicio || 'Servicio'),
+          '🚖 Nueva solicitud · ' + ((viajeConMascota(v) ? v.nombre_servicio : '') || v.tipo_servicio || v.nombre_servicio || 'Servicio'),
           formatoMoneda(v.tarifa) + (dist ? ' · ' + dist.toFixed(1) + ' km' : '') +
             '\nA: ' + (v.origen_nombre || 'Origen') + '\nB: ' + (v.destino_nombre || 'Destino'),
           { tag: 'drivxi-viaje-' + k, viaje_id: v.id, tipo: 'nuevo_viaje', persistente: true, vibrar: [350, 120, 350, 120, 700, 200, 350, 120, 350] }
@@ -1871,13 +1806,13 @@
         bloqueado:   { t: 'Notificaciones bloqueadas', s: 'Permite las notificaciones de DRIVXI en los ajustes del navegador o del sitio para recibir los avisos de tu viaje.', b: null, alerta: true },
         instalar:    { t: 'Instala DRIVXI en tu iPhone', s: 'Toca Compartir y elige «Añadir a pantalla de inicio»; luego abre DRIVXI desde su icono y activa los avisos.', b: null, alerta: false },
         nosoportado: { t: 'Avisos push no disponibles', s: 'Este navegador no admite notificaciones push. Usa Chrome, Edge o Safari actualizado para recibir los avisos de tu viaje.', b: null, alerta: true },
-        error:       { t: 'No se pudieron activar los avisos', s: ultimoErrorPush || 'Revisa tu conexión e inténtalo de nuevo.', b: 'Reintentar', alerta: true }
+        error:       { t: 'No se pudieron activar los avisos', s: 'Revisa tu conexión e inténtalo de nuevo.', b: 'Reintentar', alerta: true }
       } : {
         activar:     { t: 'Activa los avisos de viajes', s: 'Recibe cada solicitud con el sonido DRIVXI aunque tengas la app cerrada o en segundo plano.', b: 'Activar', alerta: false },
         bloqueado:   { t: 'Notificaciones bloqueadas', s: 'Permite las notificaciones de DRIVXI en los ajustes del navegador o del sitio para recibir viajes con la app cerrada.', b: null, alerta: true },
         instalar:    { t: 'Instala DRIVXI en tu iPhone', s: 'Toca Compartir y elige «Añadir a pantalla de inicio»; luego abre DRIVXI desde su icono y activa los avisos.', b: null, alerta: false },
         nosoportado: { t: 'Avisos push no disponibles', s: 'Este navegador no admite notificaciones push. Usa Chrome, Edge o Safari actualizado para recibir viajes con la app cerrada.', b: null, alerta: true },
-        error:       { t: 'No se pudieron activar los avisos', s: ultimoErrorPush || 'Revisa tu conexión e inténtalo de nuevo.', b: 'Reintentar', alerta: true }
+        error:       { t: 'No se pudieron activar los avisos', s: 'Revisa tu conexión e inténtalo de nuevo.', b: 'Reintentar', alerta: true }
       };
       const x = textos[estado];
       if (!x) { caja.classList.add('oculto'); return; }
@@ -1920,12 +1855,13 @@
       btnActivarPush.disabled = true;
       await iniciarPushConductor(true);
       btnActivarPush.disabled = false;
-      if (pushSuscrito) {
-        mostrarToast('Notificaciones activadas · Recibirás los viajes con la app cerrada', '✓');
+      const permitido = ('Notification' in window) && Notification.permission === 'granted';
+      if (pushSuscrito || permitido) {
+        mostrarToast(pushSuscrito
+          ? 'Notificaciones activadas · Recibirás los viajes con la app cerrada'
+          : 'Notificaciones activadas en este dispositivo', '✓');
         sonidoNuevoViaje(1);
         notificarSistema('🔔 DRIVXI · Avisos activados', 'Así te llegarán las solicitudes de viaje.', { forzar: true, tag: 'drivxi-prueba' });
-      } else if (ultimoErrorPush) {
-        mostrarToast(ultimoErrorPush, '!');
       }
     });
 
@@ -1934,12 +1870,13 @@
       btnActivarPushPas.disabled = true;
       await iniciarPushPasajero(true);
       btnActivarPushPas.disabled = false;
-      if (pushSuscrito) {
-        mostrarToast('Notificaciones activadas · Te avisaremos de tu viaje aunque cierres la app', '✓');
+      const permitido = ('Notification' in window) && Notification.permission === 'granted';
+      if (pushSuscrito || permitido) {
+        mostrarToast(pushSuscrito
+          ? 'Notificaciones activadas · Te avisaremos de tu viaje aunque cierres la app'
+          : 'Notificaciones activadas en este dispositivo', '✓');
         sonidoNuevoViaje(1);
         notificarSistema('🔔 DRIVXI · Avisos activados', 'Así te llegarán los avisos de tu viaje.', { forzar: true, tag: 'drivxi-prueba' });
-      } else if (ultimoErrorPush) {
-        mostrarToast(ultimoErrorPush, '!');
       }
     });
 
@@ -2179,6 +2116,7 @@
     async function resumenVehiculoDB(u) {
       const { veh, doc } = await datosVehiculoDB(u, false);
       capacidadConductor = capacidadPasajerosDe(veh, doc, u);
+      aceptaMascotasConductor = aceptaMascotasDe(veh, doc, u);
       if (!veh && !doc) return null;
       const r = {};
       ['tipo_servicio', 'marca', 'modelo', 'anio', 'placa'].forEach((k) => {
@@ -2358,7 +2296,7 @@
       documento:'Documento', dni:'DNI', cedula:'Cédula', nit:'NIT', ruc:'RUC',
       direccion:'Dirección', barrio:'Barrio', ciudad:'Ciudad', departamento:'Departamento', pais:'País',
       fecha_nacimiento:'Fecha de nacimiento', genero:'Género', tipo_usuario:'Tipo de cuenta',
-      tipo_servicio:'Servicio asignado', servicio:'Servicio', placa:'Placa del vehículo', marca:'Marca', modelo:'Modelo',
+      tipo_servicio:'Servicio asignado', servicio:'Servicio', placa:'Placa del vehículo', marca:'Marca', modelo:'Modelo', pet_friendly:'Acepta mascotas',
       color:'Color', anio:'Año', año:'Año', cilindraje:'Cilindraje', licencia:'N° de Licencia',
       soat:'SOAT Vigente', tecnomecanica:'Revisión Técnica', tarjeta_propiedad:'Tarjeta de Propiedad',
       nombre_comercio:'Comercio', nombre_establecimiento:'Establecimiento', categoria:'Categoría',
@@ -2841,8 +2779,8 @@
           'id,tipo_usuario'
         ], ['tipo_usuario', 'conductor']),
         leerTablaConCapacidad('conductores', ['id,usuario_id']),
-        leerTablaConCapacidad('vehiculos', ['conductor_id,tipo_servicio']),
-        leerTablaConCapacidad('documentos_conductor', ['usuario_id,conductor_id,tipo_servicio'])
+        leerTablaConCapacidad('vehiculos', ['conductor_id,tipo_servicio,pet_friendly', 'conductor_id,tipo_servicio']),
+        leerTablaConCapacidad('documentos_conductor', ['usuario_id,conductor_id,tipo_servicio,pet_friendly', 'usuario_id,conductor_id,tipo_servicio'])
       ]);
       const ru = res[0], rc = res[1], rv = res[2], rd = res[3];
 
@@ -2889,6 +2827,11 @@
             filaDocCond.get(String(cid)), filaCondUsuario.get(String(u.id)), u);
           const opcion = claveOpcionServicio(clave, capacidad);
           conteo[opcion] = (conteo[opcion] || 0) + 1;
+          // DRIVXI TAXI con mascota: conductores de taxi (no de 6 pasajeros) que aceptan mascotas
+          if (clave === 'taxi_auto' && capacidad !== 6 && aceptaMascotasDe(filaVehCond.get(String(cid)), filaDocUsuario.get(String(u.id)),
+            filaDocCond.get(String(cid)), filaCondUsuario.get(String(u.id)), u)) {
+            conteo[OPCION_MASCOTA] = (conteo[OPCION_MASCOTA] || 0) + 1;
+          }
         }
       });
       return conteo;
@@ -2901,6 +2844,13 @@
       const disponibles = [];
       CATALOGO.forEach((s) => {
         if (conteoActivos[s.clave] > 0) disponibles.push(Object.assign({}, s, { opcion:s.clave }));
+        // DRIVXI TAXI · Con mascota (aparece justo debajo de DRIVXI TAXI cuando hay conductores que aceptan mascotas)
+        if (s.clave === 'taxi_auto' && conteoActivos[OPCION_MASCOTA] > 0) {
+          disponibles.push(Object.assign({}, s, {
+            opcion:OPCION_MASCOTA, conMascota:true, etiqueta:s.etiqueta + ' · Con mascota',
+            desc:'🐾 Viaja con tu mascota · Conductores que aceptan mascotas'
+          }));
+        }
         const opcionSeis = claveOpcionServicio(s.clave, 6);
         if (conteoActivos[opcionSeis] > 0) {
           disponibles.push(Object.assign({}, s, {
@@ -2929,7 +2879,7 @@
         card.className = 'servicio-card';
         card.dataset.clave = s.opcion;
         card.innerHTML =
-          '<div class="servicio-icono">' + iconoServicio(s.clave) + '</div>' +
+          '<div class="servicio-icono">' + iconoServicio(s.conMascota ? 'mascota' : s.clave) + '</div>' +
           '<div class="servicio-info"><div class="servicio-nombre">' + esc(s.etiqueta) + '</div>' +
           '<div class="servicio-desc">' + esc(s.desc) + '</div><div>' +
           '<span class="servicio-tiempo"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> ' +
@@ -2953,7 +2903,9 @@
       if (!servicioSeleccionado) return;
       btnConfirmarServicio.disabled = true;
       btnConfirmarServicio.textContent = 'Solicitando…';
-      // El viaje se crea AL INSTANTE (los conductores lo reciben de inmediato); el registro de avisos sigue en paralelo
+      if (promesaPushPasajero) {
+        try { await Promise.race([promesaPushPasajero, new Promise((r) => setTimeout(r, 6000))]); } catch (e) {}
+      }
       await solicitarViaje(servicioSeleccionado);
     });
 
@@ -2972,8 +2924,14 @@
         duracion_min: duracionMin || Math.max(3, Math.round(distanciaKm * 2.5)),
         estado: 'solicitado'
       };
+      if (servicio.conMascota) registro.con_mascota = true;
 
-      const { data, error } = await db.from('viajes').insert([registro]).select();
+      let { data, error } = await db.from('viajes').insert([registro]).select();
+      // Si aún no se ejecutó el SQL de mascotas, el viaje se guarda igual (el nombre del servicio indica «Con mascota»)
+      if (error && registro.con_mascota && /con_mascota/i.test(String(error.message || ''))) {
+        delete registro.con_mascota;
+        ({ data, error } = await db.from('viajes').insert([registro]).select());
+      }
 
       if (error) {
         mostrarToast('Error: ' + error.message, '!');
@@ -2987,10 +2945,6 @@
       if (data && data.length) {
         recurrentesMostrados = false;
         viajeActivoPasajero = data[0];
-        // Un instante (máx. 1,5 s) para terminar de registrar los avisos de este celular antes de abrir el seguimiento
-        if (promesaPushPasajero) {
-          try { await Promise.race([promesaPushPasajero, new Promise((r) => setTimeout(r, 1500))]); } catch (e) {}
-        }
         window.location.href = 'viaje.html?id=' + data[0].id + '&rol=pasajero';
       }
     }
@@ -3154,7 +3108,7 @@
       card.innerHTML =
         '<div class="viaje-header">' +
           '<div class="viaje-header-izq">' +
-            '<span class="viaje-tipo-badge">' + iconoServicio(clave) + ' ' + esc((viajeDeSeisPasajeros(viaje) ? viaje.nombre_servicio : viaje.tipo_servicio) || 'Servicio') + '</span>' +
+            '<span class="viaje-tipo-badge">' + iconoServicio(viajeConMascota(viaje) ? 'mascota' : clave) + ' ' + esc(((viajeDeSeisPasajeros(viaje) || viajeConMascota(viaje)) ? viaje.nombre_servicio : viaje.tipo_servicio) || 'Servicio') + '</span>' +
             (esNuevo ? '<span class="viaje-nuevo-chip">NUEVO</span>' : '') +
           '</div>' +
           '<div class="viaje-precio-badge">' + formatoMoneda(viaje.tarifa || 0) + '<small>TARIFA</small></div>' +
@@ -3286,6 +3240,8 @@
         viajes = viajes.filter(v => normalizarClaveServicio(v.tipo_servicio || v.nombre_servicio) === claveServicioConductor);
       }
       viajes = viajes.filter(v => viajeDeSeisPasajeros(v) === (capacidadConductor === 6));
+      // Viajes «con mascota»: solo los ven los conductores que aceptan mascotas
+      viajes = viajes.filter(v => !viajeConMascota(v) || aceptaMascotasConductor);
 
       const rechazados = new Set(rechazadosDelConductor());
       viajes = viajes.filter(v => !rechazados.has(String(v.id)));
@@ -3342,6 +3298,10 @@
     async function aceptarViaje(viaje) {
       if (viajeDeSeisPasajeros(viaje) !== (capacidadConductor === 6)) {
         mostrarToast('La capacidad solicitada no corresponde a tu vehículo', '!');
+        return;
+      }
+      if (viajeConMascota(viaje) && !aceptaMascotasConductor) {
+        mostrarToast('Este viaje es con mascota y tu vehículo no está registrado para mascotas', '!');
         return;
       }
       const conductorId = usuarioActual ? (usuarioActual.conductor_id || usuarioActual.id || usuarioActual.Id) : CONDUCTOR_ID_PRUEBA;
