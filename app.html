@@ -619,6 +619,39 @@
     /* Mensaje flotante */
     #toast{padding:10px 16px;gap:8px;font-size:.8rem;border-radius:12px}
     #toast .toast-icon{width:21px;height:21px;font-size:.72rem}
+
+    /* ============================================================
+       DRIVXI · BÚSQUEDA DE DESTINO (pasajero)
+       Al escribir el destino el panel sube y queda justo encima del
+       teclado; las sugerencias aparecen ARRIBA del campo en su propia
+       tarjeta, con la mejor sugerencia más cerca del dedo.
+       ============================================================ */
+    body.buscando-destino #ui-pasajero{bottom:max(calc(var(--dx-teclado, 0px) + 10px), calc(16px + env(safe-area-inset-bottom)));overflow:visible;max-height:none}
+    body.buscando-destino #status-text-pasajero,
+    body.buscando-destino #btn-pedir-viaje,
+    body.buscando-destino #aviso-push-pasajero,
+    body.buscando-destino #ui-pasajero .comercio-info{display:none!important}
+    #btn-direcciones-favoritas,#btn-centrar-ubicacion{transition:opacity .2s,transform .2s,box-shadow .2s,border-color .2s}
+    body.buscando-destino #btn-direcciones-favoritas,
+    body.buscando-destino #btn-centrar-ubicacion{opacity:0;pointer-events:none}
+    body.buscando-destino #seccion-solicitar-pasajero .input-group{position:static}
+    body.buscando-destino #sugerencias-destino{top:auto;bottom:calc(100% + 10px);left:0;right:0;max-height:var(--dx-sug-max, 260px);
+      display:flex;flex-direction:column-reverse;padding:6px;border-radius:18px;background:var(--card-bg);
+      border:1px solid rgba(158,216,50,.35);box-shadow:0 18px 44px rgba(0,0,0,.38),0 0 0 4px rgba(158,216,50,.08);
+      overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;animation:dxSugIn .22s cubic-bezier(.2,.8,.2,1) both}
+    body.buscando-destino #sugerencias-destino:empty{display:none}
+    body.buscando-destino #sugerencias-destino::after{content:"Destinos sugeridos";display:block;flex-shrink:0;padding:6px 10px 4px;
+      font-size:.58rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--primary-color)}
+    body.buscando-destino #sugerencias-destino .sugerencia-item{flex-shrink:0;align-items:center;gap:11px;min-height:52px;padding:9px 10px;margin:2px 0;
+      border:0;border-radius:13px;background:transparent}
+    body.buscando-destino #sugerencias-destino .sugerencia-item:hover,
+    body.buscando-destino #sugerencias-destino .sugerencia-item:active{background:rgba(158,216,50,.14)}
+    body.buscando-destino #sugerencias-destino .sugerencia-pin{box-sizing:border-box;width:34px;height:34px;padding:8px;margin:0;flex-shrink:0;
+      border-radius:50%;background:rgba(158,216,50,.14);color:var(--primary-color)}
+    body.buscando-destino #sugerencias-destino .sugerencia-principal{font-size:.84rem}
+    body.buscando-destino #sugerencias-destino .sugerencia-detalle{font-size:.68rem}
+    body.buscando-destino #sugerencias-destino .powered-google{flex-shrink:0;border-top:0;padding:2px 10px}
+    @keyframes dxSugIn{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
   </style>
   <script>
     (function(){
@@ -1492,6 +1525,7 @@
       buscarSugerencias(inputDestino.value, sugDestino, 'destino', (coords, corta, detalle, completa) => {
         inputDestino.value = completa || [corta, detalle].filter(Boolean).join(', ');
         establecerDestino(coords, corta, detalle, true);
+        inputDestino.blur(); // cierra el teclado y el panel vuelve a su lugar mostrando la ruta
       });
     });
 
@@ -1508,6 +1542,61 @@
       if (inputDestino.contains(e.target) || sugDestino.contains(e.target)) return;
       sugDestino.innerHTML = '';
     });
+
+    /* ============================ BÚSQUEDA DE DESTINO (teclado + sugerencias arriba) ============================
+       Con el teclado abierto el panel sube justo encima de él (el campo siempre queda a la vista)
+       y las sugerencias se muestran arriba del campo en una tarjeta independiente. */
+    const raizDoc = document.documentElement;
+    let timerSalidaBusqueda = null;
+
+    function medirTecladoDestino() {
+      const vv = window.visualViewport;
+      const altoLayout = raizDoc.clientHeight || window.innerHeight;
+      const teclado = vv ? Math.max(0, Math.round(altoLayout - (vv.offsetTop + vv.height))) : 0;
+      raizDoc.style.setProperty('--dx-teclado', teclado + 'px');
+      if (!document.body.classList.contains('buscando-destino')) return;
+      // Espacio para la tarjeta de sugerencias: entre la barra superior y el panel
+      let techo = vv ? vv.offsetTop : 0;
+      ['mode-selector', 'perfil-superior', 'btn-theme-toggle'].forEach((id) => {
+        const el = $(id);
+        if (el && el.offsetParent !== null) techo = Math.max(techo, el.getBoundingClientRect().bottom);
+      });
+      const topePanel = uiPasajero.getBoundingClientRect().top;
+      raizDoc.style.setProperty('--dx-sug-max', Math.max(110, Math.floor(topePanel - techo - 20)) + 'px');
+    }
+
+    function entrarBusquedaDestino() {
+      clearTimeout(timerSalidaBusqueda);
+      if (modoActual !== 'pasajero') return;
+      document.body.classList.add('buscando-destino');
+      medirTecladoDestino();
+      // El teclado termina de abrirse unos milisegundos después del foco: se vuelve a medir
+      [120, 350, 700].forEach((ms) => setTimeout(medirTecladoDestino, ms));
+    }
+
+    function salirBusquedaDestino() {
+      clearTimeout(timerSalidaBusqueda);
+      timerSalidaBusqueda = setTimeout(() => {
+        if (document.activeElement === inputDestino) return;
+        document.body.classList.remove('buscando-destino');
+        sugDestino.innerHTML = '';
+        medirTecladoDestino();
+      }, 180);
+    }
+
+    inputDestino.addEventListener('focus', entrarBusquedaDestino);
+    inputDestino.addEventListener('blur', salirBusquedaDestino);
+    // Tocar una sugerencia no le quita el foco al campo (la tarjeta no se mueve antes de seleccionar)
+    sugDestino.addEventListener('mousedown', (e) => e.preventDefault());
+    // Al llegar sugerencias nuevas se recalcula el espacio disponible
+    new MutationObserver(() => {
+      if (document.body.classList.contains('buscando-destino')) medirTecladoDestino();
+    }).observe(sugDestino, { childList: true });
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', medirTecladoDestino);
+      window.visualViewport.addEventListener('scroll', medirTecladoDestino);
+    }
+    window.addEventListener('resize', medirTecladoDestino);
 
     /* ============================ MODAL ORIGEN ============================ */
     function abrirModalOrigen() {
