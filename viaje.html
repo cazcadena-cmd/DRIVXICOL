@@ -815,8 +815,9 @@
       zoom: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>',
       mascota: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="9.5" r="1.8"/><circle cx="9.5" cy="5.5" r="1.8"/><circle cx="14.5" cy="5.5" r="1.8"/><circle cx="18.5" cy="9.5" r="1.8"/><path d="M8 15.5c.8-2 2.3-3.2 4-3.2s3.2 1.2 4 3.2c.9 2.1-.2 4.2-2.3 4.2-.7 0-1.1-.3-1.7-.3s-1 .3-1.7.3c-2.1 0-3.2-2.1-2.3-4.2z"/></svg>'
     };
+    SVG.autoParticular = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m21 8-2 2-1.5-3.7A2 2 0 0 0 15.6 5H8.4a2 2 0 0 0-1.9 1.3L5 10 3 8"/><path d="M7 14h.01"/><path d="M17 14h.01"/><rect x="3" y="10" width="18" height="8" rx="2"/><path d="M5 18v2"/><path d="M19 18v2"/></svg>';
     const ICONO_SERVICIO = {
-      moto_taxi: SVG.moto, moto_delivery: SVG.bolsa, taxi_auto: SVG.auto, taxi_carga: SVG.caja, default: SVG.ruta
+      moto_taxi: SVG.moto, moto_delivery: SVG.bolsa, taxi_auto: SVG.auto, auto_particular: SVG.autoParticular, default: SVG.ruta
     };
 
     /* ============================================================
@@ -981,7 +982,9 @@
       en_camino:   ['🚗 Tu conductor va en camino', 'Se dirige a tu punto de recogida. Ten a la mano tu PIN de seguridad.', 'Tu conductor va en camino'],
       en_progreso: ['🚖 Viaje en curso', 'Vas rumbo a tu destino. ¡Buen viaje!', 'Viaje en curso · ¡Buen viaje!'],
       terminado:   ['🏁 Viaje finalizado', 'Gracias por viajar con DRIVXI. Toca para calificar tu experiencia.', 'Viaje finalizado'],
-      cancelado:   ['❌ Viaje cancelado', 'Tu viaje fue cancelado. Puedes solicitar otro cuando quieras.', 'Tu viaje fue cancelado']
+      cancelado:   ['❌ Viaje cancelado', 'Tu viaje fue cancelado. Puedes solicitar otro cuando quieras.', 'Tu viaje fue cancelado'],
+      /* El conductor canceló un viaje ya aceptado: vuelve a estar disponible para otros conductores */
+      solicitado:  ['🔄 Buscando otro conductor', 'Tu conductor canceló el viaje. Ya lo estamos mostrando a otros conductores cercanos.', 'Tu conductor canceló · buscando otro conductor']
     };
     const AVISOS_CONDUCTOR = {
       cancelado:   ['❌ Viaje cancelado', 'El pasajero canceló el viaje.', 'El pasajero canceló el viaje']
@@ -998,7 +1001,8 @@
       if (estado === 'cancelado' && String(v.cancelado_por || '').toLowerCase() === rolUsuario) return;
 
       const grupo = GRUPO_POR_ESTADO[estado] || estado;
-      const k = String(viajeId) + '-' + grupo;
+      /* «solicitado» puede repetirse si varios conductores cancelan: cada vez se avisa una sola vez */
+      const k = String(viajeId) + '-' + grupo + (estado === 'solicitado' ? '-' + Date.now() : '');
       if (avisosEstado.has(k)) return;
       avisosEstado.add(k);
 
@@ -1088,12 +1092,13 @@
       c = c.replace(/[_\-.]+/g, ' ').replace(/\s+/g, ' ').trim();
       if (/moto\s*deliver|delivery|domicili|paqueter|mensajer|reparto|envio/.test(c)) return 'moto_delivery';
       if (/moto\s*taxi|\bmoto\b/.test(c)) return 'moto_taxi';
-      if (/carga|mudanza|camion|furgon|encomienda/.test(c)) return 'taxi_carga';
+      // DRIVXI AUTO (auto particular). Los registros antiguos de «Taxi Carga» también pasan a DRIVXI AUTO.
+      if (/drivxi\s*auto|particular|carga|mudanza|camion|furgon|encomienda/.test(c)) return 'auto_particular';
       if (/taxi\s*auto|\bauto\b|\btaxi\b|\bcarro\b|\bcoche\b|sedan/.test(c)) return 'taxi_auto';
       return null;
     }
     function etiquetaServicio(clave) {
-      return { moto_taxi:'Moto Taxi', moto_delivery:'Moto Delivery', taxi_auto:'Taxi Auto', taxi_carga:'Taxi Carga' }[clave] || 'Servicio DRIVXI';
+      return { moto_taxi:'Moto Taxi', moto_delivery:'Moto Delivery', taxi_auto:'Taxi Auto', auto_particular:'DRIVXI AUTO' }[clave] || 'Servicio DRIVXI';
     }
 
     /* ============================================================
@@ -1429,6 +1434,15 @@ function obtenerFotoVehiculo(info, v) {
       if (!viajeActual) return;
       const estado = String(viajeActual.estado || 'solicitado').toLowerCase();
 
+      /* El conductor que canceló este viaje ya no lo gestiona (volvió a estar disponible para otros) */
+      if (rolUsuario === 'conductor' && canceladoPorEsteConductor()) {
+        estadoVisto = estado;
+        $('txt-origen').textContent = viajeActual.origen_nombre || 'Origen no especificado';
+        $('txt-destino').textContent = viajeActual.destino_nombre || 'Destino no especificado';
+        mostrarViajeLiberado();
+        return;
+      }
+
       /* Si el estado cambió respecto a la lectura anterior: suena el tono DRIVXI y se avisa (pasajero y conductor) */
       detectarCambioEstado(estado);
 
@@ -1738,6 +1752,89 @@ function obtenerFotoVehiculo(info, v) {
       }
     }
 
+    /* ============================================================
+       CANCELACIÓN POR EL CONDUCTOR → EL VIAJE VUELVE A ESTAR DISPONIBLE
+       Si el conductor cancela un viaje que ya aceptó, el viaje NO se cancela: vuelve a «solicitado»
+       sin conductor para que lo vean y acepten otros conductores. Solo el pasajero lo cancela de verdad.
+       ============================================================ */
+    let viajeLiberadoPorMi = false;
+    const K_RECHAZADOS_COND = 'drivxi_viajes_rechazados';            /* mismas listas que usa app.html */
+    const K_CANCELADOS_COND = 'drivxi_viajes_cancelados_conductor';
+    const idConductorSesion = () => (usuarioSesion ? (usuarioSesion.conductor_id || usuarioSesion.id || usuarioSesion.Id) : null);
+
+    function agregarAListaConductor(clave, idViaje) {
+      const idc = idConductorSesion();
+      if (idc == null) return;
+      let todo = lsJSON(clave);
+      if (!todo || typeof todo !== 'object' || Array.isArray(todo)) todo = {};
+      const k = String(idc);
+      const lista = Array.isArray(todo[k]) ? todo[k].map(String) : [];
+      if (lista.indexOf(String(idViaje)) < 0) lista.push(String(idViaje));
+      todo[k] = lista.slice(-300);
+      try { localStorage.setItem(clave, JSON.stringify(todo)); } catch (e) {}
+    }
+    function canceladoPorEsteConductor() {
+      if (viajeLiberadoPorMi) return true;
+      const idc = idConductorSesion();
+      if (idc == null || !viajeActual || mismoId(viajeActual.conductor_id, idc)) return false;
+      const todo = lsJSON(K_CANCELADOS_COND);
+      const lista = todo && typeof todo === 'object' ? todo[String(idc)] : null;
+      return Array.isArray(lista) && lista.map(String).indexOf(String(viajeId)) >= 0;
+    }
+
+    async function liberarViajeConductor(motivo) {
+      btnSiguiente.disabled = true;
+      btnSiguiente.innerHTML = '<span>Cancelando…</span>';
+      propioEstado = 'solicitado';   /* lo hace el propio conductor: no se anuncia con sonido */
+      try {
+        let q = db.from('viajes').update({ estado: 'solicitado', conductor_id: null })
+          .eq('id', viajeId).in('estado', ['aceptado', 'en_camino']);
+        if (viajeActual && viajeActual.conductor_id != null) q = q.eq('conductor_id', viajeActual.conductor_id);
+        const r = await q.select('id');
+        if (r.error) throw r.error;
+        if (!r.data || !r.data.length) {
+          propioEstado = null;
+          mostrarToast('El viaje ya cambió de estado y no se pudo cancelar');
+          await obtenerDatosViaje(true);
+          return false;
+        }
+        /* En este dispositivo: deja de aparecerle en sus solicitudes y queda en «Viajes disponibles» para retomarlo */
+        agregarAListaConductor(K_RECHAZADOS_COND, viajeId);
+        agregarAListaConductor(K_CANCELADOS_COND, viajeId);
+        if (motivo) logDebug('motivo de cancelación del conductor:', motivo);
+        viajeLiberadoPorMi = true;
+        viajeActual = Object.assign({}, viajeActual, { estado: 'solicitado', conductor_id: null });
+        mostrarToast('Cancelaste el viaje · volvió a estar disponible para otros conductores');
+        renderizarUI();
+        return true;
+      } catch (e) {
+        console.error(e);
+        propioEstado = null;
+        mostrarToast('No se pudo cancelar el viaje');
+        renderizarUI();
+        return false;
+      }
+    }
+
+    /* Vista del conductor que canceló: el viaje ya no es suyo */
+    function mostrarViajeLiberado() {
+      statusBadge.className = 'status-badge cancelado';
+      statusTexto.textContent = 'Cancelado por ti';
+      statusTitulo.textContent = 'Cancelaste este viaje';
+      statusDesc.textContent = 'El viaje volvió a estar disponible para otros conductores. Si sigue activo, puedes retomarlo desde «Viajes disponibles» en el menú de tu perfil.';
+      pasos.forEach((el) => { el.classList.remove('active'); el.classList.remove('completed'); });
+      const sonar = $('sonar-status');
+      if (sonar) sonar.classList.remove('on');
+      ocultarCardPin();
+      zonaContacto.style.display = 'none';
+      $('card-pago').style.display = 'none';
+      ['btn-extra-nav', 'btn-extra-compartir', 'btn-extra-cancelar'].forEach((id) => { $(id).style.display = 'none'; });
+      cerrarModal('modal-chat');
+      if (llamada.pc) terminarLlamada(true);
+      boton(SVG.check + '<span>Viaje cancelado por ti</span>', true, null, true);
+      btnInicio.style.display = 'flex';
+    }
+
     function estadoVacio(titulo, detalle) {
       statusBadge.className = 'status-badge cancelado';
       statusTexto.textContent = 'Sin datos';
@@ -1840,7 +1937,8 @@ function obtenerFotoVehiculo(info, v) {
       }
       const b = $('cancel-confirmar');
       b.disabled = true;
-      const ok = await cancelarViaje(motivo);
+      /* Conductor: el viaje vuelve a estar disponible para otros · Pasajero: el viaje se cancela */
+      const ok = rolUsuario === 'conductor' ? await liberarViajeConductor(motivo) : await cancelarViaje(motivo);
       b.disabled = false;
       if (ok) {
         cerrarModal('modal-cancelar');
