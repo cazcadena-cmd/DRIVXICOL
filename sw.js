@@ -1,29 +1,68 @@
-/* DRIVXI Service Worker · caché + notificaciones push */
-const CACHE_NAME = 'drivxi-cache-v1';
-const URLS_TO_CACHE = ['./index.html', './drivxi.html', './app.html', './manifest.json', './icon-192.png', './icon-512.png'];
+/* DRIVXI Service Worker · notificaciones push (cajón del celular) + caché ligera */
+const CACHE_NAME = 'drivxi-cache-v2';
+const URLS_TO_CACHE = ['./', './index.html', './app.html', './viaje.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
+/* ---------- INSTALACIÓN: nunca falla aunque algún archivo no exista en el repositorio ---------- */
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(URLS_TO_CACHE)).then(() => self.skipWaiting())
-  );
+  event.waitUntil((async () => {
+    try {
+      const cache = await caches.open(CACHE_NAME);
+      await Promise.all(URLS_TO_CACHE.map((u) => cache.add(new Request(u, { cache: 'reload' })).catch(() => {})));
+    } catch (e) { /* sin caché igual se activa */ }
+    await self.skipWaiting();
+  })());
 });
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))))
-      .then(() => self.clients.claim())
-  );
+  event.waitUntil((async () => {
+    try {
+      const keys = await caches.keys();
+      await Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)));
+    } catch (e) {}
+    await self.clients.claim();
+  })());
 });
 
+/* ---------- RED: rápido y siempre actualizado ---------- */
 self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET') return;
+  const req = event.request;
+  if (req.method !== 'GET') return;
+  let url;
+  try { url = new URL(req.url); } catch (e) { return; }
+  // Supabase, Google Maps, fuentes y CDN van DIRECTO a la red (sin pasar por el service worker = más rápido)
+  if (url.origin !== self.location.origin) return;
+
+  const esPagina = req.mode === 'navigate' || /\.html?$/i.test(url.pathname) || url.pathname.endsWith('/');
+  if (esPagina) {
+    // Páginas: siempre la versión más reciente de GitHub; la copia local solo se usa sin internet
+    event.respondWith(
+      fetch(req).then((res) => {
+        if (res && res.ok) {
+          const copia = res.clone();
+          caches.open(CACHE_NAME).then((c) => c.put(url.origin + url.pathname, copia)).catch(() => {});
+        }
+        return res;
+      }).catch(() => caches.match(req, { ignoreSearch: true }).then((r) => r || caches.match('./index.html')))
+    );
+    return;
+  }
+
+  // Iconos y manifest: copia local inmediata y se actualiza en segundo plano
   event.respondWith(
-    caches.match(event.request).then((response) => response || fetch(event.request))
+    caches.match(req).then((cacheada) => {
+      const red = fetch(req).then((res) => {
+        if (res && res.ok) {
+          const copia = res.clone();
+          caches.open(CACHE_NAME).then((c) => c.put(req, copia)).catch(() => {});
+        }
+        return res;
+      }).catch(() => cacheada);
+      return cacheada || red;
+    })
   );
 });
 
-/* ---------- PUSH: muestra el aviso aunque la app esté cerrada ---------- */
+/* ---------- PUSH: muestra el aviso en el cajón del celular aunque la app esté cerrada ---------- */
 self.addEventListener('push', (event) => {
   let d = {};
   try {
@@ -71,7 +110,7 @@ self.addEventListener('notificationclick', (event) => {
         const lista = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
         for (const c of lista) {
           try {
-            if (c.url === url || c.url.endsWith('/app.html') || c.url.endsWith('/drivxi.html') || c.url.endsWith('/index.html')) {
+            if (c.url === url || c.url.endsWith('/app.html') || c.url.endsWith('/index.html')) {
               await c.focus();
               try { c.postMessage({ tipo: 'abrir-viaje', viaje_id: data.viaje_id || null }); } catch (e) {}
               return;
