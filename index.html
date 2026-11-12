@@ -304,6 +304,31 @@
     }
 
     /* ============================================================
+       MÉTODOS DE PAGO DEL CONDUCTOR (registro)
+       ============================================================ */
+    .pago-opciones{display:flex;gap:10px}
+    .btn-pago-opcion{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:12px 10px;border-radius:14px;
+      border:1px solid var(--field-border);background:var(--field-bg);color:var(--text-color);font-size:.86rem;font-weight:700;cursor:pointer;
+      transition:background .2s,border-color .2s,box-shadow .2s,color .2s,transform .2s}
+    .btn-pago-opcion span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .btn-pago-opcion svg{width:20px;height:20px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .btn-pago-opcion:hover{border-color:var(--primary-color)}
+    .btn-pago-opcion:active{transform:scale(.98)}
+    .btn-pago-opcion.activo{background:rgba(158,216,50,.16);border-color:rgba(158,216,50,.75);color:var(--primary-color);
+      box-shadow:0 0 0 3px rgba(158,216,50,.16),0 0 22px rgba(158,216,50,.18)}
+    .pago-nota{margin:8px 4px 0;font-size:.72rem;line-height:1.4;color:var(--muted-text)}
+    #modal-billetera{top:50%;bottom:auto;transform:translate(-50%,-50%);z-index:2750;width:86%;max-width:340px;
+      background:var(--modal-box-bg)!important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+      max-height:calc(100vh - 40px);max-height:calc(100dvh - 40px);overflow-y:auto;overscroll-behavior:contain;
+      box-shadow:0 0 0 200vmax rgba(0,0,0,.35),0 15px 40px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.12);
+      animation:modalIn .4s cubic-bezier(.2,.8,.2,1) both}
+    body.dark-mode #modal-billetera .panel-title{color:#ffffff!important}
+    #form-billetera{text-align:left}
+    #form-billetera .btn-main{margin-top:6px}
+    #billetera-nombre{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239ED832' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3'/%3E%3Cpath d='M21 9h-5a3 3 0 0 0 0 6h5V9z'/%3E%3C/svg%3E")}
+    #billetera-numero{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239ED832' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 9h16M4 15h16M10 3 8 21M16 3l-2 18'/%3E%3C/svg%3E")}
+
+    /* ============================================================
        NUEVO · POLÍTICAS DE PRIVACIDAD Y PROTECCIÓN DE DATOS (LEGAL)
        ============================================================ */
     .politicas-registro-bloque{margin:14px 0 10px;display:flex;flex-direction:column;gap:8px}
@@ -528,6 +553,22 @@
           <span class="doc-btn-text">Documentación para el vehículo</span>
           <span id="doc-estado" class="doc-estado">Pendiente</span>
         </button>
+      </div>
+
+      <!-- Métodos de pago que acepta el conductor (solo visible para CONDUCTOR) -->
+      <div id="bloque-metodos-pago" class="input-group oculto">
+        <span class="doc-label">Métodos de pago que aceptas</span>
+        <div class="pago-opciones" role="group" aria-label="Métodos de pago que aceptas">
+          <button type="button" id="btn-pago-efectivo" class="btn-pago-opcion" aria-pressed="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>
+            <span>Efectivo</span>
+          </button>
+          <button type="button" id="btn-pago-billetera" class="btn-pago-opcion" aria-pressed="false" aria-haspopup="dialog" aria-controls="modal-billetera">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3"/><path d="M21 9h-5a3 3 0 0 0 0 6h5V9z"/></svg>
+            <span id="txt-pago-billetera">Billetera digital</span>
+          </button>
+        </div>
+        <p class="pago-nota">Elige uno o ambos. Los pasajeros verán los datos de tu billetera cuando aceptes su viaje.</p>
       </div>
 
       <!-- NUEVO: BOTÓN Y CHECK DE POLÍTICAS DE PROTECCIÓN DE DATOS (ENCIMA DEL BOTÓN GUARDAR) -->
@@ -814,6 +855,42 @@
     </form>
   </div>
 
+  <!-- BILLETERA DIGITAL DEL CONDUCTOR (modal pequeño) -->
+  <div id="modal-billetera" class="ui-panel oculto" role="dialog" aria-modal="true" aria-labelledby="billetera-titulo">
+    <h3 id="billetera-titulo" class="panel-title">Billetera digital</h3>
+    <p class="panel-subtitle">Los pasajeros que elijan pagar con billetera verán estos datos cuando aceptes su viaje.</p>
+    <form id="form-billetera" novalidate>
+      <div class="input-group"><input type="text" id="billetera-nombre" list="lista-billeteras" placeholder="Nombre de la billetera (Ej: Nequi)" maxlength="40" autocomplete="off"></div>
+      <datalist id="lista-billeteras">
+        <option value="Nequi"></option>
+        <option value="Daviplata"></option>
+        <option value="Bancolombia a la mano"></option>
+        <option value="Movii"></option>
+        <option value="Dale!"></option>
+        <option value="Nu Colombia"></option>
+        <option value="Lulo Bank"></option>
+        <option value="RappiPay"></option>
+      </datalist>
+      <div class="input-group"><input type="text" id="billetera-numero" inputmode="numeric" placeholder="Número de cuenta o celular" maxlength="30" autocomplete="off"></div>
+      <div class="doc-item" id="item-billetera-qr">
+        <span class="doc-label">Código QR de la billetera (opcional)</span>
+        <label class="doc-drop">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9ED832" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/></svg>
+          <span class="doc-drop-text" id="txt-billetera-qr">Subir imagen del QR</span>
+          <input type="file" id="billetera-qr" accept="image/*">
+        </label>
+        <div class="doc-preview oculto" id="preview-billetera-qr">
+          <img class="doc-preview-img" id="img-billetera-qr" alt="QR de la billetera">
+          <span class="doc-preview-nombre" id="nombre-billetera-qr"></span>
+          <button type="button" class="doc-quitar" id="quitar-billetera-qr" aria-label="Quitar QR">✕</button>
+        </div>
+      </div>
+      <button type="submit" class="btn-main">Guardar billetera</button>
+      <button type="button" id="btn-quitar-billetera" class="btn-secondary oculto" style="margin-top:8px">Quitar billetera digital</button>
+      <button type="button" id="btn-cancelar-billetera" class="btn-secondary" style="margin-top:8px">Cancelar</button>
+    </form>
+  </div>
+
   <!-- ALERTA DE INSTALACIÓN PWA -->
   <div id="modal-instalar-pwa" class="ui-panel oculto" style="z-index:3500; top:50%; bottom:auto; transform:translate(-50%, -50%);">
     <!-- CONTENEDOR CON FONDO BLANCO SIEMPRE -->
@@ -1060,6 +1137,8 @@
 
       // Documentación solo visible para conductor
       $('bloque-documentacion').classList.toggle('oculto', rolSeleccionado !== 'conductor');
+      // Métodos de pago solo visibles para conductor
+      $('bloque-metodos-pago').classList.toggle('oculto', rolSeleccionado !== 'conductor');
 
       // Resetear estado de aceptación de políticas
       actualizarEstadoPoliticas(checkPoliticasRegistro.checked);
@@ -1450,6 +1529,105 @@
 
     actualizarContadorDocumentos();
 
+    /* ================= MÉTODOS DE PAGO DEL CONDUCTOR (Efectivo / Billetera digital) ================= */
+    const metodosPagoConductor = { efectivo: false, billetera: false, nombre: '', numero: '', qr: null, qrNombre: '' };
+    const modalBilletera = $('modal-billetera');
+    let qrBilleteraTemporal = null, qrBilleteraNombreTemporal = '';
+
+    function pintarMetodosPago() {
+      const bEf = $('btn-pago-efectivo'), bBi = $('btn-pago-billetera');
+      bEf.classList.toggle('activo', metodosPagoConductor.efectivo);
+      bEf.setAttribute('aria-pressed', metodosPagoConductor.efectivo ? 'true' : 'false');
+      bBi.classList.toggle('activo', metodosPagoConductor.billetera);
+      bBi.setAttribute('aria-pressed', metodosPagoConductor.billetera ? 'true' : 'false');
+      $('txt-pago-billetera').innerText = metodosPagoConductor.billetera ? (metodosPagoConductor.nombre + ' ✓') : 'Billetera digital';
+    }
+
+    function pintarQrBilletera() {
+      const hay = !!qrBilleteraTemporal;
+      $('preview-billetera-qr').classList.toggle('oculto', !hay);
+      $('item-billetera-qr').classList.toggle('cargado', hay);
+      if (hay) $('img-billetera-qr').src = qrBilleteraTemporal; else $('img-billetera-qr').removeAttribute('src');
+      $('nombre-billetera-qr').innerText = hay ? (qrBilleteraNombreTemporal || 'Código QR') : '';
+      $('txt-billetera-qr').innerText = hay ? 'Cambiar imagen del QR' : 'Subir imagen del QR';
+    }
+
+    function abrirModalBilletera() {
+      $('billetera-nombre').value = metodosPagoConductor.nombre;
+      $('billetera-numero').value = metodosPagoConductor.numero;
+      qrBilleteraTemporal = metodosPagoConductor.qr;
+      qrBilleteraNombreTemporal = metodosPagoConductor.qrNombre;
+      pintarQrBilletera();
+      $('btn-quitar-billetera').classList.toggle('oculto', !metodosPagoConductor.billetera);
+      modalRegistro.classList.add('oculto');
+      modalBilletera.classList.remove('oculto');
+      modalBilletera.scrollTop = 0;
+    }
+
+    function cerrarModalBilletera() {
+      modalBilletera.classList.add('oculto');
+      modalRegistro.classList.remove('oculto');
+    }
+
+    $('btn-pago-efectivo').addEventListener('click', () => {
+      metodosPagoConductor.efectivo = !metodosPagoConductor.efectivo;
+      pintarMetodosPago();
+    });
+    $('btn-pago-billetera').addEventListener('click', abrirModalBilletera);
+    $('btn-cancelar-billetera').addEventListener('click', cerrarModalBilletera);
+    $('btn-quitar-billetera').addEventListener('click', () => {
+      Object.assign(metodosPagoConductor, { billetera: false, nombre: '', numero: '', qr: null, qrNombre: '' });
+      pintarMetodosPago();
+      cerrarModalBilletera();
+      mostrarAlerta('Billetera digital quitada.', 'info');
+    });
+    $('quitar-billetera-qr').addEventListener('click', () => {
+      qrBilleteraTemporal = null;
+      qrBilleteraNombreTemporal = '';
+      pintarQrBilletera();
+    });
+
+    // QR opcional: se comprime en el navegador (máx. 900 px, fondo blanco para que se lea bien)
+    $('billetera-qr').addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      e.target.value = '';
+      if (!file) return;
+      if (!file.type.startsWith('image/')) { mostrarAlerta('Sube una imagen del QR (foto o captura de pantalla).', 'error'); return; }
+      if (file.size > 5 * 1024 * 1024) { mostrarAlerta('La imagen supera los 5 MB.', 'error'); return; }
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        const img = new Image();
+        img.onload = () => {
+          const MAX = 900;
+          let w = img.width, h = img.height;
+          if (w > MAX || h > MAX) { const k = MAX / Math.max(w, h); w = Math.round(w * k); h = Math.round(h * k); }
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, h);
+          ctx.drawImage(img, 0, 0, w, h);
+          qrBilleteraTemporal = canvas.toDataURL('image/jpeg', 0.92);
+          qrBilleteraNombreTemporal = file.name;
+          pintarQrBilletera();
+        };
+        img.onerror = () => mostrarAlerta('No se pudo leer la imagen. Intenta con otra.', 'error');
+        img.src = evt.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    $('form-billetera').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const nombre = $('billetera-nombre').value.trim();
+      const numero = $('billetera-numero').value.trim();
+      if (!nombre) { mostrarAlerta('Escribe el nombre de la billetera digital.', 'error'); $('billetera-nombre').focus(); return; }
+      if (!/^[0-9+\-\s]{6,30}$/.test(numero)) { mostrarAlerta('Escribe un número de cuenta válido.', 'error'); $('billetera-numero').focus(); return; }
+      Object.assign(metodosPagoConductor, { billetera: true, nombre: nombre, numero: numero, qr: qrBilleteraTemporal, qrNombre: qrBilleteraNombreTemporal });
+      pintarMetodosPago();
+      cerrarModalBilletera();
+      mostrarAlerta('Billetera digital guardada.', 'exito');
+    });
+
     /* ================= INICIO DE SESIÓN ================= */
     formLogin.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -1541,6 +1719,12 @@
         return;
       }
 
+      if (rolSeleccionado === 'conductor' && !metodosPagoConductor.efectivo && !metodosPagoConductor.billetera) {
+        mostrarAlerta("Elige al menos un método de pago: efectivo o billetera digital.", "error");
+        $('bloque-metodos-pago').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
       btnGuardar.disabled = true;
       btnGuardar.innerText = "Guardando...";
 
@@ -1627,13 +1811,28 @@
 
       /* TABLAS CONDUCTORES + VEHÍCULOS + DOCUMENTACIÓN DEL VEHÍCULO */
       if (rolSeleccionado === 'conductor') {
-        const { data: conductorInsertado, error: errCond } = await supabaseClient
-  .from('conductores')
-  .insert([{
-    usuario_id: nuevoUsuarioId,
-    licencia: documentacionVehiculo.licencia
-  }])
-  .select();
+        /* Métodos de pago del conductor (el QR opcional se sube a Storage) */
+        let qrBilleteraUrl = null;
+        if (metodosPagoConductor.billetera && metodosPagoConductor.qr) {
+          qrBilleteraUrl = await subirASupabaseStorage(metodosPagoConductor.qr, BUCKET_FOTOS, 'billeteras', ((regNumDoc && regNumDoc.value.trim()) || 'conductor') + '_qr');
+        }
+        const filaConductor = { usuario_id: nuevoUsuarioId, licencia: documentacionVehiculo.licencia };
+        const filaPagos = {
+          acepta_efectivo: metodosPagoConductor.efectivo,
+          acepta_billetera: metodosPagoConductor.billetera,
+          billetera_nombre: metodosPagoConductor.billetera ? metodosPagoConductor.nombre : null,
+          billetera_numero: metodosPagoConductor.billetera ? metodosPagoConductor.numero : null,
+          billetera_qr: metodosPagoConductor.billetera ? qrBilleteraUrl : null,
+          metodos_pago_fecha: new Date().toISOString()
+        };
+        let { data: conductorInsertado, error: errCond } = await supabaseClient
+          .from('conductores').insert([Object.assign({}, filaConductor, filaPagos)]).select();
+        if (errCond && /column|schema cache|acepta_|billetera|metodos_pago/i.test(String(errCond.message || ''))) {
+          // Si aún no se ejecutó el SQL de métodos de pago, la cuenta se crea igual (se pedirán al entrar a la app)
+          console.warn("Métodos de pago no guardados (ejecuta el SQL de métodos de pago):", errCond.message);
+          ({ data: conductorInsertado, error: errCond } = await supabaseClient
+            .from('conductores').insert([filaConductor]).select());
+        }
         if (!errCond && conductorInsertado && conductorInsertado.length > 0) {
           const conductorId = conductorInsertado[0].id || conductorInsertado[0].Id;
           usuarioCreado.conductor_id = conductorId;
