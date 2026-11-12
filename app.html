@@ -462,6 +462,73 @@
     .pagos-resumen.con-comisiones .pago-comision{grid-column:span 3}
     .pago-comision small{display:block;margin-top:4px;font-size:.6rem;color:var(--muted-text);line-height:1.35}
     @media (prefers-reduced-motion:reduce){.modal-nueva,.modal-nueva .modal-drivxi-dialog,.modal-nueva .direccion-fila,.menu-subservicios,.menu-subservicios .menu-perfil-item,.servicio-presentacion-imagen{animation:none!important}}
+
+    /* ===== TARJETAS DE VIAJE COMPACTAS (VISTA CONDUCTOR): misma información, menos espacio ===== */
+    #contenedor-solicitudes{gap:8px}
+    #contenedor-solicitudes .tarjeta-viaje{padding:10px 10px 10px 13px;border-radius:14px}
+    #contenedor-solicitudes .tarjeta-viaje::before{top:10px;bottom:10px;width:3px}
+    #contenedor-solicitudes .viaje-header{gap:6px;margin-bottom:5px}
+    #contenedor-solicitudes .viaje-tipo-badge{gap:4px;padding:3px 7px;font-size:.58rem}
+    #contenedor-solicitudes .viaje-tipo-badge svg{width:11px;height:11px}
+    #contenedor-solicitudes .viaje-nuevo-chip{padding:2px 6px;font-size:.5rem}
+    #contenedor-solicitudes .viaje-precio-badge{font-size:1.02rem}
+    #contenedor-solicitudes .viaje-precio-badge small{font-size:.5rem}
+    #contenedor-solicitudes .viaje-hace{gap:4px;margin:0 0 5px;font-size:.58rem}
+    #contenedor-solicitudes .viaje-hace .live-dot{width:6px;height:6px}
+    #contenedor-solicitudes .viaje-ruta{gap:3px;margin-bottom:7px}
+    #contenedor-solicitudes .viaje-punto{gap:7px;font-size:.72rem;line-height:1.25}
+    #contenedor-solicitudes .viaje-punto-dot{width:17px;height:17px;font-size:.55rem;margin-top:0}
+    #contenedor-solicitudes .viaje-punto-text{padding-top:1px}
+    #contenedor-solicitudes .viaje-punto-sub{font-size:.58rem;margin-top:1px}
+    #contenedor-solicitudes .viaje-linea-conector{height:5px;margin-left:8px}
+    #contenedor-solicitudes .viaje-metricas{gap:6px;padding:5px 8px;margin-bottom:7px;border-radius:10px}
+    #contenedor-solicitudes .viaje-metrica-item{gap:5px;font-size:.66rem}
+    #contenedor-solicitudes .viaje-metrica-item svg{width:12px;height:12px}
+    #contenedor-solicitudes .viaje-metrica-sub{font-size:.52rem}
+    #contenedor-solicitudes .viaje-pasajero{gap:8px;margin-bottom:7px;padding:6px 8px;border-radius:12px}
+    #contenedor-solicitudes .vp-foto-wrap,#contenedor-solicitudes .vp-foto,#contenedor-solicitudes .vp-skeleton{width:34px;height:34px}
+    #contenedor-solicitudes .vp-verificado{width:13px;height:13px;right:-3px;bottom:-3px;font-size:.5rem}
+    #contenedor-solicitudes .vp-etiqueta{font-size:.48rem;letter-spacing:.14em;margin-bottom:1px}
+    #contenedor-solicitudes .vp-nombre{font-size:.76rem}
+    #contenedor-solicitudes .vp-estrellas{margin-top:1px}
+    #contenedor-solicitudes .vp-estrellas i{font-size:.64rem}
+    #contenedor-solicitudes .vp-estrellas .vp-nota{margin-left:4px;font-size:.6rem}
+    #contenedor-solicitudes .vp-estrellas .vp-conteo{font-size:.52rem}
+    #contenedor-solicitudes .vp-score{min-width:40px;padding:4px 6px;border-radius:10px}
+    #contenedor-solicitudes .vp-score b{font-size:.8rem}
+    #contenedor-solicitudes .vp-score span{font-size:.42rem}
+    #contenedor-solicitudes .vp-cargando{gap:6px;font-size:.62rem}
+    #contenedor-solicitudes .viaje-footer{margin-top:2px}
+    #contenedor-solicitudes .viaje-cta .btn-main{padding:8px 30px 8px 12px;font-size:.78rem;border-radius:10px}
+    #contenedor-solicitudes .viaje-cta .btn-main::after{right:12px;font-size:.95rem}
+    #contenedor-solicitudes .btn-rechazar{gap:5px;margin-top:5px;padding:6px 12px;border-radius:10px;font-size:.72rem}
+    #contenedor-solicitudes .btn-rechazar svg{width:12px;height:12px}
+    #contenedor-solicitudes .viaje-cancelado-banner{margin-bottom:6px;padding:6px 8px;border-radius:10px;font-size:.66rem}
+
+    /* ===== SOLICITAR VIAJE COMPACTO (PASAJERO): textos, campos y botón más pequeños ===== */
+    #ui-pasajero{padding:14px 14px 13px;border-radius:20px}
+    #ui-pasajero::before{margin:-15px 14% 5px}
+    #ui-pasajero .panel-title{font-size:1.02rem;margin-bottom:8px}
+    #ui-pasajero .panel-title::before{font-size:.54rem;letter-spacing:.28em;margin-bottom:3px}
+    #ui-pasajero .input-group{margin-bottom:8px}
+    #ui-pasajero .input-group>input{height:42px;padding:0 12px 0 38px;border-radius:11px;font-size:.84rem;background-position:12px center;background-size:16px 16px}
+    #ui-pasajero .sugerencia-item{padding:8px 11px}
+    #ui-pasajero .sugerencia-principal{font-size:.78rem}
+    #ui-pasajero .sugerencia-detalle{font-size:.64rem}
+    #ui-pasajero .status-text{font-size:.72rem;line-height:1.35;margin:2px 0 9px}
+    #ui-pasajero .btn-main{padding:10px 38px 10px 14px;font-size:.86rem;border-radius:11px}
+    #ui-pasajero .btn-main::after{right:14px;font-size:1rem}
+    #ui-pasajero .aviso-push{gap:8px;margin:0 0 9px;padding:8px 9px;border-radius:12px}
+    #ui-pasajero .aviso-push-icono{width:30px;height:30px;border-radius:9px}
+    #ui-pasajero .aviso-push-icono svg{width:15px;height:15px}
+    #ui-pasajero .aviso-push-tit{font-size:.72rem}
+    #ui-pasajero .aviso-push-sub{font-size:.6rem}
+    #ui-pasajero .aviso-push .btn-mini{padding:7px 10px;border-radius:10px;font-size:.66rem}
+    #ui-pasajero .viaje-bloqueo-box{padding:10px;border-radius:14px;margin-bottom:8px}
+    #ui-pasajero .viaje-bloqueo-tit{font-size:.78rem}
+    #ui-pasajero .viaje-bloqueo-txt{font-size:.66rem;margin-bottom:7px}
+    #ui-pasajero .btn-ir-seguimiento,#ui-pasajero .btn-cancelar-viaje{padding:7px 14px;font-size:.7rem}
+    #ui-pasajero .comercio-info{margin:0 0 8px;padding:7px 10px;border-radius:10px;font-size:.68rem}
   </style>
   <script>
     (function(){
@@ -871,6 +938,7 @@
 
     let swRegistro = null, swListenerOk = false;
     let pushSuscrito = false;
+    let ultimoErrorPush = '';                    // motivo exacto si no se pudieron activar los avisos
     let audioCtx = null;
     const viajesNotificados = new Set();
     const estadosViajeVistos = new Map();
@@ -1599,19 +1667,22 @@
     }
 
     async function suscribirPush(pedirPermiso) {
-      if (!db || !usuarioActual || usuarioActual.id == null || !PUSH_SOPORTADO) return false;
+      ultimoErrorPush = '';
+      if (!db || !usuarioActual || usuarioActual.id == null || !PUSH_SOPORTADO) { ultimoErrorPush = 'Inicia sesión de nuevo e inténtalo otra vez.'; return false; }
       const rolPush = esConductorSesion() ? 'conductor' : 'pasajero';
-      if (!vapidListo()) { console.warn('Push: falta VAPID_PUBLIC_KEY.'); return false; }
+      if (!vapidListo()) { ultimoErrorPush = 'Falta la llave VAPID pública en app.html.'; console.warn('Push: falta VAPID_PUBLIC_KEY.'); return false; }
       try {
         let permiso = Notification.permission;
         if (permiso === 'default' && pedirPermiso) {
           try { permiso = await Notification.requestPermission(); } catch (e) { permiso = Notification.permission; }
         }
-        if (permiso !== 'granted') return false;
+        if (permiso !== 'granted') { ultimoErrorPush = 'Permite las notificaciones de DRIVXI cuando el navegador lo pregunte.'; return false; }
 
-        const reg = await registrarServiceWorker();
-        if (!reg) return false;
-        await navigator.serviceWorker.ready;
+        const regInicial = await registrarServiceWorker();
+        if (!regInicial) { ultimoErrorPush = 'No se encontró sw.js junto a app.html. Súbelo a la misma carpeta del repositorio.'; return false; }
+        // Nunca se queda esperando: si el servicio de avisos no se activa en 10 s se informa el motivo
+        const reg = await Promise.race([navigator.serviceWorker.ready, new Promise((r) => setTimeout(() => r(null), 10000))]);
+        if (!reg) { ultimoErrorPush = 'El servicio de avisos (sw.js) no terminó de instalarse. Sube el sw.js más reciente al repositorio y recarga la página.'; return false; }
 
         let sub = await reg.pushManager.getSubscription();
         if (sub && sub.options && sub.options.applicationServerKey &&
@@ -1635,12 +1706,14 @@
           p_user_agent: (navigator.userAgent || '').slice(0, 250)
         });
         if (error) {
+          ultimoErrorPush = 'Supabase no guardó el celular (función bikar_registrar_push). Ejecuta supabase.sql en el SQL Editor. Detalle: ' + error.message;
           console.warn('Push: no se pudo registrar la suscripción:', error.message);
           return false;
         }
         pushSuscrito = true;
         return true;
       } catch (e) {
+        ultimoErrorPush = 'El navegador no pudo crear la suscripción: ' + ((e && e.message) || e) + '. Revisa tu conexión y que la llave VAPID pública sea la correcta.';
         console.warn('Push: error al suscribir:', e && e.message);
         return false;
       }
@@ -1798,13 +1871,13 @@
         bloqueado:   { t: 'Notificaciones bloqueadas', s: 'Permite las notificaciones de DRIVXI en los ajustes del navegador o del sitio para recibir los avisos de tu viaje.', b: null, alerta: true },
         instalar:    { t: 'Instala DRIVXI en tu iPhone', s: 'Toca Compartir y elige «Añadir a pantalla de inicio»; luego abre DRIVXI desde su icono y activa los avisos.', b: null, alerta: false },
         nosoportado: { t: 'Avisos push no disponibles', s: 'Este navegador no admite notificaciones push. Usa Chrome, Edge o Safari actualizado para recibir los avisos de tu viaje.', b: null, alerta: true },
-        error:       { t: 'No se pudieron activar los avisos', s: 'Revisa tu conexión e inténtalo de nuevo.', b: 'Reintentar', alerta: true }
+        error:       { t: 'No se pudieron activar los avisos', s: ultimoErrorPush || 'Revisa tu conexión e inténtalo de nuevo.', b: 'Reintentar', alerta: true }
       } : {
         activar:     { t: 'Activa los avisos de viajes', s: 'Recibe cada solicitud con el sonido DRIVXI aunque tengas la app cerrada o en segundo plano.', b: 'Activar', alerta: false },
         bloqueado:   { t: 'Notificaciones bloqueadas', s: 'Permite las notificaciones de DRIVXI en los ajustes del navegador o del sitio para recibir viajes con la app cerrada.', b: null, alerta: true },
         instalar:    { t: 'Instala DRIVXI en tu iPhone', s: 'Toca Compartir y elige «Añadir a pantalla de inicio»; luego abre DRIVXI desde su icono y activa los avisos.', b: null, alerta: false },
         nosoportado: { t: 'Avisos push no disponibles', s: 'Este navegador no admite notificaciones push. Usa Chrome, Edge o Safari actualizado para recibir viajes con la app cerrada.', b: null, alerta: true },
-        error:       { t: 'No se pudieron activar los avisos', s: 'Revisa tu conexión e inténtalo de nuevo.', b: 'Reintentar', alerta: true }
+        error:       { t: 'No se pudieron activar los avisos', s: ultimoErrorPush || 'Revisa tu conexión e inténtalo de nuevo.', b: 'Reintentar', alerta: true }
       };
       const x = textos[estado];
       if (!x) { caja.classList.add('oculto'); return; }
@@ -1847,13 +1920,12 @@
       btnActivarPush.disabled = true;
       await iniciarPushConductor(true);
       btnActivarPush.disabled = false;
-      const permitido = ('Notification' in window) && Notification.permission === 'granted';
-      if (pushSuscrito || permitido) {
-        mostrarToast(pushSuscrito
-          ? 'Notificaciones activadas · Recibirás los viajes con la app cerrada'
-          : 'Notificaciones activadas en este dispositivo', '✓');
+      if (pushSuscrito) {
+        mostrarToast('Notificaciones activadas · Recibirás los viajes con la app cerrada', '✓');
         sonidoNuevoViaje(1);
         notificarSistema('🔔 DRIVXI · Avisos activados', 'Así te llegarán las solicitudes de viaje.', { forzar: true, tag: 'drivxi-prueba' });
+      } else if (ultimoErrorPush) {
+        mostrarToast(ultimoErrorPush, '!');
       }
     });
 
@@ -1862,13 +1934,12 @@
       btnActivarPushPas.disabled = true;
       await iniciarPushPasajero(true);
       btnActivarPushPas.disabled = false;
-      const permitido = ('Notification' in window) && Notification.permission === 'granted';
-      if (pushSuscrito || permitido) {
-        mostrarToast(pushSuscrito
-          ? 'Notificaciones activadas · Te avisaremos de tu viaje aunque cierres la app'
-          : 'Notificaciones activadas en este dispositivo', '✓');
+      if (pushSuscrito) {
+        mostrarToast('Notificaciones activadas · Te avisaremos de tu viaje aunque cierres la app', '✓');
         sonidoNuevoViaje(1);
         notificarSistema('🔔 DRIVXI · Avisos activados', 'Así te llegarán los avisos de tu viaje.', { forzar: true, tag: 'drivxi-prueba' });
+      } else if (ultimoErrorPush) {
+        mostrarToast(ultimoErrorPush, '!');
       }
     });
 
@@ -2882,9 +2953,7 @@
       if (!servicioSeleccionado) return;
       btnConfirmarServicio.disabled = true;
       btnConfirmarServicio.textContent = 'Solicitando…';
-      if (promesaPushPasajero) {
-        try { await Promise.race([promesaPushPasajero, new Promise((r) => setTimeout(r, 6000))]); } catch (e) {}
-      }
+      // El viaje se crea AL INSTANTE (los conductores lo reciben de inmediato); el registro de avisos sigue en paralelo
       await solicitarViaje(servicioSeleccionado);
     });
 
@@ -2918,6 +2987,10 @@
       if (data && data.length) {
         recurrentesMostrados = false;
         viajeActivoPasajero = data[0];
+        // Un instante (máx. 1,5 s) para terminar de registrar los avisos de este celular antes de abrir el seguimiento
+        if (promesaPushPasajero) {
+          try { await Promise.race([promesaPushPasajero, new Promise((r) => setTimeout(r, 1500))]); } catch (e) {}
+        }
         window.location.href = 'viaje.html?id=' + data[0].id + '&rol=pasajero';
       }
     }
