@@ -462,6 +462,163 @@
     .pagos-resumen.con-comisiones .pago-comision{grid-column:span 3}
     .pago-comision small{display:block;margin-top:4px;font-size:.6rem;color:var(--muted-text);line-height:1.35}
     @media (prefers-reduced-motion:reduce){.modal-nueva,.modal-nueva .modal-drivxi-dialog,.modal-nueva .direccion-fila,.menu-subservicios,.menu-subservicios .menu-perfil-item,.servicio-presentacion-imagen{animation:none!important}}
+
+    /* ============================================================
+       DRIVXI · MODO COMPACTO (textos y contenedores más pequeños)
+       Pasajero y conductor. Solo tamaños: colores y lógica intactos.
+       ============================================================ */
+    /* Barra superior */
+    .perfil-superior{width:40px;height:40px}
+    .btn-theme-toggle{width:40px;height:40px}
+    .btn-theme-toggle svg{width:17px;height:17px}
+    #btn-direcciones-favoritas{top:calc(62px + env(safe-area-inset-top))}
+    #btn-centrar-ubicacion{top:calc(108px + env(safe-area-inset-top))}
+    .btn-conductor-estado{top:calc(62px + env(safe-area-inset-top));padding:6px 11px 6px 9px;gap:6px;font-size:.68rem}
+    .btn-conductor-estado .estado-punto{width:8px;height:8px}
+    #alerta-viaje-activo{top:calc(64px + env(safe-area-inset-top));padding:7px 13px;gap:7px;font-size:.7rem}
+    #alerta-viaje-activo svg{width:14px;height:14px}
+    .btn-secondary{padding:9px 13px;font-size:.78rem}
+    #btn-cambiar-modo{padding-left:30px}
+    #btn-cambiar-modo::before{left:13px;width:7px;height:7px;margin-top:-3.5px}
+    #menu-perfil{top:calc(62px + env(safe-area-inset-top));gap:6px}
+    .menu-perfil-item{padding:6px 12px 6px 8px;gap:7px;font-size:.66rem}
+    .menu-perfil-item .mi-ico{width:19px;height:19px}
+    .menu-perfil-item .mi-ico svg{width:11px;height:11px}
+    .menu-subservicios .menu-perfil-item{font-size:.62rem}
+
+    /* Paneles de pasajero y conductor */
+    .ui-panel{bottom:calc(16px + env(safe-area-inset-bottom));max-width:380px;padding:16px 15px 15px;border-radius:20px}
+    .ui-panel::before{margin:-18px 14% 5px}
+    .panel-title{font-size:1.12rem;margin-bottom:4px}
+    .panel-title::before{font-size:.56rem;margin-bottom:4px}
+    .panel-subtitle,.status-text{font-size:.76rem}
+    .status-text{margin:3px 0 10px}
+    .input-group{margin-bottom:9px}
+    .input-group>input{height:46px;padding:0 13px 0 42px;font-size:.86rem;border-radius:12px;background-position:13px center;background-size:17px 17px}
+    .btn-main{padding:12px 40px 12px 16px;font-size:.88rem;border-radius:12px}
+    .btn-main::after{right:15px;font-size:1rem}
+    .sugerencia-item{padding:9px 12px;gap:8px}
+    .sugerencia-principal{font-size:.78rem}
+    .sugerencia-detalle{font-size:.66rem}
+
+    /* Avisos, bloqueo por viaje activo y comercio */
+    .aviso-push{padding:9px;gap:9px;margin:0 0 10px;border-radius:14px}
+    .aviso-push-icono{width:32px;height:32px;border-radius:10px}
+    .aviso-push-icono svg{width:16px;height:16px}
+    .aviso-push-tit{font-size:.72rem}
+    .aviso-push-sub{font-size:.62rem}
+    .btn-mini{padding:8px 11px;gap:5px;font-size:.68rem;border-radius:10px}
+    .btn-mini svg{width:12px;height:12px}
+    .viaje-bloqueo-box{padding:12px;margin-bottom:10px;border-radius:14px}
+    .viaje-bloqueo-tit{font-size:.8rem}
+    .viaje-bloqueo-txt{font-size:.7rem;margin-bottom:8px}
+    .btn-ir-seguimiento,.btn-cancelar-viaje{padding:7px 14px;font-size:.72rem}
+    .comercio-info{padding:8px 10px;font-size:.72rem}
+
+    /* Panel de servicios (pasajero) */
+    #panel-servicios{padding:calc(18px + env(safe-area-inset-top)) 16px calc(18px + env(safe-area-inset-bottom))}
+    @media (max-width:480px){#panel-servicios{padding:16px 14px calc(16px + env(safe-area-inset-bottom))}}
+    .servicios-titulo{font-size:1.06rem}
+    .servicios-titulo::before{font-size:.56rem;margin-bottom:4px}
+    .btn-cerrar-servicios{width:30px;height:30px;border-radius:10px}
+    .servicios-resumen{margin:10px 0 12px;padding:10px;gap:7px;border-radius:14px}
+    .servicios-ruta{gap:8px;font-size:.74rem}
+    .servicios-ruta .punto{width:19px;height:19px;font-size:.58rem}
+    .servicios-ruta .texto small{font-size:.62rem}
+    .servicios-meta{margin-top:4px;padding-top:8px}
+    .servicios-meta-label{font-size:.56rem}
+    .servicios-meta-valor{font-size:.82rem}
+    .servicios-lista{gap:8px}
+    .servicio-card{padding:10px;gap:10px;border-radius:15px}
+    .servicio-card.seleccionado::before{top:8px;right:9px;width:19px;height:19px;font-size:.66rem}
+    .servicio-icono{width:44px;height:44px;border-radius:12px}
+    .servicio-icono svg{width:24px;height:24px}
+    .servicio-nombre{font-size:.86rem}
+    .servicio-desc{font-size:.66rem}
+    .servicio-tiempo{margin-top:3px;font-size:.64rem}
+    .servicio-conductores{margin-left:6px;font-size:.62rem}
+    .servicio-precio-valor{font-size:.92rem}
+    .servicio-precio-etiqueta{font-size:.56rem}
+    .servicios-footer{margin-top:10px;padding-top:10px}
+    .servicios-footer .btn-main{padding:13px 40px 13px 16px}
+    .servicios-leyenda{margin-top:8px;font-size:.64rem}
+
+    /* Panel del conductor (solicitudes de viaje) */
+    #contenedor-solicitudes{gap:9px}
+    .tarjeta-viaje{padding:12px 12px 12px 15px;border-radius:16px}
+    .tarjeta-viaje::before{top:12px;bottom:12px;width:3px}
+    .viaje-header{gap:8px;margin-bottom:7px}
+    .viaje-tipo-badge{padding:4px 8px;gap:5px;font-size:.6rem}
+    .viaje-tipo-badge svg{width:12px;height:12px}
+    .viaje-nuevo-chip{padding:2px 7px;font-size:.52rem}
+    .viaje-precio-badge{font-size:1.12rem}
+    .viaje-precio-badge small{font-size:.52rem}
+    .viaje-hace{margin:0 0 7px;font-size:.6rem}
+    .viaje-ruta{gap:4px;margin-bottom:9px}
+    .viaje-punto{gap:8px;font-size:.74rem}
+    .viaje-punto-dot{width:19px;height:19px;font-size:.58rem}
+    .viaje-punto-sub{font-size:.62rem}
+    .viaje-linea-conector{height:7px;margin-left:9px}
+    .viaje-metricas{gap:6px;padding:6px 8px;margin-bottom:9px;border-radius:10px}
+    .viaje-metrica-item{gap:5px;font-size:.68rem}
+    .viaje-metrica-item svg{width:12px;height:12px}
+    .viaje-metrica-sub{font-size:.55rem}
+    .viaje-pasajero{gap:10px;padding:8px 10px;margin-bottom:9px;border-radius:13px}
+    .vp-foto-wrap,.vp-foto,.vp-skeleton{width:40px;height:40px}
+    .vp-verificado{width:15px;height:15px;font-size:.54rem}
+    .vp-etiqueta{font-size:.5rem}
+    .vp-nombre{font-size:.8rem}
+    .vp-estrellas i{font-size:.7rem}
+    .vp-estrellas .vp-nota{font-size:.64rem}
+    .vp-estrellas .vp-conteo{font-size:.56rem}
+    .vp-score{min-width:44px;padding:5px 6px;border-radius:11px}
+    .vp-score b{font-size:.86rem}
+    .vp-score span{font-size:.45rem}
+    .viaje-cta .btn-main{padding:10px 32px 10px 14px;font-size:.8rem;border-radius:11px}
+    .btn-rechazar{margin-top:6px;padding:9px 14px;font-size:.76rem;border-radius:11px}
+    .btn-rechazar svg{width:12px;height:12px}
+    .viaje-cancelado-banner{padding:8px 10px;margin-bottom:9px;font-size:.72rem}
+    .conductor-inactivo-card{padding:18px 14px;border-radius:15px}
+    .conductor-inactivo-icono{width:42px;height:42px;margin-bottom:8px}
+    .conductor-inactivo-icono svg{width:20px;height:20px}
+    .conductor-inactivo-tit{font-size:.84rem}
+    .conductor-inactivo-sub{font-size:.7rem}
+    .cargando{padding:16px;font-size:.76rem}
+
+    /* Ventanas: perfil, vehículo, historial, favoritos, servicios */
+    .modal-drivxi-dialog{padding:16px 14px 14px;border-radius:20px}
+    .modal-drivxi-cerrar{top:11px;right:11px;width:27px;height:27px}
+    .modal-kicker{font-size:.54rem}
+    .modal-titulo{font-size:1rem}
+    .modal-instrucciones{font-size:.72rem}
+    .perfil-hero{gap:11px;margin:4px 0 12px}
+    .perfil-hero-foto{width:60px;height:60px;border-radius:19px}
+    .perfil-hero-nombre{font-size:.98rem}
+    .perfil-rol{padding:3px 8px;font-size:.56rem}
+    .perfil-datos{gap:7px;grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}
+    .perfil-dato{padding:8px 10px;border-radius:12px}
+    .perfil-dato-label{font-size:.52rem}
+    .perfil-dato-valor{font-size:.76rem}
+    .historial-tab{padding:7px 8px;font-size:.7rem}
+    .historial-select,.btn-descargar{height:36px;font-size:.7rem}
+    .historial-card{padding:10px 11px 10px 14px;border-radius:13px}
+    .historial-servicio{font-size:.62rem}
+    .historial-precio{font-size:.9rem}
+    .historial-ruta{font-size:.72rem}
+    .historial-fecha{font-size:.62rem}
+    .pago-kpi{padding:9px 8px;border-radius:13px}
+    .pago-kpi-valor{font-size:.88rem}
+    .pago-fila{padding:9px 11px}
+    .pago-fila-tit{font-size:.74rem}
+    .pago-fila-valor{font-size:.84rem}
+    .direccion-elegir{padding:10px;gap:9px}
+    .direccion-icono{width:28px;height:28px}
+    .direccion-textos strong{font-size:.74rem}
+    .direccion-textos small{font-size:.62rem}
+
+    /* Mensaje flotante */
+    #toast{padding:10px 16px;gap:8px;font-size:.8rem;border-radius:12px}
+    #toast .toast-icon{width:21px;height:21px;font-size:.72rem}
   </style>
   <script>
     (function(){
@@ -845,8 +1002,11 @@
       const dist = Number(distanciaKm || 0);
       const calculo = s.base + (dist * s.porKm);
       const final = Math.max(s.minTarifa, calculo);
-      const normal = Math.round(final / 100) * 100;
-      return s.capacidadPasajeros === 6 ? Math.round(normal * 130 / 100) * 100 : normal;
+      const centena = (v) => Math.round(v / 100) * 100;   // pesos redondeados a la centena
+      let total = centena(final);
+      if (s.capacidadPasajeros === 6) total = centena(total * 1.30); // 6 pasajeros: +30%
+      if (s.conMascota) total = Math.ceil(total * 1.10 / 100) * 100; // Con mascota: +10% (redondeo hacia arriba, nunca menos del 10%)
+      return total;
     }
 
     function formatoMoneda(v) {
@@ -2848,7 +3008,7 @@
         if (s.clave === 'taxi_auto' && conteoActivos[OPCION_MASCOTA] > 0) {
           disponibles.push(Object.assign({}, s, {
             opcion:OPCION_MASCOTA, conMascota:true, etiqueta:s.etiqueta + ' · Con mascota',
-            desc:'🐾 Viaja con tu mascota · Conductores que aceptan mascotas'
+            desc:'🐾 Viaja con tu mascota · Incluye 10% adicional'
           }));
         }
         const opcionSeis = claveOpcionServicio(s.clave, 6);
