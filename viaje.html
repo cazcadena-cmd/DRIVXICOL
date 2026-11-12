@@ -167,6 +167,23 @@
       .fx-sweep{opacity:0}
     }
 
+    /* MÉTODO DE PAGO DEL VIAJE (efectivo o billetera digital del conductor) */
+    .pago-metodo{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:10px;background:var(--field-bg);color:var(--primary-color);font-weight:800;font-size:.84rem;margin-bottom:10px}
+    .pago-metodo svg{width:16px;height:16px}
+    .pago-nota{font-size:.8rem;color:var(--muted-text);line-height:1.45;font-weight:600}
+    .pago-nota b{color:var(--text-color)}
+    .pago-billetera{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;border-radius:14px;background:var(--field-bg);border:1px solid var(--border-color);margin-bottom:10px}
+    .pago-billetera-datos{display:flex;flex-direction:column;gap:3px;min-width:0}
+    .pago-billetera-nombre{font-size:.95rem;font-weight:800}
+    .pago-billetera-numero{font-size:1.05rem;font-weight:800;letter-spacing:.06em;color:var(--primary-color);word-break:break-all}
+    .pago-copiar{align-self:flex-start;margin-top:4px;padding:6px 10px;border-radius:9px;border:1px solid var(--border-color);background:var(--card-bg);color:var(--text-color);font-size:.72rem;font-weight:700;cursor:pointer}
+    .pago-copiar:hover{border-color:var(--primary-color)}
+    .pago-qr-mini{flex-shrink:0;width:78px;height:78px;padding:4px;border-radius:12px;border:1px solid var(--border-color);background:#fff;cursor:pointer}
+    .pago-qr-mini img{width:100%;height:100%;object-fit:contain;display:block}
+    .qr-pago-marco{margin:12px auto;padding:12px;border-radius:16px;background:#fff;max-width:300px}
+    .qr-pago-marco img{width:100%;height:auto;display:block}
+    .qr-pago-titulo{font-size:.9rem;font-weight:800;margin-bottom:12px;color:var(--primary-color);word-break:break-word}
+
     /* PERFIL DE LA CONTRAPARTE */
     .profile-box{display:flex;align-items:center;gap:14px}
     .profile-img{width:62px;height:62px;border-radius:50%;object-fit:cover;border:2px solid var(--primary-color);background:var(--field-bg);flex-shrink:0}
@@ -580,6 +597,13 @@
       </div>
     </section>
 
+    <!-- MÉTODO DE PAGO (efectivo o billetera digital del conductor) -->
+    <section class="card" id="card-pago" style="display:none">
+      <div class="card-title">Método de pago</div>
+      <div class="pago-metodo" id="pago-metodo"></div>
+      <div id="pago-cuerpo"></div>
+    </section>
+
     <!-- ACCIONES -->
     <section id="sec-acciones" class="zona-acciones" style="display:none">
       <div class="aviso" id="aviso-rol" style="display:none"></div>
@@ -691,6 +715,19 @@
         <button class="btn-action btn-danger" id="llamada-colgar"><span>Colgar</span></button>
       </div>
       <audio id="audio-remoto" autoplay playsinline></audio>
+    </div>
+  </div>
+
+  <!-- MODAL QR DE PAGO (AMPLIACIÓN) -->
+  <div class="modal z3" id="modal-qr-pago">
+    <div class="modal-box" style="text-align:center;max-width:380px;padding:20px">
+      <div class="modal-head">
+        <div class="modal-title">Paga con QR</div>
+        <button class="modal-close" data-cerrar="modal-qr-pago">✕</button>
+      </div>
+      <div class="qr-pago-marco"><img id="img-qr-pago" src="" alt="Código QR de la billetera"></div>
+      <div id="qr-pago-titulo" class="qr-pago-titulo"></div>
+      <button class="btn-action btn-secundario" data-cerrar="modal-qr-pago" style="padding:12px"><span>Cerrar</span></button>
     </div>
   </div>
 
@@ -1435,6 +1472,100 @@ function obtenerFotoVehiculo(info, v) {
 
       configurarAcciones(estado);
       actualizarExtras(estado);
+      pintarMetodoPago();
+    }
+
+    /* ============================================================
+       MÉTODO DE PAGO DEL VIAJE
+       - Efectivo: se paga al conductor al terminar.
+       - Billetera digital: cuando un conductor acepta, el pasajero ve su billetera,
+         el número de cuenta (para copiar) y su QR (para ampliar y escanear).
+       ============================================================ */
+    const ETIQUETA_PAGO = { efectivo: 'Efectivo', billetera: 'Billetera digital' };
+    const SVG_EFECTIVO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>';
+    const SVG_BILLETERA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3"/><path d="M21 9h-5a3 3 0 0 0 0 6h5V9z"/></svg>';
+    const metodoPagoDeViaje = (v) => {
+      const m = String((v && v.metodo_pago) || '').toLowerCase();
+      return m.indexOf('billetera') >= 0 ? 'billetera' : (m.indexOf('efectivo') >= 0 ? 'efectivo' : '');
+    };
+    let seqPago = 0;
+
+    async function copiarTexto(texto) {
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) await navigator.clipboard.writeText(texto);
+        else {
+          const ta = document.createElement('textarea');
+          ta.value = texto; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+        }
+        mostrarToast('Número copiado');
+      } catch (e) { mostrarToast('No se pudo copiar el número'); }
+    }
+
+    function pintarCuerpoPago(html, enlazar) {
+      const cuerpo = $('pago-cuerpo');
+      if (cuerpo.dataset.k === html) return;
+      cuerpo.dataset.k = html;
+      cuerpo.innerHTML = html;
+      if (enlazar) enlazar();
+    }
+
+    async function pintarMetodoPago() {
+      const card = $('card-pago');
+      const v = viajeActual || {};
+      const metodo = metodoPagoDeViaje(v);
+      const estado = String(v.estado || 'solicitado').toLowerCase();
+      if (!metodo || estado === 'cancelado') { card.style.display = 'none'; return; }
+      const miSeq = ++seqPago;
+      const tarifa = esc(formatoMoneda(tarifaDelViaje(v)));
+      const esCond = (rolUsuario === 'conductor');
+      $('pago-metodo').innerHTML = (metodo === 'billetera' ? SVG_BILLETERA : SVG_EFECTIVO) + '<span>' + ETIQUETA_PAGO[metodo] + '</span>';
+      card.style.display = 'block';
+
+      if (metodo === 'efectivo') {
+        pintarCuerpoPago('<p class="pago-nota">' + (esCond
+          ? 'El pasajero te pagará <b>' + tarifa + '</b> en efectivo al terminar el viaje.'
+          : 'Paga <b>' + tarifa + '</b> en efectivo a tu conductor al terminar el viaje.') + '</p>');
+        return;
+      }
+      if (v.conductor_id == null) {
+        pintarCuerpoPago('<p class="pago-nota">Cuando un conductor acepte tu viaje verás aquí su billetera digital, el número de cuenta y su código QR para pagarle.</p>');
+        return;
+      }
+
+      const info = await resolverConductor(v.conductor_id);
+      if (miSeq !== seqPago) return;
+      const c = (info && info.conductor) || {};
+      const nombre = String(c.billetera_nombre || '').trim();
+      const numero = String(c.billetera_numero || '').trim();
+      const qr = String(c.billetera_qr || '').trim();
+      if (!nombre && !numero && !qr) {
+        pintarCuerpoPago('<p class="pago-nota">' + (esCond
+          ? 'El pasajero eligió billetera digital, pero no tienes una billetera registrada. Actualízala en Perfil → Métodos de pago.'
+          : 'Tu conductor aún no registró los datos de su billetera. Pídeselos por el chat.') + '</p>');
+        return;
+      }
+      const html =
+        '<div class="pago-billetera">' +
+          '<div class="pago-billetera-datos">' +
+            '<span class="pago-billetera-nombre">' + esc(nombre || 'Billetera digital') + '</span>' +
+            (numero ? '<span class="pago-billetera-numero">' + esc(numero) + '</span>' : '') +
+            (numero ? '<button type="button" class="pago-copiar" id="pago-copiar">Copiar número</button>' : '') +
+          '</div>' +
+          (qr ? '<button type="button" class="pago-qr-mini" id="pago-ver-qr" title="Ver código QR"><img src="' + esc(qr) + '" alt="QR de la billetera"></button>' : '') +
+        '</div>' +
+        '<p class="pago-nota">' + (esCond
+          ? 'El pasajero te pagará <b>' + tarifa + '</b> a esta billetera.'
+          : 'Paga <b>' + tarifa + '</b> a esta billetera' + (qr ? ' (toca el QR para ampliarlo)' : '') + ' y muestra el comprobante a tu conductor.') + '</p>';
+      pintarCuerpoPago(html, () => {
+        const bCopiar = $('pago-copiar');
+        if (bCopiar) bCopiar.onclick = () => copiarTexto(numero);
+        const bQr = $('pago-ver-qr');
+        if (bQr) bQr.onclick = () => {
+          $('img-qr-pago').src = qr;
+          $('qr-pago-titulo').textContent = (nombre || 'Billetera digital') + (numero ? ' · ' + numero : '');
+          abrirModal('modal-qr-pago');
+        };
+      });
     }
 
     /* ============================================================
