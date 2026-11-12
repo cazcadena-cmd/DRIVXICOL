@@ -213,7 +213,7 @@
     #preview-foto{display:block;width:100%;height:100%;object-fit:cover}
 
     /* OPCIONES DE ROL */
-    .opciones-rol-drivxi{position:absolute!important;left:16px!important;bottom:220px!important;z-index:2601!important;
+    .opciones-rol-drivxi{position:absolute!important;left:16px!important;bottom:290px!important;z-index:2601!important;
       display:flex!important;flex-direction:column!important;gap:10px!important;width:230px!important;background:transparent!important;
       border:none!important;box-shadow:none!important;padding:0!important;margin:0!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
       visibility:hidden!important;pointer-events:none!important}
@@ -688,7 +688,7 @@
       <p class="doc-nota">Si el vehículo tiene más de 3 años deberás adjuntar la revisión técnica.</p>
       <div class="input-group"><input type="text" id="reg-placa" placeholder="Placa del Vehículo" required autocomplete="off"></div>
       <div class="input-group"><input type="text" id="doc-capacidad" inputmode="numeric" maxlength="2" placeholder="Capacidad de pasajeros (Ej: 4)" required autocomplete="off"></div>
-      <div class="pet-friendly-grupo" id="bloque-pet-friendly">
+      <div class="pet-friendly-grupo oculto" id="bloque-pet-friendly">
         <span class="doc-label">¿Acepta Mascotas?</span>
         <div class="pet-friendly-opciones" role="group" aria-label="¿Acepta Mascotas?">
           <button type="button" id="btn-pet-si" class="btn-pet-friendly" aria-pressed="false">
@@ -1025,10 +1025,6 @@
     /* ================= SELECCIÓN DE ROL ================= */
     window.seleccionarRol = function (rol) {
       rolSeleccionado = rol;
-      // Opciones específicas del rol elegido: "Iniciar sesión Pasajero", "Crear cuenta Pasajero", etc.
-      const nombreRol = { pasajero: 'Pasajero', conductor: 'Conductor', comercio: 'Comercio' }[rol] || '';
-      $('btn-iniciar-sesion').textContent = ('Iniciar sesión ' + nombreRol).trim();
-      $('btn-crear-cuenta').textContent = ('Crear cuenta ' + nombreRol).trim();
       pantallaInicio.classList.remove('oculto');
       modalRegistro.classList.add('oculto');
       modalLogin.classList.add('oculto');
@@ -1245,6 +1241,7 @@
       modalDocumentacion.classList.remove('oculto');
       modalDocumentacion.scrollTop = 0;
       actualizarRevisionTecnica();
+      actualizarPreguntaMascotas();
     }
     function cerrarModalDocumentacion() {
       modalDocumentacion.classList.add('oculto');
@@ -1270,6 +1267,20 @@
     }
     $('btn-pet-si').addEventListener('click', () => { aplicarEstadoPetFriendly(true); marcarDocumentacionPendiente(); });
     $('btn-pet-no').addEventListener('click', () => { aplicarEstadoPetFriendly(false); marcarDocumentacionPendiente(); });
+
+    /* «¿Acepta Mascotas?» aparece SOLO para el tipo de servicio DRIVXI TAXI */
+    function esServicioTaxi() {
+      const sel = $('doc-tipo-servicio');
+      return !!sel && sel.value === 'DRIVXI TAXI';
+    }
+    function actualizarPreguntaMascotas() {
+      const bloque = $('bloque-pet-friendly');
+      if (bloque) bloque.classList.toggle('oculto', !esServicioTaxi());
+    }
+    $('doc-tipo-servicio').addEventListener('change', () => {
+      aplicarEstadoPetFriendly(null);   /* al cambiar de servicio se vuelve a preguntar */
+      actualizarPreguntaMascotas();
+    });
     formDocumentacion.addEventListener('input', marcarDocumentacionPendiente);
     formDocumentacion.addEventListener('change', marcarDocumentacionPendiente);
 
@@ -1359,7 +1370,11 @@
       const capacidadTxt = $('doc-capacidad').value.trim();
       const capacidad = parseInt(capacidadTxt, 10);
       if (!/^\d+$/.test(capacidadTxt) || capacidad < 1 || capacidad > 99) { mostrarAlerta('Ingresa la capacidad de pasajeros.', "error"); $('doc-capacidad').focus(); return; }
-      if (documentacionVehiculo.pet_friendly !== true && documentacionVehiculo.pet_friendly !== false) { mostrarAlerta('Indica si acepta mascotas.', "error"); return; }
+      if (esServicioTaxi()) {
+        if (documentacionVehiculo.pet_friendly !== true && documentacionVehiculo.pet_friendly !== false) { mostrarAlerta('Indica si acepta mascotas.', "error"); return; }
+      } else {
+        documentacionVehiculo.pet_friendly = false;   /* solo DRIVXI TAXI puede aceptar mascotas */
+      }
       for (const [clave, nombre] of listaDocumentosRequeridos()) {
         if (!documentacionVehiculo.archivos[clave]) {
           mostrarAlerta(`Falta adjuntar: ${nombre}.`, "error");
